@@ -11,7 +11,7 @@ import subprocess
 import copy
 
 from tqdm import trange
-from src.envs.amod_env import Scenario, AMoD
+from src.envs.sim.amod_env import Scenario, AMoD
 from src.algos.sac import SAC, GNNParser
 from src.algos.reb_flow_solver import solveRebFlow
 from src.misc.utils import dictsum, moving_average, moving_std, sumo_scenario_analysis

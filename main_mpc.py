@@ -9,7 +9,7 @@ import numpy as np
 import argparse
 
 from src.algos.reb_flow_solver import solveRebFlow
-from src.envs.amod_env import Scenario, AMoD
+from src.envs.sim.amod_env import Scenario, AMoD
 from src.algos.MPC import MPC
 from tqdm import trange
 
