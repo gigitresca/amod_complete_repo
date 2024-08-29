@@ -86,7 +86,6 @@ class AMoD:
         # observation: current vehicle distribution, time, future arrivals, demand
         self.obs = (self.acc, self.time, self.dacc, self.demand)
 
-    # @profile
     def matching(self, demandAttr=[], CPLEXPATH=None, PATH='', platime_endorm='linux'):
         """
         Matching step method: generation of a flow demand between the nodes of the aggregated net given the input demand
@@ -131,7 +130,6 @@ class AMoD:
         paxAction = [flow[i, j] if (i, j) in flow else 0 for i, j in self.edges]
         return paxAction
 
-    # @profile
     # pax step
     def pax_step(self, paxAction=None, CPLEXPATH=None, PATH='', platime_endorm='linux'):
         tstep = self.tstep
