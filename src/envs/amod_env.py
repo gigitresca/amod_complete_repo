@@ -23,11 +23,6 @@ if 'SUMO_HOME' in os.environ:
 import sumolib
 import traci
 import math
-import multiprocessing
-import pdb
-import time
-import platform
-# import line_profiler
 
 from lxml import etree as ET
 from collections import defaultdict
@@ -35,14 +30,11 @@ from itertools import combinations
 from sklearn.cluster import KMeans
 from src.misc.utils import mat2str
 from scipy.spatial.distance import cdist
-from copy import deepcopy
 
 
 class AMoD:
     # initialization
     def __init__(self, scenario, beta=0.2):  # updated to take scenario and beta (cost for rebalancing) as input
-        # sys.setrecursionlimit(10000000)  # Change the recursion limit for the deepcopy command
-        # self.scenario = deepcopy(scenario)  # I changed it to deep copy so that the scenario input is not modified by env
         self.scenario = scenario
         self.G = scenario.G  # Road Graph: node - region, edge - connection of regions, node attr: 'accInit', edge attr: 'time'
         self.regions_sumo = scenario.regions_sumo
@@ -252,7 +244,6 @@ class AMoD:
             arrival_time = (arrival_time // tstep + 1) * tstep
         return taxi, taxi_valid, arrival_time, demand_time
 
-    # @profile
     # reb step
     def reb_step(self, rebAction):
         tstep = self.tstep
@@ -390,7 +381,6 @@ class AMoD:
         self.reward = 0
         return self.obs
 
-    # @profile
     def get_demand_attr(self):
         """
         Method to set the demand for each time step to be satisfied through the matching step
@@ -444,7 +434,6 @@ class AMoD:
 
         return demandAttr
 
-    # @profile
     def update_routes(self, time):
         """
         Method to update the travel time in the network
@@ -465,7 +454,6 @@ class AMoD:
                 self.reb_time[o, d][time] = 0
         self.taxi_routes = new_routes
 
-    # @profile
     def set_taxi_to_region(self, taxi_ids):
         """
         Method to assign the avaiable taxi to the relative region
@@ -764,7 +752,6 @@ class Scenario:
 
         # converting demand_input to static_demand
         # skip this when resetting the demand
-        # if not reset:
         if self.is_json:
             for t in range(0, (self.duration + self.thorizon) // self.tstep):
                 t *= self.tstep
