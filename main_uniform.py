@@ -130,7 +130,7 @@ for episode in epochs:
         # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
         desired_acc = {env.region[i]: int(action[i] * dictsum(env.acc, env.time + env.tstep)) for i in range(len(env.region))}
         # solve minimum rebalancing distance problem
-        reb_action = solveRebFlow(env, 'scenario_lux_test', desired_acc, cplexpath)
+        reb_action = solveRebFlow(env, 'uniform/scenario_lux_test', desired_acc, cplexpath)
         # Take action in environment
         new_obs, rebreward, done, info = env.reb_step(reb_action)
         episode_reward += rebreward

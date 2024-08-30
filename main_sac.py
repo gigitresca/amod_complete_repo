@@ -229,7 +229,7 @@ if not args.test:
             # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
             desired_acc = {env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time+env.tstep))for i in range(len(env.region))}
             # solve minimum rebalancing distance problem (Step 3 in paper)
-            reb_action = solveRebFlow(env, f'scenario_lux/{args.agent_name}', desired_acc, args.cplexpath)
+            reb_action = solveRebFlow(env, f'sac/scenario_lux/{args.agent_name}', desired_acc, args.cplexpath)
             # Take action in environment
             try:
                 new_obs, rebreward, done, info = env.reb_step(reb_action)
@@ -326,7 +326,7 @@ else:
             if step > 0:
                 obs1 = copy.deepcopy(o)
             # take matching step (Step 1 in paper)
-            obs, paxreward, done, info = env.pax_step(CPLEXPATH=args.cplexpath, PATH='scenario_lux_test')
+            obs, paxreward, done, info = env.pax_step(CPLEXPATH=args.cplexpath, PATH=f'sac/scenario_lux/{args.agent_name}')
             episode_reward += paxreward
             o = parser.parse_obs(obs=obs)
             # use GNN-RL policy (Step 2 in paper)
@@ -334,7 +334,7 @@ else:
             # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
             desired_acc = {env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time + env.tstep)) for i in range(len(env.region))}
             # solve minimum rebalancing distance problem (Step 3 in paper)
-            reb_action = solveRebFlow(env, 'scenario_lux_test', desired_acc, args.cplexpath)
+            reb_action = solveRebFlow(env, f'sac/scenario_lux/{args.agent_name}', desired_acc, args.cplexpath)
             # Take action in environment
             new_obs, rebreward, done, info = env.reb_step(reb_action)
             episode_reward += rebreward
