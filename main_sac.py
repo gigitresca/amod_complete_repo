@@ -7,17 +7,14 @@ import sys
 if 'SUMO_HOME' in os.environ:
     sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
 import traci
-import subprocess
 import copy
 
 from tqdm import trange
 from src.envs.sim.amod_env import Scenario, AMoD
 from src.algos.sac import SAC, GNNParser
 from src.algos.reb_flow_solver import solveRebFlow
-from src.misc.utils import dictsum, moving_average, moving_std, sumo_scenario_analysis
-from src.misc.plots import plot_reward, scenario_analysis_plot, graph_flow_plot
+from src.misc.utils import dictsum
 from datetime import date
-import concurrent.futures
 
 
 parser = argparse.ArgumentParser(description='A2C-GNN')
@@ -95,9 +92,10 @@ device = torch.device("cuda" if args.cuda else "cpu")
 aggregated_demand = not args.random_od
 
 # Define SUMO scenario
-scenario_path = 'data/LuSTScenario/'
+scenario_path = 'src/envs/data/LuSTScenario/'
 sumocfg_file = 'dua_meso.static.sumocfg'
 net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
+os.makedirs('saved_files/sumo_output/scenario_lux/', exist_ok=True)
 if args.test:
     sumo_cmd = [
         "sumo", "--no-internal-links", "-c", os.path.join(scenario_path, sumocfg_file),
@@ -118,7 +116,7 @@ else:
         "-b", str(args.time_start * 60 * 60), "--seed", "10",
         "-W", 'true', "-v", 'false',
     ]
-demand_file = f'data/scenario_lux{args.num_regions}.json'
+demand_file = f'src/envs/data/scenario_lux{args.num_regions}.json'
 
 # Define AMoD Simulator Environment
 scenario = Scenario(num_cluster=args.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,

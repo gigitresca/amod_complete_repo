@@ -57,10 +57,11 @@ matching_steps = int(args.matching_tstep * 60 / args.sumo_tstep)  # sumo steps b
 aggregated_demand = not args.random_od
 
 # Define SUMO scenario
-scenario_path = 'data/LuSTScenario/'
+scenario_path = 'src/envs/data/LuSTScenario/'
 sumocfg_file = 'dua_meso.static.sumocfg'
 net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
-demand_file = f'data/scenario_lux{args.num_regions}.json'
+demand_file = f'src/envs/data/scenario_lux{args.num_regions}.json'
+os.makedirs('saved_files/sumo_output/scenario_lux/', exist_ok=True)
 sumo_cmd = [
         "sumo", "--no-internal-links", "-c", os.path.join(scenario_path, sumocfg_file),
         "--step-length", str(args.sumo_tstep),
@@ -218,4 +219,5 @@ log_stat = {
     }
 print(f"Plus one: Reward {log_stat['test_reward']['mean']:.2f}, Revenue {log_stat['test_revenue']['mean']},Served demand {log_stat['test_served_demand']['mean']:.2f}, Rebalancing Cost {log_stat['test_reb_cost']['mean']:.2f}, Operational Cost {log_stat['test_op_cost']['mean']:.2f}, Rebalanced Vehicles {log_stat['test_reb_vehicles']['mean']:.2f}")
 print(f"Plus one: Reward {log_stat['test_reward']['std']:.2f}, Revenue {log_stat['test_revenue']['std']:.2f},Served demand {log_stat['test_served_demand']['std']:.2f}, Rebalancing Cost {log_stat['test_reb_cost']['std']:.2f}, Operational Cost {log_stat['test_op_cost']['std']:.2f}, Rebalanced Vehicles {log_stat['test_reb_vehicles']['std']:.2f}")
+os.makedirs('saved_files/baseline_policies/scenario_lux/', exist_ok=True)
 torch.save({'log': log, 'log_stat': log_stat}, f'./saved_files/baseline_policies/scenario_lux/{args.policy_name}_test.pth')
