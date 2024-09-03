@@ -2,55 +2,75 @@ import hydra
 from omegaconf import DictConfig
 import os 
 import torch
+import json
 
-@hydra.main(version_base=None, config_path="config", config_name="config")
-def setup(cfg: DictConfig):
-   
+def setup_sumo(cfg):
+    from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
+
+    cfg = cfg.simulator
+    demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
+    aggregated_demand = not cfg.random_od
+    scenario_path = 'src/envs/data/LuSTScenario/'
+    net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
+
+    scenario = Scenario(num_cluster=cfg.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,
+                sumo_net_file=net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
+                time_start=cfg.time_start, time_horizon=cfg.time_horizon, duration=cfg.duration,
+                tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time)
+    env = AMoD(scenario, beta=cfg.beta)
+    parser = GNNParser(env, T=cfg.time_horizon, json_file=demand_file)
+    return env, parser
+    
+def setup_macro(cfg):
+    from src.envs.sim.macro_env import Scenario, AMoD, GNNParser
+    with open("src/envs/data/macro/calibrated_parameters.json", "r") as file:
+        calibrated_params = json.load(file)
+
+    cfg = cfg.simulator
+    city = cfg.city
+    print(city)
+    scenario = Scenario(
+    json_file=f"src/envs/data/macro/scenario_{city}.json",
+    demand_ratio=calibrated_params[city]["demand_ratio"],
+    json_hr=calibrated_params[city]["json_hr"],
+    sd=cfg.seed,
+    json_tstep=cfg.json_tsetp,
+    tf=cfg.max_steps,
+    )
+    env = AMoD(scenario, cfg = cfg, beta = calibrated_params[city]["beta"])
+    parser = GNNParser(env, T=cfg.time_horizon, json_file=f"src/envs/data/macro/scenario_{city}.json")
+    return env, parser
+
+def setup_model(cfg, env, parser, device):
+    model_name = cfg.model.name
+    cfg = cfg.model
+    if model_name == "sac":
+        from src.algos.sac import SAC
+        return SAC(env=env, input_size=cfg.input_size, cfg=cfg, parser=parser).to(device)
+    elif model_name == "a2c":
+        from src.algos.a2c import A2C
+        return A2C(env=env, input_size=cfg.input_size, parser=parser).to(device)
+    else:
+        raise ValueError(f"Unknown model or baseline: {model_name}")
+
+@hydra.main(version_base=None, config_path="src/config/", config_name="config")
+def main(cfg: DictConfig):
     # Import simulator module based on the configuration
     simulator_name = cfg.simulator.name
     if simulator_name == "sumo":
-        from src.sim.sumo_env import Scenario, AMoD
-        demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
-        aggregated_demand = not cfg.random_od
-        scenario_path = 'src/envs/data/LuSTScenario/'
-        net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
-        scenario = Scenario(num_cluster=cfg.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,
-                    sumo_net_file=net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
-                    time_start=cfg.time_start, time_horizon=cfg.time_horizon, duration=cfg.duration,
-                    tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time)
-        env = AMoD(scenario, beta=cfg.beta)
+        env, parser = setup_sumo(cfg)
 
     elif simulator_name == "macro":
-        scenario = Scenario(json_file="data/scenario_nyc4x4.json", sd=cfg.seed, demand_ratio=cfg.demand_ratio, json_hr=cfg.json_hr, json_tstep=cfg.json_tsetp)
-        env = AMoD(scenario, beta = 0.5)
+        env, parser = setup_macro(cfg)
     else:
         raise ValueError(f"Unknown simulator: {simulator_name}")
 
-    # Import model module based on the configuration
-    model_name = cfg.model.name
-    cfg.cuda = not cfg.no_cuda and torch.cuda.is_available()
-    device = torch.device("cuda" if cfg.cuda else "cpu")
+    use_cuda = not cfg.model.no_cuda and torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
 
-    if cfg.model.name == "sac":
-        from src.algos import SAC
-        model = SAC(
-            env=env,
-            input_size=21,
-            hidden_size=cfg.hidden_size,
-            p_lr=cfg.p_lr,
-            q_lr=cfg.q_lr,
-            alpha=cfg.alpha,
-            batch_size=cfg.batch_size,
-            use_automatic_entropy_tuning=cfg.auto_entropy,
-            clip=cfg.clip,
-            critic_version=cfg.critic_version,
-        ).to(device)
-        
-    elif model_name == "a2c":
-        from src.algos import A2C
-        model = A2C(env=env, input_size=21).to(device)
-    else:
-        raise ValueError(f"Unknown model: {model_name}")
+    model = setup_model(cfg, env, parser, device)
+
+    model.learn(cfg.model)
 
 if __name__ == "__main__":
-    setup()
+    main()

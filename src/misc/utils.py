@@ -3,9 +3,9 @@ import math
 import numpy as np
 import pandas as pd
 import math
-from lxml import etree as ET
+#from lxml import etree as ET
 import networkx as nx
-import matplotlib.pyplot as plt
+
 
 
 def mat2str(mat):
@@ -33,11 +33,11 @@ def moving_std(data, window=5):
     mov_data = data.rolling(window=window).std()
     return list(mov_data)
 
-
+"""
 def sumo_scenario_analysis(xml_file, acc_init, nregions, center_pos, time_start=0, duration=2):
-    """
+    
     Function to analyze the tripinfo xml file, output of sumo simulation
-    """
+    
     # Initialization
     tripinfos_tree = ET.parse(xml_file)
     time_start = time_start * 60 * 60
@@ -144,3 +144,4 @@ def sumo_scenario_analysis(xml_file, acc_init, nregions, center_pos, time_start=
         regions_graph.nodes[region]['waiting_time'] /= regions_graph.nodes[region]['demand']
         regions_graph.nodes[region]['waiting_time'] = np.nan_to_num(regions_graph.nodes[region]['waiting_time'], nan=0)
     return regions_graph, taxi_info
+"""

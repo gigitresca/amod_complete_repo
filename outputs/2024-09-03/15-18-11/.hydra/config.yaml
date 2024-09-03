@@ -1,0 +1,4 @@
+simulator:
+  name: macro
+model:
+  name: sac

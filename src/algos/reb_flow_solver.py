@@ -3,14 +3,14 @@ import subprocess
 from collections import defaultdict
 from src.misc.utils import mat2str
 
-def solveRebFlow(env,res_path,desiredAcc,CPLEXPATH):
+
+def solveRebFlow(env,res_path,desiredAcc,CPLEXPATH, directory):
     t = env.time
-    tstep = env.tstep
     accRLTuple = [(n,int(round(desiredAcc[n]))) for n in desiredAcc]
-    accTuple = [(n,int(env.acc[n][t+tstep])) for n in env.acc]
+    accTuple = [(n,int(env.acc[n][t+1])) for n in env.acc]
     edgeAttr = [(i,j,env.G.edges[i,j]['time']) for i,j in env.G.edges]
     modPath = os.getcwd().replace('\\','/')+'/src/cplex_mod/'
-    OPTPath = os.getcwd().replace('\\','/')+'/saved_files/cplex_logs/rebalancing/'+res_path + '/'
+    OPTPath = os.getcwd().replace('\\','/')+'/' + directory +'/cplex_logs/rebalancing/'+res_path + '/'
     if not os.path.exists(OPTPath):
         os.makedirs(OPTPath)
     datafile = OPTPath + f'data_{t}.dat'
@@ -22,7 +22,7 @@ def solveRebFlow(env,res_path,desiredAcc,CPLEXPATH):
         file.write('accRLTuple='+mat2str(accRLTuple)+';\r\n')
     modfile = modPath+'minRebDistRebOnly.mod'
     if CPLEXPATH is None:
-        CPLEXPATH = "C:/Program Files/IBM/ILOG/CPLEX_Studio2211/opl/bin/x64_win64/"
+        CPLEXPATH = "/opt/ibm/ILOG/CPLEX_Studio128/opl/bin/x86-64_linux/"
     my_env = os.environ.copy()
     my_env["LD_LIBRARY_PATH"] = CPLEXPATH
     out_file =  OPTPath + f'out_{t}.dat'
@@ -32,7 +32,7 @@ def solveRebFlow(env,res_path,desiredAcc,CPLEXPATH):
 
     # 3. collect results from file
     flow = defaultdict(float)
-    with open(resfile, 'r', encoding="utf8") as file:
+    with open(resfile,'r', encoding="utf8") as file:
         for row in file:
             item = row.strip().strip(';').split('=')
             if item[0] == 'flow':

@@ -2,74 +2,15 @@ import numpy as np
 import torch
 from torch import nn
 import torch.nn.functional as F
-from torch.distributions import Dirichlet
 from torch_geometric.data import Data, Batch
-from torch_geometric.nn import GCNConv
-from torch_geometric.utils import grid
 from src.algos.reb_flow_solver import solveRebFlow
 from src.misc.utils import dictsum
+from src.nets.actor import GNNActor, GNNActorLSTM
+from src.nets.critic import GNNCritic, GNNCriticLSTM
 import random
-import json
+from tqdm import trange
 import os
 import sys
-if 'SUMO_HOME' in os.environ:
-    sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
-import traci
-
-
-class GNNParser:
-    """
-    Parser converting raw environment observations to agent inputs (s_t).
-    """
-
-    def __init__(self, env, T=10, json_file=None, scale_factor=0.01):
-        super().__init__()
-        self.env = env
-        self.T = self.env.scenario.thorizon
-        self.s_acc, self.s_dem = self.get_scaling_factors()     # ADDED
-        self.json_file = json_file
-        if self.json_file is not None:
-            with open(json_file, "r") as file:
-                self.data = json.load(file)
-
-    def parse_obs(self, obs):
-        x = torch.cat((
-            torch.tensor([obs[0][n][self.env.time+1]*self.s_acc for n in self.env.region]).view(1, 1, self.env.nregions).float(),
-            torch.tensor([[(obs[0][n][self.env.time+1] + self.env.dacc[n][t])*self.s_acc for n in self.env.region] \
-                          for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregions).float(),
-            torch.tensor([[sum([(self.env.scenario.demand_input[i,j][t])*(self.env.price[i,j][t])*self.s_dem \
-                          for j in self.env.region]) for i in self.env.region] for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregions).float()),
-              dim=1).squeeze(0).view(1+self.T+self.T, self.env.nregions).T
-
-        ###################
-        # ADDED
-        # Edge index self-connected tensor definition
-        origin = []
-        destination = []
-        for o in range(self.env.scenario.adjacency_matrix.shape[0]):
-            for d in range(self.env.scenario.adjacency_matrix.shape[1]):
-                if self.env.scenario.adjacency_matrix[o, d] == 1:
-                    origin.append(o)
-                    destination.append(d)
-
-        edge_index = torch.cat([torch.tensor([origin]), torch.tensor([destination])])
-        # edge_index = torch.cat([torch.tensor([self.env.region]), torch.tensor([self.env.region])])    # Just local region information
-        ##################
-
-
-        data = Data(x, edge_index)
-        return data
-
-    def get_scaling_factors(self):
-        t0 = 0
-        tf = self.env.scenario.duration
-        time = [t for t in range(t0, tf)]
-        acc_tot = (self.env.acc[0][0] * self.env.nregions)
-        demand = self.env.scenario.demand_input
-        price = self.env.scenario.price
-        demand_max = max([max([demand[key][t] for key in demand]) for t in time])
-        price_max = max([max([price[key][t] for key in price]) for t in time])
-        return 2/acc_tot, 1/(1.2 * demand_max * price_max)
 
 
 class PairData(Data):
@@ -135,240 +76,8 @@ class Scalar(nn.Module):
         return self.constant
 
 #########################################
-############## ACTOR ####################
-#########################################
-class GNNActor(nn.Module):
-    """
-    Actor \pi(a_t | s_t) parametrizing the concentration parameters of a Dirichlet Policy.
-    """
-
-    def __init__(self, in_channels, hidden_size=32, act_dim=6):
-        super().__init__()
-        self.in_channels = in_channels
-        self.act_dim = act_dim
-        self.conv1 = GCNConv(in_channels, in_channels)
-        self.lin1 = nn.Linear(in_channels, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, hidden_size)
-        self.lin3 = nn.Linear(hidden_size, 1)
-
-    def forward(self, state, edge_index, deterministic=False):
-        out = F.relu(self.conv1(state, edge_index))
-        x = out + state
-        x = x.reshape(-1, self.act_dim, self.in_channels)
-        x = F.leaky_relu(self.lin1(x))
-        x = F.leaky_relu(self.lin2(x))
-        x = F.softplus(self.lin3(x))
-        concentration = x.squeeze(-1)
-        if deterministic:
-            action = (concentration) / (concentration.sum() + 1e-20)
-            log_prob = None
-        else:
-            m = Dirichlet(concentration + 1e-20)
-            action = m.rsample()
-            log_prob = m.log_prob(action)
-        return action, log_prob
-
-
-class GNNActorLSTM(nn.Module):
-    """
-    Actor \pi(a_t | s_t) parametrizing the concentration parameters of a Dirichlet Policy.
-    """
-
-    def __init__(self, in_channels, hidden_size=32, act_dim=6):
-        super().__init__()
-        self.in_channels = in_channels
-        self.act_dim = act_dim
-        self.conv1 = GCNConv(in_channels, in_channels)
-        self.lstm = nn.LSTM(in_channels, hidden_size, dropout=0.3)
-        self.lin1 = nn.Linear(hidden_size, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, 1)
-
-    def forward(self, state, edge_index, deterministic=False):
-        out = F.relu(self.conv1(state, edge_index))
-        x = out + state
-        x = x.reshape(-1, self.act_dim, self.in_channels)
-        x, _ = self.lstm(x)
-        x = F.leaky_relu(self.lin1(x))
-        x = F.softplus(self.lin2(x))
-        concentration = x.squeeze(-1)
-        if deterministic:
-            action = (concentration) / (concentration.sum() + 1e-20)
-            log_prob = None
-        else:
-            m = Dirichlet(concentration + 1e-20)
-            action = m.rsample()
-            log_prob = m.log_prob(action)
-        return action, log_prob
-
-
-#########################################
-############## CRITIC ###################
-#########################################
-
-
-class GNNCritic1(nn.Module):
-    """
-    Architecture 1, GNN, Pointwise Multiplication, Readout, FC
-    """
-
-    def __init__(self, in_channels, hidden_size=256, act_dim=6):
-        super().__init__()
-        self.act_dim = act_dim
-        self.in_channels = in_channels
-        self.conv1 = GCNConv(in_channels, in_channels)
-        self.lin1 = nn.Linear(in_channels, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, hidden_size)
-        self.lin3 = nn.Linear(hidden_size, 1)
-
-    def forward(self, state, edge_index, action):
-        out = F.relu(self.conv1(state, edge_index))
-        x = out + state
-        x = x.reshape(-1, self.act_dim, self.in_channels)  # (B,N,21)
-        action = action * 10
-        action = action.unsqueeze(-1)  # (B,N,1)
-        x = x * action  # pointwise multiplication (B,N,21)
-        x = x.sum(dim=1)  # (B,21)
-        x = F.relu(self.lin1(x))  # (B,H)
-        x = F.relu(self.lin2(x))  # (B,H)
-        x = self.lin3(x).squeeze(-1)  # (B)
-        return x
-
-
-class GNNCritic2(nn.Module):
-    """
-    Architecture 2, GNN, Readout, Concatenation, FC
-    """
-
-    def __init__(self, in_channels, hidden_size=256, act_dim=6):
-        super().__init__()
-        self.act_dim = act_dim
-        self.conv1 = GCNConv(in_channels, in_channels)
-        self.lin1 = nn.Linear(in_channels + act_dim, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, hidden_size)
-        self.lin3 = nn.Linear(hidden_size, 1)
-
-    def forward(self, state, edge_index, action):
-        out = F.relu(self.conv1(state, edge_index))
-        x = out + state
-        x = x.reshape(-1, self.act_dim, 21)  # (B,N,21)
-        x = torch.sum(x, dim=1)  # (B, 21)
-        concat = torch.cat([x, action], dim=-1)  # (B, 21+N)
-        x = F.relu(self.lin1(concat))  # (B,H)
-        x = F.relu(self.lin2(x))  # (B,H)
-        x = self.lin3(x).squeeze(-1)  # B
-        return x
-
-
-class GNNCritic3(nn.Module):
-    """
-    Architecture 3: Concatenation, GNN, Readout, FC
-    """
-
-    def __init__(self, in_channels, hidden_size=32, act_dim=6):
-        super().__init__()
-        self.act_dim = act_dim
-        self.conv1 = GCNConv(22, 22)
-        self.lin1 = nn.Linear(22, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, hidden_size)
-        self.lin3 = nn.Linear(hidden_size, 1)
-
-    def forward(self, state, edge_index, action):
-        cat = torch.cat([state, action.unsqueeze(-1)], dim=-1)  # (B,N,22)
-        out = F.relu(self.conv1(cat, edge_index))
-        x = out + cat
-        x = x.reshape(-1, self.act_dim, 22)  # (B,N,22)
-        x = F.relu(self.lin1(x))  # (B, H)
-        x = F.relu(self.lin2(x))  # (B, H)
-        x = torch.sum(x, dim=1)  # (B, 22)
-        x = self.lin3(x).squeeze(-1)  # (B)
-        return x
-
-
-class GNNCritic4(nn.Module):
-    """
-    Architecture 4: GNN, Concatenation, FC, Readout
-    """
-
-    def __init__(self, in_channels, hidden_size=32, act_dim=6):
-        super().__init__()
-        self.act_dim = act_dim
-        self.conv1 = GCNConv(in_channels, in_channels)
-        self.lin1 = nn.Linear(in_channels + 1, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, hidden_size)
-        self.lin3 = nn.Linear(hidden_size, 1)
-        self.in_channels = in_channels
-
-    def forward(self, state, edge_index, action):
-        out = F.relu(self.conv1(state, edge_index))
-        x = out + state
-        x = x.reshape(-1, self.act_dim, self.in_channels)  # (B,N,21)
-        concat = torch.cat([x, action.unsqueeze(-1)], dim=-1)  # (B,N,22)
-        x = F.relu(self.lin1(concat))
-        x = F.relu(self.lin2(x))  # (B, N, H)
-        x = torch.sum(x, dim=1)  # (B, H)
-        x = self.lin3(x).squeeze(-1)  # (B)
-        return x
-
-
-class GNNCritic4LSTM(nn.Module):
-    """
-    Architecture 4: GNN, Concatenation, FC, Readout
-    """
-
-    def __init__(self, in_channels, hidden_size=32, act_dim=6):
-        super().__init__()
-        self.act_dim = act_dim
-        self.conv1 = GCNConv(in_channels, in_channels)
-        self.lstm = nn.LSTM(in_channels + 1, hidden_size, dropout=0.3)
-        self.lin1 = nn.Linear(hidden_size, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, 1)
-        self.in_channels = in_channels
-
-    def forward(self, state, edge_index, action):
-        out = F.relu(self.conv1(state, edge_index))
-        x = out + state
-        x = x.reshape(-1, self.act_dim, self.in_channels)  # (B,N,21)
-        concat = torch.cat([x, action.unsqueeze(-1)], dim=-1)  # (B,N,22)
-        x, _ = self.lstm(concat)
-        x = F.relu(self.lin1(x))  # (B, N, H)
-        x = torch.sum(x, dim=1)  # (B, H)
-        x = self.lin2(x).squeeze(-1)  # (B)
-        return x
-
-
-class GNNCritic5(nn.Module):
-    """
-    Architecture 5, GNN, Pointwise Multiplication, FC, Readout
-    """
-
-    def __init__(self, in_channels, hidden_size=256, act_dim=6):
-        super().__init__()
-        self.act_dim = act_dim
-        self.in_channels = in_channels
-        self.conv1 = GCNConv(in_channels, in_channels)
-        self.lin1 = nn.Linear(in_channels, hidden_size)
-        self.lin2 = nn.Linear(hidden_size, hidden_size)
-        self.lin3 = nn.Linear(hidden_size, 1)
-
-    def forward(self, state, edge_index, action):
-        out = F.relu(self.conv1(state, edge_index))
-        x = out + state
-        x = x.reshape(-1, self.act_dim, self.in_channels)  # (B,N,21)
-        action = action + 1
-        action = action.unsqueeze(-1)  # (B,N,1)
-        x = x * action  # pointwise multiplication (B,N,21)
-        x = F.relu(self.lin1(x))  # (B,N,H)
-        x = F.relu(self.lin2(x))  # (B,N,H)
-        x = x.sum(dim=1)  # (B,H)
-        x = self.lin3(x).squeeze(-1)  # (B)
-        return x
-
-
-#########################################
 ############## A2C AGENT ################
 #########################################
-
-
 class SAC(nn.Module):
     """
     Advantage Actor Critic algorithm for the AMoD control problem.
@@ -378,77 +87,49 @@ class SAC(nn.Module):
         self,
         env,
         input_size,
-        hidden_size=32,
-        alpha=0.2,
-        gamma=0.99,
-        polyak=0.995,
-        batch_size=128,
-        p_lr=3e-4,
-        q_lr=1e-3,
-        use_automatic_entropy_tuning=False,
-        lagrange_thresh=-1,
-        min_q_weight=1,
-        deterministic_backup=False,
-        eps=np.finfo(np.float32).eps.item(),
+        cfg, 
+        parser,
         device=torch.device("cpu"),
-        min_q_version=3,
-        clip=200,
-        critic_version=4,
     ):
         super(SAC, self).__init__()
         self.env = env
-        self.eps = eps
+        self.eps = np.finfo(np.float32).eps.item(),
         self.input_size = input_size
-        self.hidden_size = hidden_size
+        self.hidden_size = cfg.hidden_size
         self.device = device
         self.path = None
-        self.act_dim = env.nregions
+        self.act_dim = env.nregion
 
         # SAC parameters
-        self.alpha = alpha
-        self.polyak = polyak
+        self.alpha = cfg.alpha
+        self.polyak = 0.995
         self.env = env
-        self.BATCH_SIZE = batch_size
-        self.p_lr = p_lr
-        self.q_lr = q_lr
-        self.gamma = gamma
-        self.use_automatic_entropy_tuning = use_automatic_entropy_tuning
-        self.min_q_version = min_q_version
-        self.clip = clip
+        self.BATCH_SIZE = cfg.batch_size
+        self.p_lr = cfg.p_lr
+        self.q_lr = cfg.q_lr
+        self.gamma = 0.99
+        self.use_automatic_entropy_tuning = cfg.auto_entropy
+        self.clip = cfg.clip
+        self.use_LSTM = cfg.use_LSTM
+        self.parser = parser
+        #self.sim = cfg.simulator.name
 
-        # conservative Q learning parameters
-        self.num_random = 10
-        self.temp = 1.0
-        self.min_q_weight = min_q_weight
-        if lagrange_thresh == -1:
-            self.with_lagrange = False
-        else:
-            print("using lagrange")
-            self.with_lagrange = True
-        self.deterministic_backup = deterministic_backup
+        self.cplexpath = cfg.cplexpath
+        self.directory = cfg.directory
         self.step = 0
-        self.nodes = env.nregions
+        self.nodes = env.nregion
 
         self.replay_buffer = ReplayData(device=device)
         # nnets
-        self.actor = GNNActor(self.input_size, self.hidden_size, act_dim=self.act_dim)
-    
-        if critic_version == 1:
-            GNNCritic = GNNCritic1
-        if critic_version == 2:
-            GNNCritic = GNNCritic2
-        if critic_version == 3:
-            GNNCritic = GNNCritic3
-        if critic_version == 4:
-            GNNCritic = GNNCritic4
-        if critic_version == 5:
-            GNNCritic = GNNCritic5
-        if critic_version == 6:
-            GNNCritic = GNNCritic4LSTM
+        if self.use_LSTM:
             self.actor = GNNActorLSTM(self.input_size, self.hidden_size, act_dim=self.act_dim)
+            self.critic1 = GNNCriticLSTM(self.input_size, self.hidden_size, act_dim=self.act_dim)
+            self.critic2 = GNNCriticLSTM(self.input_size, self.hidden_size, act_dim=self.act_dim)
+        else:
+            self.actor = GNNActor(self.input_size, self.hidden_size, act_dim=self.act_dim)
+            self.critic1 = GNNCritic(self.input_size, self.hidden_size, act_dim=self.act_dim)
+            self.critic2 = GNNCritic(self.input_size, self.hidden_size, act_dim=self.act_dim)
 
-        self.critic1 = GNNCritic(self.input_size, self.hidden_size, act_dim=self.act_dim)
-        self.critic2 = GNNCritic(self.input_size, self.hidden_size, act_dim=self.act_dim)
         assert self.critic1.parameters() != self.critic2.parameters()
 
         self.critic1_target = GNNCritic(self.input_size, self.hidden_size, act_dim=self.act_dim)
@@ -468,26 +149,13 @@ class SAC(nn.Module):
         self.rewards = []
         self.to(self.device)
 
-        if self.with_lagrange:
-            self.target_action_gap = lagrange_thresh  # lagrange treshhold
-            self.log_alpha_prime = Scalar(1.0)
-            self.alpha_prime_optimizer = torch.optim.Adam(
-                self.log_alpha_prime.parameters(),
-                lr=self.p_lr,
-            )
-
         if self.use_automatic_entropy_tuning:
             self.target_entropy = -np.prod(self.act_dim).item()
             self.log_alpha = Scalar(0.0)
             self.alpha_optimizer = torch.optim.Adam(
                 self.log_alpha.parameters(), lr=1e-3
             )
-
-    def parse_obs(self, obs):
-        state = self.obs_parser.parse_obs(obs)
-        return state
-
-    def select_action(self, data, deterministic=False):
+    def select_action(self, data, deterministic=True):
         with torch.no_grad():
             a, _ = self.actor(data.x, data.edge_index, deterministic)
         a = a.squeeze(-1)
@@ -609,7 +277,67 @@ class SAC(nn.Module):
 
         return optimizers
 
-    def test_agent(self, test_episodes, env, cplexpath, matching_steps, agent_name, parser):
+    def learn(self, cfg):
+        train_episodes = cfg.max_episodes  # set max number of training episodes
+        epochs = trange(train_episodes)  # epoch iterator
+        best_reward_test = -np.inf  # set best reward
+        self.train()  # set model in train mode
+
+        for i_episode in epochs:
+            obs, rew = self.env.reset()  # initialize environment
+            obs = self.parser.parse_obs(obs)
+            episode_reward = 0
+            episode_reward += rew
+            episode_served_demand = 0
+            episode_rebalancing_cost = 0
+         
+            done = False
+
+            while not done:
+                
+                action_rl = self.select_action(obs)
+                desiredAcc = {self.env.region[i]: int(action_rl[i] * dictsum(self.env.acc, self.env.time + 1))
+                    for i in range(len(self.env.region))
+                }
+                reb_action = solveRebFlow(
+                    self.env,
+                    "scenario_nyc4",
+                    desiredAcc,
+                    self.cplexpath,
+                    directory=self.directory,
+                )
+                new_obs, rew, done, info = self.env.step(reb_action)
+                
+                episode_reward += rew
+                episode_served_demand += info["served_demand"]
+                episode_rebalancing_cost += info["rebalancing_cost"]
+                
+                if not done: 
+                    new_obs = self.parser.parse_obs(new_obs)
+                    self.replay_buffer.store(obs, action_rl, cfg.rew_scale * rew, new_obs)
+                obs = new_obs
+                if i_episode > 10:
+                    batch = self.replay_buffer.sample_batch(cfg.batch_size)
+                    self.update(data=batch)
+
+            epochs.set_description(
+                f"Episode {i_episode+1} | Reward: {episode_reward:.2f} | ServedDemand: {episode_served_demand:.2f} | Reb. Cost: {episode_rebalancing_cost:.2f}"
+            )
+      
+            self.save_checkpoint(
+                path=f"ckpt/{cfg.checkpoint_path}_running.pth"
+            )
+            if i_episode % 10 == 0:
+                test_reward, test_served_demand, test_rebalancing_cost = self.test(
+                    1, self.env
+                )
+                if test_reward >= best_reward_test:
+                    best_reward_test = test_reward
+                    self.save_checkpoint(
+                        path=f"ckpt/{cfg.checkpoint_path}_test.pth"
+                    )
+
+    def test(self, test_episodes, env):
         epochs = range(test_episodes)  # epoch iterator
         episode_reward = []
         episode_served_demand = []
@@ -620,59 +348,39 @@ class SAC(nn.Module):
             eps_served_demand = 0
             eps_rebalancing_cost = 0
             eps_rebalancing_veh = 0
-            actions = []
             done = False
-            # Reset the environment
-            obs = env.reset()   # initialize environment
-            if self.env.scenario.is_meso:
-                try:
-                    traci.simulationStep()
-                except Exception as e:
-                    print(f"FatalTraCIError during initial step: {e}")
-                    traci.close()
-                    break
+
+            obs, rew = env.reset()  # initialize environment
+            obs = self.parser.parse_obs(obs)
+            eps_reward += rew
+            
             while not done:
-                sumo_step = 0
-                try:
-                    while sumo_step < matching_steps:
-                        traci.simulationStep()
-                        sumo_step += 1
-                except Exception as e:
-                    print(f"FatalTraCIError during matching steps: {e}")
-                    traci.close()
-                    break
-                obs, paxreward, done, info = env.pax_step(CPLEXPATH=cplexpath, PATH=f'scenario_lux/{agent_name}')
-                eps_reward += paxreward
+                
+                action_rl = self.select_action(obs, deterministic=True)
+                desiredAcc = {env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time + 1))
+                    for i in range(len(self.env.region))
+                }
+                reb_action = solveRebFlow(
+                    self.env,
+                    "scenario_nyc4",
+                    desiredAcc,
+                    self.cplexpath,
+                    directory=self.directory,
+                )
+                new_obs, rew, done, info = env.step(reb_action)
+                if not done:
+                    obs = self.parser.parse_obs(new_obs)
 
-                o = parser.parse_obs(obs)
-
-                action_rl = self.select_action(o, deterministic=True)
-                actions.append(action_rl)
-
-                desired_acc = {env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time + env.tstep)) for i in range(len(env.region))}
-
-                reb_action = solveRebFlow(env, f'scenario_lux/{agent_name}', desired_acc, cplexpath)
-
-                # Take action in environment
-                try:
-                    _, rebreward, done, info = env.reb_step(reb_action)
-                except Exception as e:
-                    print(f"FatalTraCIError during rebalancing step: {e}")
-                    traci.close()
-                    break
-
-                eps_reward += rebreward
+                eps_reward += rew
                 eps_served_demand += info["served_demand"]
                 eps_rebalancing_cost += info["rebalancing_cost"]
-                eps_rebalancing_veh += info["rebalanced_vehicles"]
+                #eps_rebalancing_veh += info["rebalanced_vehicles"]
+
             episode_reward.append(eps_reward)
             episode_served_demand.append(eps_served_demand)
             episode_rebalancing_cost.append(eps_rebalancing_cost)
-            episode_rebalanced_vehicles.append(eps_rebalancing_veh)
+            #episode_rebalanced_vehicles.append(eps_rebalancing_veh)
 
-            # stop episode if terminating conditions are met
-            if done:
-                traci.close()
 
         return (
             np.mean(episode_reward),

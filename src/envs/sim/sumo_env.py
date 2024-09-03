@@ -30,6 +30,8 @@ from itertools import combinations
 from sklearn.cluster import KMeans
 from src.misc.utils import mat2str
 from scipy.spatial.distance import cdist
+import torch
+from torch.geometric.data import Data
 
 
 class AMoD:
@@ -861,3 +863,60 @@ class Scenario:
                 route_id = edge_o.getID() + edge_d.getID() + 'init'
                 traci.vehicle.add(vehID=taxi_id, typeID='taxi', routeID=route_id)
                 taxi_num += 1
+
+
+
+
+class GNNParser:
+    """
+    Parser converting raw environment observations to agent inputs (s_t).
+    """
+
+    def __init__(self, env, T=10, json_file=None):
+        super().__init__()
+        self.env = env
+        self.T = self.env.scenario.thorizon
+        self.s_acc, self.s_dem = self.get_scaling_factors()     # ADDED
+        self.json_file = json_file
+        if self.json_file is not None:
+            with open(json_file, "r") as file:
+                self.data = json.load(file)
+
+    def parse_obs(self, obs):
+        x = torch.cat((
+            torch.tensor([obs[0][n][self.env.time+1]*self.s_acc for n in self.env.region]).view(1, 1, self.env.nregions).float(),
+            torch.tensor([[(obs[0][n][self.env.time+1] + self.env.dacc[n][t])*self.s_acc for n in self.env.region] \
+                          for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregions).float(),
+            torch.tensor([[sum([(self.env.scenario.demand_input[i,j][t])*(self.env.price[i,j][t])*self.s_dem \
+                          for j in self.env.region]) for i in self.env.region] for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregions).float()),
+              dim=1).squeeze(0).view(1+self.T+self.T, self.env.nregions).T
+
+        ###################
+        # ADDED
+        # Edge index self-connected tensor definition
+        origin = []
+        destination = []
+        for o in range(self.env.scenario.adjacency_matrix.shape[0]):
+            for d in range(self.env.scenario.adjacency_matrix.shape[1]):
+                if self.env.scenario.adjacency_matrix[o, d] == 1:
+                    origin.append(o)
+                    destination.append(d)
+
+        edge_index = torch.cat([torch.tensor([origin]), torch.tensor([destination])])
+        # edge_index = torch.cat([torch.tensor([self.env.region]), torch.tensor([self.env.region])])    # Just local region information
+        ##################
+
+
+        data = Data(x, edge_index)
+        return data
+
+    def get_scaling_factors(self):
+        t0 = 0
+        tf = self.env.scenario.duration
+        time = [t for t in range(t0, tf)]
+        acc_tot = (self.env.acc[0][0] * self.env.nregions)
+        demand = self.env.scenario.demand_input
+        price = self.env.scenario.price
+        demand_max = max([max([demand[key][t] for key in demand]) for t in time])
+        price_max = max([max([price[key][t] for key in price]) for t in time])
+        return 2/acc_tot, 1/(1.2 * demand_max * price_max)

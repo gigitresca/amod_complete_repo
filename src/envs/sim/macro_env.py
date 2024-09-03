@@ -6,10 +6,12 @@ import networkx as nx
 from src.misc.utils import mat2str
 from copy import deepcopy
 import json
+import torch 
+from torch_geometric.data import Data
 
 class AMoD:
     # initialization
-    def __init__(self, scenario, beta=0.2): # updated to take scenario and beta (cost for rebalancing) as input 
+    def __init__(self, scenario, cfg, beta=0.2): # updated to take scenario and beta (cost for rebalancing) as input 
         self.scenario = deepcopy(scenario) # I changed it to deep copy so that the scenario input is not modified by env 
         self.G = scenario.G # Road Graph: node - region, edge - connection of regions, node attr: 'accInit', edge attr: 'time'
         self.demandTime = self.scenario.demandTime
@@ -20,6 +22,7 @@ class AMoD:
         self.depDemand = dict()
         self.arrDemand = dict()
         self.region = list(self.G) # set of regions
+        self.cfg = cfg 
         for i in self.region:
             self.depDemand[i] = defaultdict(float)
             self.arrDemand[i] = defaultdict(float)
@@ -179,18 +182,17 @@ class AMoD:
         # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
         # Take action in environment
         rew = 0
-        _, rebreward, done, info = self.env.reb_step(reb_action)
+        obs, rebreward, done, info = self.reb_step(reb_action)
 
         rew += rebreward 
 
-        #if done: 
-        #    return None, rew, done, info
+        if done: 
+            return obs, rew, done, info
 
-        obs, paxreward, done, info = self.env.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=f'sac/scenario_lux/{self.cfg.agent_name}')
-        episode_reward += paxreward
-        o = self.parser.parse_obs(obs=obs)
+        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=f'sac/scenario_lux/{self.cfg.directory}')
+
         rew += paxreward
-        return o, rew, done, info
+        return obs, rew, done, info
 
     def reset(self):
         # reset the episode
@@ -229,10 +231,10 @@ class AMoD:
          # TODO: define states here
         self.obs = (self.acc, self.time, self.dacc, self.demand)
 
-        obs, paxreward, done, info = self.env.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=f'sac/scenario_lux/{self.cfg.agent_name}')
+        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=f'sac/scenario_lux/{self.cfg.directory}')
 
         self.reward = 0
-        return obs
+        return obs, paxreward
    
     
     
@@ -443,17 +445,37 @@ class Scenario:
 
         return tripAttr
 
-#TODO: Needed?
-class Star2Complete(Scenario):
-    def __init__(self, N1 = 4, N2 =4, sd = 10, star_demand = 20, complete_demand = 1, star_center = [5,6,9,10],
-                 grid_travel_time=3, ninit = 50, demand_ratio=[1,1.5,1.5,1], alpha=0.2, fix_price=False): 
-        # beta - proportion of star network
-        # alpha - parameter for uniform distribution of demand [1-alpha, 1+alpha]
-        super(Star2Complete, self).__init__(N1=N1,N2=N2,sd=sd, ninit = ninit, 
-                                            grid_travel_time=grid_travel_time, 
-                                            fix_price = fix_price,
-                                            alpha = alpha,
-                                            demand_ratio = demand_ratio,
-                                            demand_input = {(i,j): complete_demand + (star_demand if i in star_center and j not in star_center else 0)
-                                                            for i in range(0,N1*N2) for j in range(0,N1*N2) if i!=j}
-                                            )
+class GNNParser():
+    """
+    Parser converting raw environment observations to agent inputs (s_t).
+    """
+    def __init__(self, env, T=10, json_file=None, scale_factor=0.01):
+        super().__init__()
+        self.env = env
+        self.T = T
+        self.s = scale_factor
+        self.json_file = json_file
+        if self.json_file is not None:
+            with open(json_file,"r") as file:
+                self.data = json.load(file)
+        
+    def parse_obs(self, obs):
+        x = torch.cat((
+            torch.tensor([obs[0][n][self.env.time+1]*self.s for n in self.env.region]).view(1, 1, self.env.nregion).float(), 
+
+            torch.tensor([[(obs[0][n][self.env.time+1] + self.env.dacc[n][t])*self.s for n in self.env.region] \
+                          for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregion).float(), 
+
+            torch.tensor([[sum([(self.env.scenario.demand_input[i,j][t])*(self.env.price[i,j][t])*self.s \
+                          for j in self.env.region]) for i in self.env.region] for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregion).float()),
+                          
+              dim=1).squeeze(0).view(1+self.T +self.T , self.env.nregion).T
+        
+        if self.json_file is not None:
+            edge_index = torch.vstack((torch.tensor([edge['i'] for edge in self.data["topology_graph"]]).view(1,-1), 
+                                      torch.tensor([edge['j'] for edge in self.data["topology_graph"]]).view(1,-1))).long()
+        else:
+            edge_index = torch.cat((torch.arange(self.env.nregion).view(1, self.env.nregion), 
+                                    torch.arange(self.env.nregion).view(1, self.env.nregion)), dim=0).long()
+        data = Data(x, edge_index)
+        return data
