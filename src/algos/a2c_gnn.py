@@ -231,6 +231,69 @@ class A2C(nn.Module):
 
         return [loss.item() for loss in value_losses], [loss.item() for loss in policy_losses]
     
+    def learn(self, cfg):
+        log = {'train_reward': [], 
+           'train_served_demand': [], 
+           'train_reb_cost': [],
+           'train_reb_vehicles': [],
+           'train_policy_losses': [],
+           'train_value_losses': []}
+
+        train_episodes = cfg.max_episodes #set max number of training episodes
+        T = cfg.max_steps #set episode length
+        epochs = trange(train_episodes)     # epoch iterator
+        best_reward = -np.inf   # set best reward
+        self.train()   # set model in train mode
+        
+        for i_episode in epochs:
+    
+            # Initialize the reward
+            episode_reward = 0
+            episode_served_demand = 0
+            episode_rebalancing_cost = 0
+            episode_rebalanced_vehicles = 0
+            # Reset the environment
+            obs = self.env.reset()  # initialize environment
+            for step in range(T):
+                # take matching step (Step 1 in paper)
+                action_rl = self.select_action(obs)
+                desired_acc = {self.env.region[i]: int(action_rl[i] * dictsum(self.env.acc, self.env.time+self.env.tstep))for i in range(len(self.env.region))}
+                # solve minimum rebalancing distance problem (Step 3 in paper)
+                reb_action = self.solveRebFlow(self.env, f'sac/scenario_lux/{self.cfg.agent_name}', desired_acc, self.cfg.cplexpath)
+
+                obs, rew, done, info = self.env.step(reb_action)
+
+                self.rewards.append(rew)
+                # track performance over episode
+                episode_served_demand += info['served_demand']
+                episode_rebalancing_cost += info['rebalancing_cost']
+                episode_rebalanced_vehicles += info['rebalanced_vehicles']
+                # stop episode if terminating conditions are met
+                if done:
+                    break
+            
+            # Training step only if the episode was completed
+            if step < (args.duration * 60) / args.matching_tstep - 1:
+                epochs.set_description(f"Episode {i_episode + 1} | Not completed")
+                continue
+            # perform on-policy backprop
+            p_loss, v_loss = self.training_step()
+            log['train_policy_losses'].extend(p_loss)
+            log['train_value_losses'].extend(v_loss)
+
+            # Send current statistics to screen
+            epochs.set_description(f"Episode {i_episode+1} | Reward: {episode_reward:.2f} | ServedDemand: {episode_served_demand:.2f} | Reb. Cost: {episode_rebalancing_cost:.2f}  | Reb. Veh: {episode_rebalanced_vehicles:.2f}")
+            # Checkpoint best performing model
+            if episode_reward >= best_reward:
+                self.save_checkpoint(path=f"./{args.directory}/ckpt/scenario_lux/{args.agent_name}.pth")
+                best_reward = episode_reward
+            # Log KPIs
+            log['train_reward'].append(episode_reward)
+            log['train_served_demand'].append(episode_served_demand)
+            log['train_reb_cost'].append(episode_rebalancing_cost)
+            log['train_reb_vehicles'].append(episode_rebalanced_vehicles)
+            self.log(log, path=f"./{args.directory}/rl_logs/scenario_lux/{args.agent_name}.pth")
+
     def configure_optimizers(self):
         optimizers = dict()
         actor_params = list(self.actor.parameters())

@@ -1,0 +1,129 @@
+simulator:
+  seed: 
+    value: 10
+    description: "random seed (default: 10)"
+
+  demand_ratio: 
+    value: 0.8
+    description: "demand_ratio (default: 0.8)"
+
+  time_start: 
+    value: 7
+    description: "simulation start time in hours (default: 7 hr)"
+
+  duration: 
+    value: 2
+    description: "episode duration in hours (default: 2 hr)"
+
+  time_horizon: 
+    value: 10
+    description: "matching steps in the future for demand and arriving vehicle forecast (default: 10 min)"
+
+  matching_tstep: 
+    value: 1
+    description: "minutes per timestep (default: 1 min)"
+
+  reb_tstep: 
+    value: 3
+    description: "minutes per timestep (default: 3 min)"
+
+  sumo_tstep: 
+    value: 1
+    description: "sumo time step (default: 1 s)"
+
+  max_waiting_time: 
+    value: 10
+    description: "maximum passengers waiting time for a ride (default: 10 min)"
+
+  beta: 
+    value: 1.0
+    description: "cost of rebalancing (default: 1)"
+
+  num_regions: 
+    value: 8
+    description: "Number of regions for spatial aggregation (default: 8)"
+
+  random_od: 
+    value: false
+    description: "Demand aggregated in the centers of the regions (default: False)"
+
+  acc_init: 
+    value: 90
+    description: "Initial number of taxis per region (default: 90)"
+
+model:
+  test: 
+    value: false
+    description: "activates test mode for agent evaluation"
+
+  agent_name: 
+    value: ${now:%Y%m%d}_sac_gnn
+    description: "Agent name for training or evaluation (default: today's date + '_sac_gnn')"
+
+  pretrained_agent: 
+    value: ""
+    description: "Pretrained agent for fine-tuning (default: '')"
+
+  cplexpath: 
+    value: "/opt/ibm/ILOG/CPLEX_Studio2211/opl/bin/x86-64_linux/"
+    description: "defines directory of the CPLEX installation"
+
+  directory: 
+    value: "saved_files"
+    description: "defines directory where to save files"
+
+  max_episodes: 
+    value: 16000
+    description: "number of episodes to train agent (default: 16k)"
+
+  max_steps: 
+    value: 120
+    description: "number of steps per episode (default: T=120)"
+
+  no_cuda: 
+    value: true
+    description: "disables CUDA training"
+
+  batch_size: 
+    value: 100
+    description: "defines batch size"
+
+  p_lr: 
+    value: 1e-3
+    description: "define policy learning rate"
+
+  q_lr: 
+    value: 1e-3
+    description: "defines q-value learning rate"
+
+  alpha: 
+    value: 0.3
+    description: "defines entropy coefficient"
+
+  auto_entropy: 
+    value: false
+    description: "Use automatic entropy tuning"
+
+  hidden_size: 
+    value: 256
+    description: "defines hidden units in the MLP layers"
+
+  clip: 
+    value: 500
+    description: "clip value for gradient clipping (default: 500)"
+
+  checkpoint_path: 
+    value: "SAC"
+    description: "path, where to save model checkpoints"
+
+  city: 
+    value: "nyc_brooklyn"
+    description: "defines city to train on"
+
+  rew_scale: 
+    value: 0.01
+    description: "defines reward scale"
+
+  critic_version: 
+    value: 4
+    description: "defines the critic version (default: 4)"
