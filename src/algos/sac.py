@@ -11,6 +11,7 @@ import random
 from tqdm import trange
 import os
 import sys
+import traci
 
 
 class PairData(Data):
@@ -278,12 +279,31 @@ class SAC(nn.Module):
         return optimizers
 
     def learn(self, cfg):
-        train_episodes = cfg.max_episodes  # set max number of training episodes
+        sim = cfg.simulator.name
+        if sim == "sumo": 
+            scenario_path = 'src/envs/data/LuSTScenario/'
+            sumocfg_file = 'dua_meso.static.sumocfg'
+            net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
+            os.makedirs('saved_files/sumo_output/scenario_lux/', exist_ok=True)
+            matching_steps = int(cfg.simulator.matching_tstep * 60 / cfg.simulator.sumo_tstep)  # sumo steps between each matching
+            if 'meso' in net_file:
+                matching_steps -= 1 
+            sumo_cmd = [
+            "sumo", "--no-internal-links", "-c", os.path.join(scenario_path, sumocfg_file),
+            "--step-length", str(cfg.sumo_tstep),
+            "--device.taxi.dispatch-algorithm", "traci",
+            "-b", str(cfg.time_start * 60 * 60), "--seed", "10",
+            "-W", 'true', "-v", 'false',
+            ]
+        
+        train_episodes = cfg.model.max_episodes  # set max number of training episodes
         epochs = trange(train_episodes)  # epoch iterator
         best_reward_test = -np.inf  # set best reward
         self.train()  # set model in train mode
 
         for i_episode in epochs:
+            if sim =='sumo':
+                traci.start(sumo_cmd)
             obs, rew = self.env.reset()  # initialize environment
             obs = self.parser.parse_obs(obs)
             episode_reward = 0
@@ -292,8 +312,14 @@ class SAC(nn.Module):
             episode_rebalancing_cost = 0
          
             done = False
-
+            if sim =='sumo' and 'meso' in net_file:
+                traci.simulationStep()
             while not done:
+                if sim =='sumo':
+                    sumo_step = 0
+                    while sumo_step < matching_steps:
+                        traci.simulationStep()
+                        sumo_step += 1
                 
                 action_rl = self.select_action(obs)
                 desiredAcc = {self.env.region[i]: int(action_rl[i] * dictsum(self.env.acc, self.env.time + 1))
@@ -314,19 +340,22 @@ class SAC(nn.Module):
                 
                 if not done: 
                     new_obs = self.parser.parse_obs(new_obs)
-                    self.replay_buffer.store(obs, action_rl, cfg.rew_scale * rew, new_obs)
+                    self.replay_buffer.store(obs, action_rl, cfg.model.rew_scale * rew, new_obs)
+
                 obs = new_obs
                 if i_episode > 10:
-                    batch = self.replay_buffer.sample_batch(cfg.batch_size)
+                    batch = self.replay_buffer.sample_batch(cfg.model.batch_size)
                     self.update(data=batch)
-
+                if sim =='sumo' and done:
+                    traci.close()
             epochs.set_description(
                 f"Episode {i_episode+1} | Reward: {episode_reward:.2f} | ServedDemand: {episode_served_demand:.2f} | Reb. Cost: {episode_rebalancing_cost:.2f}"
             )
       
             self.save_checkpoint(
-                path=f"ckpt/{cfg.checkpoint_path}_running.pth"
+                path=f"ckpt/{cfg.model.checkpoint_path}_running.pth"
             )
+         
             if i_episode % 10 == 0:
                 test_reward, test_served_demand, test_rebalancing_cost = self.test(
                     1, self.env
@@ -334,7 +363,7 @@ class SAC(nn.Module):
                 if test_reward >= best_reward_test:
                     best_reward_test = test_reward
                     self.save_checkpoint(
-                        path=f"ckpt/{cfg.checkpoint_path}_test.pth"
+                        path=f"ckpt/{cfg.model.checkpoint_path}_test.pth"
                     )
 
     def test(self, test_episodes, env):

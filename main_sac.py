@@ -257,7 +257,7 @@ if not args.test:
         if step < (args.duration * 60) / args.matching_tstep - 1:
             epochs.set_description(f"Episode {i_episode + 1} | Not completed")
             continue
-
+            
         # Send current statistics to screen
         epochs.set_description(f"Episode {i_episode+1} | Reward: {episode_reward:.2f} | ServedDemand: {episode_served_demand:.2f} | Reb. Cost: {episode_rebalancing_cost:.2f}  | Reb. Veh: {episode_rebalanced_vehicles:.2f}")
         # Checkpoint best performing model

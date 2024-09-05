@@ -8,6 +8,7 @@ from copy import deepcopy
 import json
 import torch 
 from torch_geometric.data import Data
+from pulp import LpMaximize, LpProblem, LpVariable, lpSum, LpStatus, value
 
 class AMoD:
     # initialization
@@ -107,6 +108,63 @@ class AMoD:
                         flow[int(i),int(j)] = float(f)
         paxAction = [flow[i,j] if (i,j) in flow else 0 for i,j in self.edges]
         return paxAction
+
+
+    def matching_pulp(self):
+        #region, acc_init, demand, price, demand_edges
+        t = self.time
+        demandAttr = [(i,j,self.demand[i,j][t], self.price[i,j][t]) for i,j in self.demand \
+                      if t in self.demand[i,j] and self.demand[i,j][t]>1e-3]
+        accTuple = [(n,self.acc[n][t+1]) for n in self.acc]
+
+        acc_init = {n: self.acc[n][t+1] for n in self.acc}
+
+        demand = {(i, j): self.demand[i,j][t] for i,j in self.demand if t in self.demand[i,j] and self.demand[i,j][t]>1e-3}
+
+        price = {(i, j): self.price[i,j][t] for i,j in self.price if t in self.price[i,j] and self.price[i,j][t]>1e-3}
+        
+        demand_edges = [(i, j) for i,j in self.demand if t in self.demand[i,j] and self.demand[i,j][t]>1e-3]
+
+        region = [n for n in self.acc]
+        
+        # Create a new PuLP model
+        model = LpProblem("DemandFlowOptimization", LpMaximize)
+
+        # Decision variables: flow on each edge
+        flow = {
+            (i, j): LpVariable(f"flow_{i}_{j}", lowBound=0, cat='Continuous')
+            for (i, j) in demand_edges
+        }
+
+        # Objective function: maximize total revenue
+        model += lpSum(flow[(i, j)] * price[(i, j)] for (i, j) in demand_edges), "TotalRevenue"
+
+        # Supply constraints: total flow out of each region <= initial availability
+        for i in region:
+            model += lpSum(flow[(i, j)] for (i, j) in demand_edges if i == i) <= acc_init[i], f"Supply_Region_{i}"
+
+        # Demand constraints: flow on each edge <= demand on that edge
+        for (i, j) in demand_edges:
+            model += flow[(i, j)] <= demand[(i, j)], f"Demand_Edge_{i}_{j}"
+
+        # Solve the problem
+        status = model.solve()
+
+        # Output the results
+        if LpStatus[status] == "Optimal":
+            flow = {(i, j): value(flow[(i, j)]) for (i, j) in demand_edges}
+            
+            paxAction = [flow[i,j] if (i,j) in flow else 0 for i,j in self.edges]
+
+            flow_result = {(i, j): value(flow[(i, j)]) for (i, j) in demand_edges}
+
+            # Map flow values to paxAction array based on the edges
+            paxAction = [flow_result.get((i, j), 0) for (i, j) in self.edges]
+
+            return paxAction
+        else:
+            print(f"Optimization failed with status: {LpStatus[status]}")
+            return None
 
     # pax step
     def pax_step(self, paxAction=None, CPLEXPATH=None, PATH='', platform =  'linux'):

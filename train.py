@@ -19,8 +19,9 @@ def setup_sumo(cfg):
                 tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time)
     env = AMoD(scenario, beta=cfg.beta)
     parser = GNNParser(env, T=cfg.time_horizon, json_file=demand_file)
+
     return env, parser
-    
+
 def setup_macro(cfg):
     from src.envs.sim.macro_env import Scenario, AMoD, GNNParser
     with open("src/envs/data/macro/calibrated_parameters.json", "r") as file:
@@ -70,7 +71,7 @@ def main(cfg: DictConfig):
 
     model = setup_model(cfg, env, parser, device)
 
-    model.learn(cfg.model)
+    model.learn(cfg)
 
 if __name__ == "__main__":
     main()
