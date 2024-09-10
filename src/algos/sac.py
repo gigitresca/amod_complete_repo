@@ -11,6 +11,8 @@ import random
 from tqdm import trange
 import os
 import sys
+if 'SUMO_HOME' in os.environ:
+    sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
 import traci
 
 
@@ -121,7 +123,20 @@ class SAC(nn.Module):
         self.nodes = env.nregion
 
         self.replay_buffer = ReplayData(device=device)
+        """
+        self.actor = models["actor"](self.input_size, self.hidden_size, act_dim=self.act_dim)
+        self.critic1 = models["critic"](self.input_size, self.hidden_size, act_dim=self.act_dim)
+        self.critic2 = models["critic"](self.input_size, self.hidden_size, act_dim=self.act_dim)
+
+        assert self.critic1.parameters() != self.critic2.parameters()
+
+        self.critic1_target = models["critic"](self.input_size, self.hidden_size, act_dim=self.act_dim)
+        self.critic1_target.load_state_dict(self.critic1.state_dict())
+        self.critic2_target = models["critic"](self.input_size, self.hidden_size, act_dim=self.act_dim)
+        self.critic2_target.load_state_dict(self.critic2.state_dict())
+        
         # nnets
+        """
         if self.use_LSTM:
             self.actor = GNNActorLSTM(self.input_size, self.hidden_size, act_dim=self.act_dim)
             self.critic1 = GNNCriticLSTM(self.input_size, self.hidden_size, act_dim=self.act_dim)
@@ -137,7 +152,7 @@ class SAC(nn.Module):
         self.critic1_target.load_state_dict(self.critic1.state_dict())
         self.critic2_target = GNNCritic(self.input_size, self.hidden_size, act_dim=self.act_dim)
         self.critic2_target.load_state_dict(self.critic2.state_dict())
-
+        
         for p in self.critic1_target.parameters():
             p.requires_grad = False
         for p in self.critic2_target.parameters():
@@ -281,20 +296,23 @@ class SAC(nn.Module):
     def learn(self, cfg):
         sim = cfg.simulator.name
         if sim == "sumo": 
-            scenario_path = 'src/envs/data/LuSTScenario/'
+            #traci.close(wait=False)
+            scenario_path = '/home/csasc/amod_complete_repo/src/envs/data/LuSTScenario/'
             sumocfg_file = 'dua_meso.static.sumocfg'
             net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
             os.makedirs('saved_files/sumo_output/scenario_lux/', exist_ok=True)
             matching_steps = int(cfg.simulator.matching_tstep * 60 / cfg.simulator.sumo_tstep)  # sumo steps between each matching
             if 'meso' in net_file:
                 matching_steps -= 1 
+                
             sumo_cmd = [
             "sumo", "--no-internal-links", "-c", os.path.join(scenario_path, sumocfg_file),
-            "--step-length", str(cfg.sumo_tstep),
+            "--step-length", str(cfg.simulator.sumo_tstep),
             "--device.taxi.dispatch-algorithm", "traci",
-            "-b", str(cfg.time_start * 60 * 60), "--seed", "10",
+            "-b", str(cfg.simulator.time_start * 60 * 60), "--seed", "10",
             "-W", 'true', "-v", 'false',
             ]
+            assert os.path.exists(os.path.join(scenario_path, sumocfg_file)), "SUMO configuration file not found!"
         
         train_episodes = cfg.model.max_episodes  # set max number of training episodes
         epochs = trange(train_episodes)  # epoch iterator
@@ -303,7 +321,9 @@ class SAC(nn.Module):
 
         for i_episode in epochs:
             if sim =='sumo':
+                print('starting sumo')
                 traci.start(sumo_cmd)
+            print('resetting env')
             obs, rew = self.env.reset()  # initialize environment
             obs = self.parser.parse_obs(obs)
             episode_reward = 0

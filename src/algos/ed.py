@@ -4,12 +4,13 @@ from src.algos.reb_flow_solver import solveRebFlow
 from src.algos.base import BaseAlgorithm
 
 class EqualDistribution(BaseAlgorithm):
-    def __init__(self, cplexpath):
+    def __init__(self, cplexpath, directory):
         """
         :param cplexpath: Path to the CPLEX solver.
         """
         super().__init__()
         self.cplexpath = cplexpath
+        self.directory = directory
 
     def select_action(self, env):
         """
@@ -17,8 +18,8 @@ class EqualDistribution(BaseAlgorithm):
         """
         action_rl = [1 / env.nregion for _ in range(env.nregion)]
         desired_acc = {
-            env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time + env.tstep))
+            env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time +1))
             for i in range(len(env.region))
         }
-        reb_action = solveRebFlow(env, 'scenario_ed', desired_acc, self.cplexpath)
+        reb_action = solveRebFlow(env, 'scenario_ed', desired_acc, self.cplexpath, self.directory)
         return reb_action

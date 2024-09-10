@@ -31,7 +31,7 @@ from sklearn.cluster import KMeans
 from src.misc.utils import mat2str
 from scipy.spatial.distance import cdist
 import torch
-from torch.geometric.data import Data
+from torch_geometric.data import Data
 
 
 class AMoD:
@@ -60,7 +60,7 @@ class AMoD:
         self.rebFlow = defaultdict(dict)  # number of rebalancing vehicles, key: (i,j) - (origin, destination), t - time
         self.paxFlow = defaultdict(dict)  # number of vehicles with passengers, key: (i,j) - (origin, destination), t - time
         self.edges = []  # set of rebalancing edges
-        self.nregions = len(scenario.G)  # number of regions
+        self.nregion = len(scenario.G)  # number of regions
         for i in self.G:
             self.edges.append((i, i))
             for e in self.G.out_edges(i):
@@ -426,7 +426,7 @@ class AMoD:
                 else:
                     self.demand_res[o, d][t].append(trip)
         # Compute average waiting time per region
-        for n in range(self.nregions):
+        for n in range(self.nregion):
             if self.waiting_time[n][self.time] != 0:
                 self.waiting_time[n][self.time] /= self.passengers[n][self.time]
             else:
@@ -884,12 +884,12 @@ class GNNParser:
 
     def parse_obs(self, obs):
         x = torch.cat((
-            torch.tensor([obs[0][n][self.env.time+1]*self.s_acc for n in self.env.region]).view(1, 1, self.env.nregions).float(),
+            torch.tensor([obs[0][n][self.env.time+1]*self.s_acc for n in self.env.region]).view(1, 1, self.env.nregion).float(),
             torch.tensor([[(obs[0][n][self.env.time+1] + self.env.dacc[n][t])*self.s_acc for n in self.env.region] \
-                          for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregions).float(),
+                          for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregion).float(),
             torch.tensor([[sum([(self.env.scenario.demand_input[i,j][t])*(self.env.price[i,j][t])*self.s_dem \
-                          for j in self.env.region]) for i in self.env.region] for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregions).float()),
-              dim=1).squeeze(0).view(1+self.T+self.T, self.env.nregions).T
+                          for j in self.env.region]) for i in self.env.region] for t in range(self.env.time+1, self.env.time+self.T+1)]).view(1, self.T, self.env.nregion).float()),
+              dim=1).squeeze(0).view(1+self.T+self.T, self.env.nregion).T
 
         ###################
         # ADDED
@@ -914,7 +914,7 @@ class GNNParser:
         t0 = 0
         tf = self.env.scenario.duration
         time = [t for t in range(t0, tf)]
-        acc_tot = (self.env.acc[0][0] * self.env.nregions)
+        acc_tot = (self.env.acc[0][0] * self.env.nregion)
         demand = self.env.scenario.demand_input
         price = self.env.scenario.price
         demand_max = max([max([demand[key][t] for key in demand]) for t in time])

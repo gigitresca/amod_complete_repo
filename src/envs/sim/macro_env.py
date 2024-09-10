@@ -9,6 +9,7 @@ import json
 import torch 
 from torch_geometric.data import Data
 from pulp import LpMaximize, LpProblem, LpVariable, lpSum, LpStatus, value
+import pulp
 
 class AMoD:
     # initialization
@@ -67,66 +68,73 @@ class AMoD:
         self.reward = 0
         # observation: current vehicle distribution, time, future arrivals, demand        
         self.obs = (self.acc, self.time, self.dacc, self.demand)
-
+    
     def matching(self, CPLEXPATH=None, PATH='', platform = 'linux'):
-        t = self.time
-        demandAttr = [(i,j,self.demand[i,j][t], self.price[i,j][t]) for i,j in self.demand \
-                      if t in self.demand[i,j] and self.demand[i,j][t]>1e-3]
-        accTuple = [(n,self.acc[n][t+1]) for n in self.acc]
-        modPath = os.getcwd().replace('\\','/')+'/src/cplex_mod/'
-        matchingPath = os.getcwd().replace('\\','/')+'/saved_files/cplex_logs/matching/'+PATH + '/'
-        if not os.path.exists(matchingPath):
-            os.makedirs(matchingPath)
-        datafile = matchingPath + 'data_{}.dat'.format(t)
-        resfile = matchingPath + 'res_{}.dat'.format(t)
-        with open(datafile,'w') as file:
-            file.write('path="'+resfile+'";\r\n')
-            file.write('demandAttr='+mat2str(demandAttr)+';\r\n')
-            file.write('accInitTuple='+mat2str(accTuple)+';\r\n')
-        modfile = modPath+'matching.mod'
-        if CPLEXPATH is None:
-            CPLEXPATH = "C:/Program Files/ibm/ILOG/CPLEX_Studio1210/opl/bin/x64_win64/"
-        my_env = os.environ.copy()
-        if platform == 'mac':
-            my_env["DYLD_LIBRARY_PATH"] = CPLEXPATH
+        #CPLEXPATH = 'None'
+        if CPLEXPATH=='None':
+            return self.matching_pulp()
         else:
-            my_env["LD_LIBRARY_PATH"] = CPLEXPATH
-        out_file =  matchingPath + 'out_{}.dat'.format(t)
-        with open(out_file,'w') as output_f:
-            subprocess.check_call([CPLEXPATH+"oplrun", modfile,datafile],stdout=output_f,env=my_env)
-        output_f.close()
-        flow = defaultdict(float)
-        with open(resfile,'r', encoding="utf8") as file:
-            for row in file:
-                item = row.replace('e)',')').strip().strip(';').split('=')
-                if item[0] == 'flow':
-                    values = item[1].strip(')]').strip('[(').split(')(')
-                    for v in values:
-                        if len(v) == 0:
-                            continue
-                        i,j,f = v.split(',')
-                        flow[int(i),int(j)] = float(f)
-        paxAction = [flow[i,j] if (i,j) in flow else 0 for i,j in self.edges]
-        return paxAction
+            t = self.time
+            demandAttr = [(i,j,self.demand[i,j][t], self.price[i,j][t]) for i,j in self.demand \
+                        if t in self.demand[i,j] and self.demand[i,j][t]>1e-3]
+            accTuple = [(n,self.acc[n][t+1]) for n in self.acc]
 
+            #print(accTuple)
+            modPath = os.getcwd().replace('\\','/')+'/src/cplex_mod/'
+            matchingPath = os.getcwd().replace('\\','/')+'/saved_files/cplex_logs/matching/'+PATH + '/'
+            if not os.path.exists(matchingPath):
+                os.makedirs(matchingPath)
+            datafile = matchingPath + 'data_{}.dat'.format(t)
+            resfile = matchingPath + 'res_{}.dat'.format(t)
+            with open(datafile,'w') as file:
+                file.write('path="'+resfile+'";\r\n')
+                file.write('demandAttr='+mat2str(demandAttr)+';\r\n')
+                file.write('accInitTuple='+mat2str(accTuple)+';\r\n')
+            modfile = modPath+'matching.mod'
+            #if CPLEXPATH is None:
+            #    CPLEXPATH = "C:/Program Files/ibm/ILOG/CPLEX_Studio1210/opl/bin/x64_win64/"
+            my_env = os.environ.copy()
+            if platform == 'mac':
+                my_env["DYLD_LIBRARY_PATH"] = CPLEXPATH
+            else:
+                my_env["LD_LIBRARY_PATH"] = CPLEXPATH
+            out_file =  matchingPath + 'out_{}.dat'.format(t)
+            with open(out_file,'w') as output_f:
+                subprocess.check_call([CPLEXPATH+"oplrun", modfile,datafile],stdout=output_f,env=my_env)
+            output_f.close()
+            flow = defaultdict(float)
+            with open(resfile,'r', encoding="utf8") as file:
+                for row in file:
+                    item = row.replace('e)',')').strip().strip(';').split('=')
+                    if item[0] == 'flow':
+                        values = item[1].strip(')]').strip('[(').split(')(')
+                        for v in values:
+                            if len(v) == 0:
+                                continue
+                            i,j,f = v.split(',')
+                            flow[int(i),int(j)] = float(f)
+                
+            paxAction = [flow[i,j] if (i,j) in flow else 0 for i,j in self.edges]
+            #print(paxAction)
+            #print(sum(paxAction))
+            return paxAction
 
     def matching_pulp(self):
         #region, acc_init, demand, price, demand_edges
         t = self.time
-        demandAttr = [(i,j,self.demand[i,j][t], self.price[i,j][t]) for i,j in self.demand \
-                      if t in self.demand[i,j] and self.demand[i,j][t]>1e-3]
-        accTuple = [(n,self.acc[n][t+1]) for n in self.acc]
 
         acc_init = {n: self.acc[n][t+1] for n in self.acc}
 
         demand = {(i, j): self.demand[i,j][t] for i,j in self.demand if t in self.demand[i,j] and self.demand[i,j][t]>1e-3}
 
-        price = {(i, j): self.price[i,j][t] for i,j in self.price if t in self.price[i,j] and self.price[i,j][t]>1e-3}
+        price = {(i, j): self.price[i,j][t] for i,j in self.price if t in self.demand[i,j] and self.demand[i,j][t]>1e-3}
         
         demand_edges = [(i, j) for i,j in self.demand if t in self.demand[i,j] and self.demand[i,j][t]>1e-3]
 
-        region = [n for n in self.acc]
-        
+        region = [n for n in acc_init]
+
+        #print(acc_init)
+    
         # Create a new PuLP model
         model = LpProblem("DemandFlowOptimization", LpMaximize)
 
@@ -140,27 +148,30 @@ class AMoD:
         model += lpSum(flow[(i, j)] * price[(i, j)] for (i, j) in demand_edges), "TotalRevenue"
 
         # Supply constraints: total flow out of each region <= initial availability
-        for i in region:
-            model += lpSum(flow[(i, j)] for (i, j) in demand_edges if i == i) <= acc_init[i], f"Supply_Region_{i}"
+        for k in region:
+            model += lpSum(flow[(i, j)] for (i, j) in demand_edges if i == k) <=  acc_init[k], f"Supply_Region_{k}"
 
         # Demand constraints: flow on each edge <= demand on that edge
         for (i, j) in demand_edges:
             model += flow[(i, j)] <= demand[(i, j)], f"Demand_Edge_{i}_{j}"
 
         # Solve the problem
-        status = model.solve()
-
+        status = model.solve(pulp.PULP_CBC_CMD(msg=False, options=["primalTol=1e-10", "dualTol=1e-10", "mipGap=1e-10"]))
+        #print(f"PuLP Objective: {value(model.objective)}")
         # Output the results
         if LpStatus[status] == "Optimal":
             flow = {(i, j): value(flow[(i, j)]) for (i, j) in demand_edges}
             
             paxAction = [flow[i,j] if (i,j) in flow else 0 for i,j in self.edges]
 
-            flow_result = {(i, j): value(flow[(i, j)]) for (i, j) in demand_edges}
+            #flow_result = {(i, j): value(flow[(i, j)]) for (i, j) in demand_edges}
 
             # Map flow values to paxAction array based on the edges
-            paxAction = [flow_result.get((i, j), 0) for (i, j) in self.edges]
-
+            #paxAction = [flow_result[(i, j)] for (i, j) in self.edges]
+            #print('pulp')
+            #print(sum([flow[(i, j)] * price[(i, j)] for (i, j) in demand_edges]))
+            #print(paxAction)
+            #print(sum(paxAction))
             return paxAction
         else:
             print(f"Optimization failed with status: {LpStatus[status]}")
@@ -180,7 +191,7 @@ class AMoD:
             paxAction = self.matching(CPLEXPATH=CPLEXPATH, PATH=PATH, platform = platform)
         self.paxAction = paxAction
         # serving passengers
-        
+        test_rew =0
         for k in range(len(self.edges)):
             i,j = self.edges[k]
             if (i,j) not in self.demand or t not in self.demand[i,j] or self.paxAction[k]<1e-3:
@@ -194,9 +205,10 @@ class AMoD:
             self.acc[i][t+1] -= self.paxAction[k]
             self.info['served_demand'] += self.servedDemand[i,j][t]            
             self.dacc[j][t+self.demandTime[i,j][t]] += self.paxFlow[i,j][t+self.demandTime[i,j][t]]
-            self.reward += self.paxAction[k]*(self.price[i,j][t] - self.demandTime[i,j][t]*self.beta)            
+            self.reward += self.paxAction[k]*(self.price[i,j][t] - self.demandTime[i,j][t]*self.beta)  
+            test_rew += self.paxAction[k]*(self.price[i,j][t])     
             self.info['revenue'] += self.paxAction[k]*(self.price[i,j][t])  
-        
+       # print('test_rew:', test_rew)
         self.obs = (self.acc, self.time, self.dacc, self.demand) # for acc, the time index would be t+1, but for demand, the time index would be t
         done = False # if passenger matching is executed first
         return self.obs, max(0,self.reward), done, self.info
@@ -248,7 +260,7 @@ class AMoD:
             return obs, rew, done, info
 
         obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=f'sac/scenario_lux/{self.cfg.directory}')
-
+    
         rew += paxreward
         return obs, rew, done, info
 

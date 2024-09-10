@@ -28,7 +28,6 @@ float desiredVehicles[region] = [i:v|<i,v> in accRLTuple]; // TODO: desiredVehic
 //float accInit[region] = [i:v|<i,v> in accInitTuple];
 float vehicles[region] = [i:v|<i,v> in accInitTuple]; // TODO: vehicles
 
-dvar int+ demandFlow[edge];
 dvar int+ rebFlow[edge];
 
 minimize(sum(e in edge) (rebFlow[e]*time[e]));
@@ -45,6 +44,9 @@ main {
   thisOplModel.generate();
   cplex.solve();
   var ofile = new IloOplOutputFile(thisOplModel.path);
+  var objValue = cplex.getObjValue();
+  ofile.writeln("ObjectiveValue = " + objValue + ";");
+
   ofile.write("flow=[")
   for(var e in thisOplModel.edge)
        {

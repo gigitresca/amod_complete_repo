@@ -10,12 +10,11 @@ import traci
 import copy
 
 from tqdm import trange
-from src.envs.sim.amod_env import Scenario, AMoD
-from src.algos.sac import SAC, GNNParser
+from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
+from src.algos.sac_old import SAC
 from src.algos.reb_flow_solver import solveRebFlow
 from src.misc.utils import dictsum
 from datetime import date
-
 
 parser = argparse.ArgumentParser(description='A2C-GNN')
 
@@ -53,7 +52,7 @@ parser.add_argument('--agent_name', type=str, default=date.today().strftime("%Y%
                     help='Agent name for training or evaluation (default:'+date.today().strftime("%Y%m%d")+'_sac_gnn')
 parser.add_argument('--pretrained_agent', type=str, default='',
                     help='Pretrained agent for fine-tuning (default:'')')
-parser.add_argument('--cplexpath', type=str, default='/opt/ibm/ILOG/CPLEX_Studio2211/opl/bin/x86-64_linux/',
+parser.add_argument('--cplexpath', type=str, default='/home/csasc/opt/opl/bin/x86-64_linux/',
                     help='defines directory of the CPLEX installation')
 parser.add_argument('--directory', type=str, default='saved_files',
                     help='defines directory where to save files')

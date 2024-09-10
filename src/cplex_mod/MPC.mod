@@ -88,7 +88,8 @@ main {
   thisOplModel.generate();
   cplex.solve();
   var t = thisOplModel.t0
-  var ofile = new IloOplOutputFile(thisOplModel.path);
+  var ofile = new IloOplOutputFile(thisOplModel.path);  
+
   ofile.write("flow=[")
   for(var e in thisOplModel.edge)
 	if(thisOplModel.demandFlow[e][t]>1e-3 || thisOplModel.rebFlow[e][t]>1e-3)

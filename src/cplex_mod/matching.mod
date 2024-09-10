@@ -47,6 +47,10 @@ main {
   thisOplModel.generate();
   cplex.solve();
   var ofile = new IloOplOutputFile(thisOplModel.path);
+
+  var objValue = cplex.getObjValue();
+  ofile.writeln("ObjectiveValue = " + objValue + ";");
+
   ofile.write("flow=[")
   for(var e in thisOplModel.demandEdge)
        {

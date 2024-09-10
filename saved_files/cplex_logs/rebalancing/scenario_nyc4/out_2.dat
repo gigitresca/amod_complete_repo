@@ -2,7 +2,7 @@
 <<< setup
 
 Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
-Found incumbent of value 1717.000000 after 0.00 sec. (0.01 ticks)
+Found incumbent of value 1290.000000 after 0.00 sec. (0.01 ticks)
 Tried aggregator 1 time.
 MIP Presolve eliminated 1 rows and 13 columns.
 Reduced MIP has 27 rows, 169 columns, and 507 nonzeros.
@@ -16,15 +16,15 @@ Presolve time = 0.00 sec. (0.25 ticks)
 MIP emphasis: balance optimality and feasibility.
 MIP search method: dynamic search.
 Parallel mode: deterministic, using up to 32 threads.
-Root relaxation solution time = 0.00 sec. (0.13 ticks)
+Root relaxation solution time = 0.00 sec. (0.12 ticks)
 
         Nodes                                         Cuts/
    Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
 
-*     0+    0                         1717.0000        0.0000           100.00%
-*     0+    0                          488.0000        0.0000           100.00%
-*     0     0      integral     0      424.0000      424.0000       16    0.00%
-Elapsed time = 0.00 sec. (0.80 ticks, tree = 0.00 MB, solutions = 3)
+*     0+    0                         1290.0000        0.0000           100.00%
+*     0+    0                         1172.0000        0.0000           100.00%
+*     0     0      integral     0      391.0000      391.0000       16    0.00%
+Elapsed time = 0.00 sec. (0.79 ticks, tree = 0.00 MB, solutions = 3)
 
 Root node processing (before b&c):
   Real time             =    0.00 sec. (0.80 ticks)

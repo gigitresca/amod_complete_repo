@@ -1,3 +1,5 @@
+name: sumo
+
 seed: 10  # Random seed (default: 10)
 
 demand_ratio: 0.8  # Demand ratio (default: 0.8)

@@ -3,6 +3,7 @@ from omegaconf import DictConfig
 import os 
 import torch
 import json
+import numpy as np
 
 def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
@@ -25,16 +26,16 @@ def setup_macro(cfg):
     from src.envs.sim.macro_env import Scenario, AMoD, GNNParser
     with open("src/envs/data/macro/calibrated_parameters.json", "r") as file:
         calibrated_params = json.load(file)
-
+    cfg.simulator.cplexpath = cfg.model.cplexpath
     cfg = cfg.simulator
     city = cfg.city
-    print(city)
     scenario = Scenario(
     json_file=f"src/envs/data/macro/scenario_{city}.json",
     demand_ratio=calibrated_params[city]["demand_ratio"],
     json_hr=calibrated_params[city]["json_hr"],
     sd=cfg.seed,
-    json_tstep=cfg.json_tsetp,
+    #json_tstep=cfg.json_tsetp,
+    json_tstep=4,
     tf=cfg.max_steps,
     )
     env = AMoD(scenario, cfg = cfg, beta = calibrated_params[city]["beta"])
@@ -53,8 +54,8 @@ def setup_model(cfg, env, parser, device):
         return A2C(env=env, input_size=cfg.model.input_size, parser=parser).to(device)
     
     elif model_name == "equal_distribution":
-        from src.algos.ed import EqualDistributionBaseline
-        return EqualDistributionBaseline(cplexpath=None)
+        from src.algos.ed import EqualDistribution
+        return EqualDistribution(cplexpath=cfg.model.cplexpath, directory=cfg.model.directory)
     
     elif model_name =="plus_one": 
         from src.algos.plus_one import PlusOneBaseline
@@ -66,6 +67,20 @@ def setup_model(cfg, env, parser, device):
     
     else:
         raise ValueError(f"Unknown model or baseline: {model_name}")
+
+def setup_net(cfg):
+    if cfg.model.use_LSTM:
+        from src.nets.actor import GNNActorLSTM as GNNActor
+        from src.nets.critic import GNNCriticLSTM as GNNCritic
+    else:
+        from src.nets.actor import GNNActor
+        from src.nets.critic import GNNCritic
+
+        models = {
+        "actor": GNNActor,
+        "critic": GNNCritic,
+        }
+    return models
 
 @hydra.main(version_base=None, config_path="src/config/", config_name="config")
 def main(cfg: DictConfig):
@@ -86,11 +101,11 @@ def main(cfg: DictConfig):
     model = setup_model(cfg, env, parser, device)
 
     print('Testing...')
-    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(1, env)
+    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(10, env)
 
-    print('Mean Episode Reward: ', episode_reward)
-    print('Mean Episode Served Demand: ', episode_served_demand)
-    print('Mean Episode Rebalancing Cost: ', episode_rebalancing_cost)
+    print('Mean Episode Reward: ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
+    print('Mean Episode Served Demand: ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
+    print('Mean Episode Rebalancing Cost: ', np.mean(episode_rebalancing_cost), 'Std Episode Rebalancing Cost: ', np.std(episode_rebalancing_cost))
 
     ##TODO: ADD VISUALIZATION
 

@@ -6,8 +6,9 @@ import json
 
 def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
-
+    
     cfg = cfg.simulator
+    print(cfg)
     demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
     aggregated_demand = not cfg.random_od
     scenario_path = 'src/envs/data/LuSTScenario/'

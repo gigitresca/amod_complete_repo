@@ -3,16 +3,16 @@
 
 Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
 Tried aggregator 1 time.
-MIP Presolve eliminated 1 rows and 13 columns.
-Reduced MIP has 27 rows, 169 columns, and 507 nonzeros.
-Reduced MIP has 0 binaries, 169 generals, 0 SOSs, and 0 indicators.
-Presolve time = 0.00 sec. (0.24 ticks)
-Found incumbent of value 1213.000000 after 0.00 sec. (0.75 ticks)
+MIP Presolve eliminated 2 rows and 26 columns.
+Reduced MIP has 26 rows, 156 columns, and 468 nonzeros.
+Reduced MIP has 0 binaries, 156 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.22 ticks)
+Found incumbent of value 365.000000 after 0.00 sec. (1.41 ticks)
 Tried aggregator 1 time.
 Detecting symmetries...
-Reduced MIP has 27 rows, 169 columns, and 507 nonzeros.
-Reduced MIP has 0 binaries, 169 generals, 0 SOSs, and 0 indicators.
-Presolve time = 0.00 sec. (0.25 ticks)
+Reduced MIP has 26 rows, 156 columns, and 468 nonzeros.
+Reduced MIP has 0 binaries, 156 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.22 ticks)
 MIP emphasis: balance optimality and feasibility.
 MIP search method: dynamic search.
 Parallel mode: deterministic, using up to 32 threads.
@@ -21,19 +21,19 @@ Root relaxation solution time = 0.00 sec. (0.12 ticks)
         Nodes                                         Cuts/
    Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
 
-*     0+    0                         1213.0000        0.0000           100.00%
-*     0+    0                         1067.0000        0.0000           100.00%
-*     0     0      integral     0      329.0000      329.0000       15    0.00%
-Elapsed time = 0.00 sec. (1.25 ticks, tree = 0.00 MB, solutions = 3)
+*     0+    0                          365.0000        0.0000           100.00%
+*     0+    0                          269.0000        0.0000           100.00%
+*     0     0      integral     0      228.0000      228.0000       18    0.00%
+Elapsed time = 0.00 sec. (1.87 ticks, tree = 0.00 MB, solutions = 3)
 
 Root node processing (before b&c):
-  Real time             =    0.00 sec. (1.26 ticks)
+  Real time             =    0.00 sec. (1.88 ticks)
 Parallel b&c, 32 threads:
   Real time             =    0.00 sec. (0.00 ticks)
   Sync time (average)   =    0.00 sec.
   Wait time (average)   =    0.00 sec.
                           ------------
-Total (root+branch&cut) =    0.00 sec. (1.26 ticks)
+Total (root+branch&cut) =    0.00 sec. (1.88 ticks)
 main returns 0
 
 <<< main
