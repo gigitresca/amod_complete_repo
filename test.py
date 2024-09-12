@@ -82,6 +82,37 @@ def setup_net(cfg):
         }
     return models
 
+import torch
+import numpy as np
+from hydra import initialize, compose
+
+def test(config):
+
+    with initialize(config_path="src/config"):
+        cfg = compose(config_name="config", overrides= [f"{key}={value}" for key, value in config.items()])  # Load the configuration
+        
+    # Import simulator module based on the configuration
+    simulator_name = cfg.simulator.name
+    if simulator_name == "sumo":
+        env, parser = setup_sumo(cfg)
+    elif simulator_name == "macro":
+        env, parser = setup_macro(cfg)
+    else:
+        raise ValueError(f"Unknown simulator: {simulator_name}")
+    
+    use_cuda = not cfg.model.no_cuda and torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
+
+    model = setup_model(cfg, env, parser, device)
+
+    print(f'Testing model {cfg.model.name} on {cfg.simulator.name} environment')
+    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(10, env)
+
+    print('Mean Episode Reward: ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
+    print('Mean Episode Served Demand: ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
+    print('Mean Episode Rebalancing Cost: ', np.mean(episode_rebalancing_cost), 'Std Episode Rebalancing Cost: ', np.std(episode_rebalancing_cost))
+
+
 @hydra.main(version_base=None, config_path="src/config/", config_name="config")
 def main(cfg: DictConfig):
    
@@ -103,9 +134,9 @@ def main(cfg: DictConfig):
     print('Testing...')
     episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(10, env)
 
-    print('Mean Episode Reward: ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
-    print('Mean Episode Served Demand: ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
-    print('Mean Episode Rebalancing Cost: ', np.mean(episode_rebalancing_cost), 'Std Episode Rebalancing Cost: ', np.std(episode_rebalancing_cost))
+    print('Mean Episode Profit ($): ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
+    print('Mean Episode Served Demand($): ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
+    print('Mean Episode Rebalancing Cost($): ', np.mean(episode_rebalancing_cost), 'Std Episode Rebalancing Cost: ', np.std(episode_rebalancing_cost))
 
     ##TODO: ADD VISUALIZATION
 
