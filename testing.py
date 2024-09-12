@@ -108,10 +108,58 @@ def test(config):
     print(f'Testing model {cfg.model.name} on {cfg.simulator.name} environment')
     episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(10, env)
 
-    print('Mean Episode Reward: ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
-    print('Mean Episode Served Demand: ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
-    print('Mean Episode Rebalancing Cost: ', np.mean(episode_rebalancing_cost), 'Std Episode Rebalancing Cost: ', np.std(episode_rebalancing_cost))
+    print('Mean Episode Profit ($): ', np.mean(episode_reward))
+    print('Mean Episode Served Demand($): ', np.mean(episode_served_demand))
+    print('Mean Episode Rebalancing Cost($): ', np.mean(episode_rebalancing_cost))
 
+
+    no_reb_reward = 27592.241758477943
+    no_reb_demand = 1599.6
+    no_reb_cost = 0.0
+    mean_reward = np.mean(episode_reward)
+    mean_served_demand = np.mean(episode_served_demand)
+    mean_rebalancing_cost = np.mean(episode_rebalancing_cost)
+
+
+    labels = ['Reward', 'Served Demand', 'Rebalancing Cost']
+    rl_means = [mean_reward, mean_served_demand, mean_rebalancing_cost]
+
+    no_control = [no_reb_reward, no_reb_demand, no_reb_cost]
+
+    import matplotlib.pyplot as plt
+    x = np.arange(len(labels))  # the label locations
+    width = 0.25  # the width of the bars
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    rects1 = ax.bar(x - width/2, rl_means, width, label=cfg.model.name, color='tab:blue', capsize=5)
+    rects2 = ax.bar(x + width/2, no_control, width, label='No Control', color='tab:orange')
+    
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_xlabel('Metrics')
+    ax.set_ylabel('$')
+    ax.set_title(f'Comparison of {cfg.model.name} vs No Control')
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.legend()
+    
+    # Function to add value labels on top of bars
+    def add_value_labels(rects):
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate(f'{height:.2f}',
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        xytext=(0, 3),  # 3 points vertical offset
+                        textcoords="offset points",
+                        ha='center', va='bottom')
+
+    # Adding value labels to each bar
+    add_value_labels(rects1)
+    add_value_labels(rects2)
+
+    plt.tight_layout()
+    plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+    plt.show()
+    
 
 @hydra.main(version_base=None, config_path="src/config/", config_name="config")
 def main(cfg: DictConfig):
