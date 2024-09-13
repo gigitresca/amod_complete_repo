@@ -8,17 +8,19 @@ import numpy as np
 def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
 
+    cfg.simulator.cplexpath = cfg.model.cplexpath
     cfg = cfg.simulator
+    scenario_path = 'src/envs/data'
+    cfg.sumocfg_file = f'{scenario_path}/{cfg.city}/{cfg.sumocfg_file}'
+    cfg.net_file = f'{scenario_path}/{cfg.city}/{cfg.net_file}'
     demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
     aggregated_demand = not cfg.random_od
-    scenario_path = 'src/envs/data/LuSTScenario/'
-    net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
 
     scenario = Scenario(num_cluster=cfg.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,
-                sumo_net_file=net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
+                sumo_net_file=cfg.net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
                 time_start=cfg.time_start, time_horizon=cfg.time_horizon, duration=cfg.duration,
                 tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time)
-    env = AMoD(scenario, beta=cfg.beta)
+    env = AMoD(scenario, cfg=cfg, beta=cfg.beta)
     parser = GNNParser(env, T=cfg.time_horizon, json_file=demand_file)
     return env, parser
     
