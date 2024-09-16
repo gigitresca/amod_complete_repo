@@ -1,3 +1,10 @@
+import os
+import sys
+if 'SUMO_HOME' in os.environ:
+    sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
+import traci
+
+
 class BaseAlgorithm:
     def __init__(self):
         """
@@ -22,6 +29,22 @@ class BaseAlgorithm:
         raise NotImplementedError("The select_action method must be implemented by subclasses.")
 
     def test(self, num_episodes, env):
+        sim = env.cfg.name
+        if sim == "sumo":
+            # traci.close(wait=False)
+            os.makedirs(f'saved_files/sumo_output/{env.cfg.city}/', exist_ok=True)
+            matching_steps = int(env.cfg.matching_tstep * 60 / env.cfg.sumo_tstep)  # sumo steps between each matching
+            if env.scenario.is_meso:
+                matching_steps -= 1
+
+            sumo_cmd = [
+                "sumo", "--no-internal-links", "-c", env.cfg.sumocfg_file,
+                "--step-length", str(env.cfg.sumo_tstep),
+                "--device.taxi.dispatch-algorithm", "traci",
+                "-b", str(env.cfg.time_start * 60 * 60), "--seed", "10",
+                "-W", 'true', "-v", 'false',
+            ]
+            assert os.path.exists(env.cfg.sumocfg_file), "SUMO configuration file not found!"
         epochs = range(num_episodes)  # epoch iterator
         episode_reward = []
         episode_served_demand = []
@@ -33,6 +56,10 @@ class BaseAlgorithm:
             eps_rebalancing_cost = 0
             
             done = False
+            if sim =='sumo':
+                print('starting sumo')
+                traci.start(sumo_cmd)
+            print('resetting env')
             obs, rew = env.reset() 
             eps_reward += rew
             
