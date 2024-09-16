@@ -1,14 +1,15 @@
 from src.algos.reb_flow_solver import solveRebFlow
 from src.algos.base import BaseAlgorithm
 
+
 class PlusOne(BaseAlgorithm):
-    def __init__(self, cplexpath):
+    def __init__(self, cplexpath, directory):
         """
         :param cplexpath: Path to the CPLEX solver.
         """
         super().__init__()
         self.cplexpath = cplexpath
-
+        self.directory = directory
 
     def select_action(self, env):
         """
@@ -53,6 +54,6 @@ class PlusOne(BaseAlgorithm):
         # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
         desired_acc = {env.region[i]: int(acc[i]) for i in range(len(env.region))}
         # solve minimum rebalancing distance problem
-        reb_action = solveRebFlow(env, 'plusone/scenario_lux_test', desired_acc, self.cplexpath)
+        reb_action = solveRebFlow(env, self.directory, desired_acc, self.cplexpath)
 
         return reb_action

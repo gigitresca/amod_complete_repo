@@ -1,7 +1,7 @@
-
 from src.misc.utils import dictsum
 from src.algos.reb_flow_solver import solveRebFlow
 from src.algos.base import BaseAlgorithm
+
 
 class EqualDistribution(BaseAlgorithm):
     def __init__(self, cplexpath, directory):
@@ -14,12 +14,12 @@ class EqualDistribution(BaseAlgorithm):
 
     def select_action(self, env):
         """
-        Implements the Equal Distribution (ED) basline for rebalancing.
+        Implements the Equal Distribution (ED) baseline for rebalancing.
         """
         action_rl = [1 / env.nregion for _ in range(env.nregion)]
         desired_acc = {
             env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time +1))
             for i in range(len(env.region))
         }
-        reb_action = solveRebFlow(env, 'scenario_ed', desired_acc, self.cplexpath, self.directory)
+        reb_action = solveRebFlow(env, self.directory, desired_acc, self.cplexpath)
         return reb_action
