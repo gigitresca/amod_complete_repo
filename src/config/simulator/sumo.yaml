@@ -35,3 +35,5 @@ city: "lux"  # Defines city to train on
 max_steps: 120  # Number of steps per episode (default: T=120)
 
 cplexpath: "/home/csasc/opt/opl/bin/x86-64_linux/"  # Defines directory of the CPLEX installation
+
+directory: "" # Defines directory where to save files
