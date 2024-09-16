@@ -7,7 +7,6 @@ import numpy as np
 
 def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
-
     cfg.simulator.cplexpath = cfg.model.cplexpath
     if not cfg.simulator.directory:
         cfg.simulator.directory = f"{cfg.model.name}/{cfg.simulator.city}"
@@ -33,6 +32,8 @@ def setup_macro(cfg):
     with open("src/envs/data/macro/calibrated_parameters.json", "r") as file:
         calibrated_params = json.load(file)
     cfg.simulator.cplexpath = cfg.model.cplexpath
+    if not cfg.simulator.directory:
+        cfg.simulator.directory = f"{cfg.model.name}/{cfg.simulator.city}"
     cfg = cfg.simulator
     city = cfg.city
     scenario = Scenario(
