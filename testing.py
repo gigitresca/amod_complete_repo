@@ -9,6 +9,8 @@ def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
 
     cfg.simulator.cplexpath = cfg.model.cplexpath
+    if not cfg.simulator.directory:
+        cfg.simulator.directory = f"{cfg.model.name}/{cfg.simulator.city}"
     cfg = cfg.simulator
     scenario_path = 'src/envs/data'
     cfg.sumocfg_file = f'{scenario_path}/{cfg.city}/{cfg.sumocfg_file}'
@@ -16,10 +18,12 @@ def setup_sumo(cfg):
     demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
     aggregated_demand = not cfg.random_od
 
-    scenario = Scenario(num_cluster=cfg.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,
-                sumo_net_file=cfg.net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
-                time_start=cfg.time_start, time_horizon=cfg.time_horizon, duration=cfg.duration,
-                tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time)
+    scenario = Scenario(
+        num_cluster=cfg.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,
+        sumo_net_file=cfg.net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
+        time_start=cfg.time_start, time_horizon=cfg.time_horizon, duration=cfg.duration,
+        tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time
+    )
     env = AMoD(scenario, cfg=cfg, beta=cfg.beta)
     parser = GNNParser(env, T=cfg.time_horizon, json_file=demand_file)
     return env, parser
@@ -32,13 +36,13 @@ def setup_macro(cfg):
     cfg = cfg.simulator
     city = cfg.city
     scenario = Scenario(
-    json_file=f"src/envs/data/macro/scenario_{city}.json",
-    demand_ratio=calibrated_params[city]["demand_ratio"],
-    json_hr=calibrated_params[city]["json_hr"],
-    sd=cfg.seed,
-    #json_tstep=cfg.json_tsetp,
-    json_tstep=4,
-    tf=cfg.max_steps,
+        json_file=f"src/envs/data/macro/scenario_{city}.json",
+        demand_ratio=calibrated_params[city]["demand_ratio"],
+        json_hr=calibrated_params[city]["json_hr"],
+        sd=cfg.seed,
+        #json_tstep=cfg.json_tsetp,
+        json_tstep=4,
+        tf=cfg.max_steps,
     )
     env = AMoD(scenario, cfg = cfg, beta = calibrated_params[city]["beta"])
     parser = GNNParser(env, T=cfg.time_horizon, json_file=f"src/envs/data/macro/scenario_{city}.json")
@@ -182,7 +186,7 @@ def main(cfg: DictConfig):
     model = setup_model(cfg, env, parser, device)
 
     print('Testing...')
-    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(10, env)
+    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(cfg.model.max_episodes, env)
 
     print('Mean Episode Profit ($): ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
     print('Mean Episode Served Demand($): ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
