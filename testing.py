@@ -62,11 +62,11 @@ def setup_model(cfg, env, parser, device):
     
     elif model_name == "equal_distribution":
         from src.algos.ed import EqualDistribution
-        return EqualDistribution(cplexpath=cfg.model.cplexpath, directory=cfg.model.directory)
+        return EqualDistribution(cplexpath=cfg.simulator.cplexpath, directory=cfg.simulator.directory)
     
     elif model_name =="plus_one": 
         from src.algos.plus_one import PlusOneBaseline
-        return PlusOneBaseline(cplexpath=None)
+        return PlusOneBaseline(cplexpath=cfg.simulator.cplexpath, directory=cfg.simulator.directory)
     
     elif model_name == "no_rebalancing":
         from src.algos.no_reb import NoRebalanceBaseline
