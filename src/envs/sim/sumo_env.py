@@ -36,7 +36,7 @@ from torch_geometric.data import Data
 
 class AMoD:
     # initialization
-    def __init__(self, scenario, beta=0.2):  # updated to take scenario and beta (cost for rebalancing) as input
+    def __init__(self, scenario, cfg, beta=0.2):  # updated to take scenario and beta (cost for rebalancing) as input
         self.scenario = scenario
         self.G = scenario.G  # Road Graph: node - region, edge - connection of regions, node attr: 'accInit', edge attr: 'time'
         self.regions_sumo = scenario.regions_sumo
@@ -52,6 +52,10 @@ class AMoD:
         self.waiting_time = defaultdict(dict)   # Waiting time per region
         self.demand = defaultdict(dict)  # demand
         self.region = list(self.G)  # set of regions
+        self.cfg = cfg
+        self.matching_steps = int(self.cfg.matching_tstep * 60 / self.cfg.sumo_tstep)  # sumo steps between each matching
+        if scenario.is_meso:
+            self.matching_steps -= 1     # In the meso setting one step is done within the reb_step
         self.price = defaultdict(dict)  # price
         self.acc = defaultdict(dict)  # number of vehicles within each region, key: i - region, t - time
         self.dacc = defaultdict(dict)  # number of vehicles arriving at each region, key: i - region, t - time
@@ -293,6 +297,32 @@ class AMoD:
         done = (self.duration == t + tstep)  # if the episode is completed
         return self.obs, self.reward, done, self.info
 
+    def step(self, reb_action):
+        # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
+        # Take action in environment
+        rew = 0
+        # Rebalancing step
+        obs, rebreward, done, info = self.reb_step(reb_action)
+        rew += rebreward
+        # Check for episode end
+        if done:
+            traci.close()
+            return obs, rew, done, info
+        # Matching step
+        self.sumo_steps()
+        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
+        rew += paxreward
+        return obs, rew, done, info
+
+    def sumo_steps(self):
+        """
+        Method to run sumo simulation steps until the next decision process
+        """
+        sumo_step = 0
+        while sumo_step < self.matching_steps:
+            traci.simulationStep()
+            sumo_step += 1
+
     def reb_taxi(self, reb_assign, taxis_reb, o, d):
         """
         Method to rebalance taxis
@@ -379,7 +409,12 @@ class AMoD:
         # TODO: define states here
         self.obs = (self.acc, self.time, self.dacc, self.demand)
         self.reward = 0
-        return self.obs
+        # 1st pax step
+        if self.scenario.is_meso:
+            traci.simulationStep()
+        self.sumo_steps()
+        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
+        return obs, paxreward
 
     def get_demand_attr(self):
         """
