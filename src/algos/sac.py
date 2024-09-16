@@ -387,6 +387,22 @@ class SAC(nn.Module):
                     )
 
     def test(self, test_episodes, env):
+        sim = env.cfg.name
+        if sim == "sumo":
+            # traci.close(wait=False)
+            os.makedirs(f'saved_files/sumo_output/{env.cfg.city}/', exist_ok=True)
+            matching_steps = int(env.cfg.matching_tstep * 60 / env.cfg.sumo_tstep)  # sumo steps between each matching
+            if env.scenario.is_meso:
+                matching_steps -= 1
+
+            sumo_cmd = [
+                "sumo", "--no-internal-links", "-c", env.cfg.sumocfg_file,
+                "--step-length", str(env.cfg.sumo_tstep),
+                "--device.taxi.dispatch-algorithm", "traci",
+                "-b", str(env.cfg.time_start * 60 * 60), "--seed", "10",
+                "-W", 'true', "-v", 'false',
+            ]
+            assert os.path.exists(env.cfg.sumocfg_file), "SUMO configuration file not found!"
         epochs = range(test_episodes)  # epoch iterator
         episode_reward = []
         episode_served_demand = []
@@ -398,7 +414,10 @@ class SAC(nn.Module):
             eps_rebalancing_cost = 0
             eps_rebalancing_veh = 0
             done = False
-
+            if sim =='sumo':
+                print('starting sumo')
+                traci.start(sumo_cmd)
+            print('resetting env')
             obs, rew = env.reset()  # initialize environment
             obs = self.parser.parse_obs(obs)
             eps_reward += rew
@@ -411,10 +430,9 @@ class SAC(nn.Module):
                 }
                 reb_action = solveRebFlow(
                     self.env,
-                    "scenario_nyc4",
+                    self.env.cfg.directory,
                     desiredAcc,
                     self.cplexpath,
-                    directory=self.directory,
                 )
                 new_obs, rew, done, info = env.step(reb_action)
                 if not done:
@@ -432,9 +450,9 @@ class SAC(nn.Module):
 
 
         return (
-            np.mean(episode_reward),
-            np.mean(episode_served_demand),
-            np.mean(episode_rebalancing_cost),
+            episode_reward,
+            episode_served_demand,
+            episode_rebalancing_cost,
         )
 
     def save_checkpoint(self, path="ckpt.pth"):
