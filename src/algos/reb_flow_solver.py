@@ -5,7 +5,7 @@ from src.misc.utils import mat2str
 from pulp import LpMinimize, LpProblem, LpVariable, lpSum, LpStatus, value
 import pulp
 
-def solveRebFlow(env,res_path,desiredAcc,CPLEXPATH, directory):
+def solveRebFlow(env,res_path,desiredAcc,CPLEXPATH):
     #CPLEXPATH='None'
     if CPLEXPATH=='None':
         return solveRebFlow_pulp(env, desiredAcc)
@@ -16,7 +16,7 @@ def solveRebFlow(env,res_path,desiredAcc,CPLEXPATH, directory):
         edgeAttr = [(i,j,env.G.edges[i,j]['time']) for i,j in env.G.edges]
     
         modPath = os.getcwd().replace('\\','/')+'/src/cplex_mod/'
-        OPTPath = os.getcwd().replace('\\','/')+'/' + directory +'/cplex_logs/rebalancing/'+res_path + '/'
+        OPTPath = os.getcwd().replace('\\','/')+'/' + 'saved_files/cplex_logs/rebalancing/' + res_path + '/'
         if not os.path.exists(OPTPath):
             os.makedirs(OPTPath)
         datafile = OPTPath + f'data_{t}.dat'
