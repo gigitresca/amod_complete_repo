@@ -259,7 +259,7 @@ class AMoD:
         if done: 
             return obs, rew, done, info
 
-        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=f'sac/scenario_lux/{self.cfg.directory}')
+        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
     
         rew += paxreward
         return obs, rew, done, info
@@ -301,7 +301,7 @@ class AMoD:
          # TODO: define states here
         self.obs = (self.acc, self.time, self.dacc, self.demand)
 
-        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=f'sac/scenario_lux/{self.cfg.directory}')
+        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
 
         self.reward = 0
         return obs, paxreward

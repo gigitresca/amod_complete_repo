@@ -18,4 +18,4 @@ time_horizon: 6  # Steps in the future for demand and arriving vehicle forecast 
 
 cplexpath: "/home/csasc/opt/opl/bin/x86-64_linux/"  # Defines directory of the CPLEX installation
   
-directory: "saved_files"  # Defines directory where to save files
+directory: ""  # Defines directory where to save files
