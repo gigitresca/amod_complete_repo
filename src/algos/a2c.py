@@ -4,11 +4,12 @@ from torch import nn
 import torch.nn.functional as F
 from collections import namedtuple
 from src.misc.utils import dictsum
-from src.algos.gnn_critic import GNNValue
-from src.algos.gnn_actor import GNNActor
+from src.nets.actor import GNNActor
+from src.nets.critic import GNNValue
 from src.algos.reb_flow_solver import solveRebFlow
 import os 
 from tqdm import trange
+import sys
 if 'SUMO_HOME' in os.environ:
     sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
 import traci

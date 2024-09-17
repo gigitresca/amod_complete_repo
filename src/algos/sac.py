@@ -316,14 +316,12 @@ class SAC(nn.Module):
         
         train_episodes = cfg.model.max_episodes  # set max number of training episodes
         epochs = trange(train_episodes)  # epoch iterator
-        best_reward_test = -np.inf  # set best reward
+        best_reward = -np.inf  # set best reward
         self.train()  # set model in train mode
 
         for i_episode in epochs:
             if sim =='sumo':
-                print('starting sumo')
                 traci.start(sumo_cmd)
-            print('resetting env')
             obs, rew = self.env.reset()  # initialize environment
             obs = self.parser.parse_obs(obs)
             episode_reward = 0
@@ -345,12 +343,12 @@ class SAC(nn.Module):
                 desiredAcc = {self.env.region[i]: int(action_rl[i] * dictsum(self.env.acc, self.env.time + 1))
                     for i in range(len(self.env.region))
                 }
+        
                 reb_action = solveRebFlow(
                     self.env,
-                    "scenario_nyc4",
+                    self.env.cfg.directory,
                     desiredAcc,
                     self.cplexpath,
-                    directory=self.directory,
                 )
                 new_obs, rew, done, info = self.env.step(reb_action)
                 
@@ -373,19 +371,14 @@ class SAC(nn.Module):
             )
       
             self.save_checkpoint(
-                path=f"ckpt/{cfg.model.checkpoint_path}_running.pth"
+                path=f"ckpt/{cfg.model.checkpoint_path}.pth"
             )
-         
-            if i_episode % 10 == 0:
-                test_reward, test_served_demand, test_rebalancing_cost = self.test(
-                    1, self.env
+            if episode_reward > best_reward: 
+                best_reward = episode_reward
+                self.save_checkpoint(
+                    path=f"ckpt/{cfg.model.checkpoint_path}_best.pth"
                 )
-                if test_reward >= best_reward_test:
-                    best_reward_test = test_reward
-                    self.save_checkpoint(
-                        path=f"ckpt/{cfg.model.checkpoint_path}_test.pth"
-                    )
-
+    
     def test(self, test_episodes, env):
         sim = env.cfg.name
         if sim == "sumo":
@@ -403,21 +396,19 @@ class SAC(nn.Module):
                 "-W", 'true', "-v", 'false',
             ]
             assert os.path.exists(env.cfg.sumocfg_file), "SUMO configuration file not found!"
-        epochs = range(test_episodes)  # epoch iterator
+        epochs = trange(test_episodes)  # epoch iterator
         episode_reward = []
         episode_served_demand = []
         episode_rebalancing_cost = []
         episode_rebalanced_vehicles = []
-        for _ in epochs:
+        for i_episode in epochs:
             eps_reward = 0
             eps_served_demand = 0
             eps_rebalancing_cost = 0
             eps_rebalancing_veh = 0
             done = False
             if sim =='sumo':
-                print('starting sumo')
                 traci.start(sumo_cmd)
-            print('resetting env')
             obs, rew = env.reset()  # initialize environment
             obs = self.parser.parse_obs(obs)
             eps_reward += rew
@@ -442,7 +433,9 @@ class SAC(nn.Module):
                 eps_served_demand += info["served_demand"]
                 eps_rebalancing_cost += info["rebalancing_cost"]
                 #eps_rebalancing_veh += info["rebalanced_vehicles"]
-
+            epochs.set_description(
+                f"Test Episode {i_episode+1} | Reward: {eps_reward:.2f} | ServedDemand: {eps_served_demand:.2f} | Reb. Cost: {eps_rebalancing_cost:.2f}"
+            )
             episode_reward.append(eps_reward)
             episode_served_demand.append(eps_served_demand)
             episode_rebalancing_cost.append(eps_rebalancing_cost)

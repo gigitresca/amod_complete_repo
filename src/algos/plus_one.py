@@ -2,14 +2,14 @@ from src.algos.reb_flow_solver import solveRebFlow
 from src.algos.base import BaseAlgorithm
 
 
-class PlusOne(BaseAlgorithm):
-    def __init__(self, cplexpath, directory):
+class PlusOneBaseline(BaseAlgorithm):
+    def __init__(self, **kwargs):
         """
         :param cplexpath: Path to the CPLEX solver.
         """
         super().__init__()
-        self.cplexpath = cplexpath
-        self.directory = directory
+        self.cplexpath = kwargs.get('cplexpath')
+        self.directory = kwargs.get('directory')
 
     def select_action(self, env):
         """

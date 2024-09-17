@@ -3,12 +3,12 @@ from omegaconf import DictConfig
 import os 
 import torch
 import json
-
+from hydra import initialize, compose
 def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
     
     cfg = cfg.simulator
-    print(cfg)
+   
     demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
     aggregated_demand = not cfg.random_od
     scenario_path = 'src/envs/data/LuSTScenario/'
@@ -30,7 +30,7 @@ def setup_macro(cfg):
 
     cfg = cfg.simulator
     city = cfg.city
-    print(city)
+
     scenario = Scenario(
     json_file=f"src/envs/data/macro/scenario_{city}.json",
     demand_ratio=calibrated_params[city]["demand_ratio"],
@@ -54,6 +54,26 @@ def setup_model(cfg, env, parser, device):
         return A2C(env=env, input_size=cfg.input_size, parser=parser).to(device)
     else:
         raise ValueError(f"Unknown model or baseline: {model_name}")
+
+def train(config): 
+    """
+    for colab tutorial
+    """
+
+    with initialize(config_path="src/config"):
+        cfg = compose(config_name="config", overrides= [f"{key}={value}" for key, value in config.items()])  # Load the configuration
+
+    if cfg.simulator.name == "sumo":
+        env, parser = setup_sumo(cfg)
+    elif cfg.simulator.name == "macro":
+        env, parser = setup_macro(cfg)
+    else:
+        raise ValueError(f"Unknown simulator: {cfg.simulator.name}")
+    
+    use_cuda = not cfg.model.no_cuda and torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
+    model = setup_model(cfg, env, parser, device)
+    model.learn(cfg)
 
 @hydra.main(version_base=None, config_path="src/config/", config_name="config")
 def main(cfg: DictConfig):

@@ -3,10 +3,10 @@ import sys
 if 'SUMO_HOME' in os.environ:
     sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
 import traci
-
+from tqdm import trange
 
 class BaseAlgorithm:
-    def __init__(self):
+    def __init__(self, **kwargs):
         """
         Base class for baseline algorithms.
         """
@@ -45,21 +45,19 @@ class BaseAlgorithm:
                 "-W", 'true', "-v", 'false',
             ]
             assert os.path.exists(env.cfg.sumocfg_file), "SUMO configuration file not found!"
-        epochs = range(num_episodes)  # epoch iterator
+        epochs = trange(num_episodes)  # epoch iterator
         episode_reward = []
         episode_served_demand = []
         episode_rebalancing_cost = []
 
-        for _ in epochs:
+        for i_episode in epochs:
             eps_reward = 0
             eps_served_demand = 0
             eps_rebalancing_cost = 0
             
             done = False
             if sim =='sumo':
-                print('starting sumo')
                 traci.start(sumo_cmd)
-            print('resetting env')
             obs, rew = env.reset() 
             eps_reward += rew
             
@@ -76,5 +74,7 @@ class BaseAlgorithm:
             episode_reward.append(eps_reward)
             episode_served_demand.append(eps_served_demand)
             episode_rebalancing_cost.append(eps_rebalancing_cost)
-
+            epochs.set_description(
+                f"Test Episode {i_episode+1} | Reward: {eps_reward:.2f} | ServedDemand: {eps_served_demand:.2f} | Reb. Cost: {eps_rebalancing_cost:.2f}"
+            )
         return episode_reward, episode_served_demand, episode_rebalancing_cost

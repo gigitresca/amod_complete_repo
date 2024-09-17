@@ -1,9 +1,10 @@
 import hydra
 from omegaconf import DictConfig
-import os 
 import torch
 import json
 import numpy as np
+from hydra import initialize, compose
+from src.algos.registry import get_model
 
 def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
@@ -49,31 +50,31 @@ def setup_macro(cfg):
     parser = GNNParser(env, T=cfg.time_horizon, json_file=f"src/envs/data/macro/scenario_{city}.json")
     return env, parser
 
+
 def setup_model(cfg, env, parser, device):
     model_name = cfg.model.name
 
     if model_name == "sac":
         from src.algos.sac import SAC
-        return SAC(env=env, input_size=cfg.model.input_size, cfg=cfg.model, parser=parser).to(device)
+        model= SAC(env=env, input_size=cfg.model.input_size, cfg=cfg.model, parser=parser).to(device)
+        model.load_checkpoint(path=f"ckpt/{cfg.model.checkpoint_path}_best.pth")
+        return model
     
     elif model_name == "a2c":
         from src.algos.a2c import A2C
-        return A2C(env=env, input_size=cfg.model.input_size, parser=parser).to(device)
-    
-    elif model_name == "equal_distribution":
-        from src.algos.ed import EqualDistribution
-        return EqualDistribution(cplexpath=cfg.simulator.cplexpath, directory=cfg.simulator.directory)
-    
-    elif model_name =="plus_one": 
-        from src.algos.plus_one import PlusOneBaseline
-        return PlusOneBaseline(cplexpath=cfg.simulator.cplexpath, directory=cfg.simulator.directory)
-    
-    elif model_name == "no_rebalancing":
-        from src.algos.no_reb import NoRebalanceBaseline
-        return NoRebalanceBaseline()
+        model= A2C(env=env, input_size=cfg.model.input_size, parser=parser).to(device)
+        model.load_checkpoint(path=f"ckpt/{cfg.model.checkpoint_path}_best.pth")
+        return model
     
     else:
-        raise ValueError(f"Unknown model or baseline: {model_name}")
+        model_class = get_model(model_name)
+        
+        model_kwargs = {
+            "cplexpath": cfg.simulator.cplexpath,
+            "directory": cfg.simulator.directory,
+        }
+
+        return model_class(**model_kwargs)
 
 def setup_net(cfg):
     if cfg.model.use_LSTM:
@@ -89,12 +90,11 @@ def setup_net(cfg):
         }
     return models
 
-import torch
-import numpy as np
-from hydra import initialize, compose
 
 def test(config):
-
+    '''
+    for Colab tutorial
+    '''
     with initialize(config_path="src/config"):
         cfg = compose(config_name="config", overrides= [f"{key}={value}" for key, value in config.items()])  # Load the configuration
         
@@ -111,9 +111,9 @@ def test(config):
     device = torch.device("cuda" if use_cuda else "cpu")
 
     model = setup_model(cfg, env, parser, device)
-
+    
     print(f'Testing model {cfg.model.name} on {cfg.simulator.name} environment')
-    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(10, env)
+    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(cfg.model.test_episodes, env)
 
     print('Mean Episode Profit ($): ', np.mean(episode_reward))
     print('Mean Episode Served Demand($): ', np.mean(episode_served_demand))

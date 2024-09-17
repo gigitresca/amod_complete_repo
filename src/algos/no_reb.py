@@ -1,7 +1,7 @@
 from src.algos.base import BaseAlgorithm
 
 class NoRebalanceBaseline(BaseAlgorithm):
-    def __init__(self):
+    def __init__(self, **kwargs):
 
         super().__init__()
 
