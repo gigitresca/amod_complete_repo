@@ -323,12 +323,13 @@ class SAC(nn.Module):
             if sim =='sumo':
                 traci.start(sumo_cmd)
             obs, rew = self.env.reset()  # initialize environment
+            
             obs = self.parser.parse_obs(obs)
             episode_reward = 0
             episode_reward += rew
             episode_served_demand = 0
             episode_rebalancing_cost = 0
-         
+            episode_served_demand += rew
             done = False
             if sim =='sumo' and 'meso' in net_file:
                 traci.simulationStep()
@@ -353,7 +354,7 @@ class SAC(nn.Module):
                 new_obs, rew, done, info = self.env.step(reb_action)
                 
                 episode_reward += rew
-                episode_served_demand += info["served_demand"]
+                episode_served_demand += info["profit"]
                 episode_rebalancing_cost += info["rebalancing_cost"]
                 
                 if not done: 
@@ -412,7 +413,7 @@ class SAC(nn.Module):
             obs, rew = env.reset()  # initialize environment
             obs = self.parser.parse_obs(obs)
             eps_reward += rew
-            
+            eps_served_demand += rew
             while not done:
                 
                 action_rl = self.select_action(obs, deterministic=True)
@@ -430,7 +431,7 @@ class SAC(nn.Module):
                     obs = self.parser.parse_obs(new_obs)
 
                 eps_reward += rew
-                eps_served_demand += info["served_demand"]
+                eps_served_demand += info["profit"]
                 eps_rebalancing_cost += info["rebalancing_cost"]
                 #eps_rebalancing_veh += info["rebalanced_vehicles"]
             epochs.set_description(

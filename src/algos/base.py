@@ -60,17 +60,17 @@ class BaseAlgorithm:
                 traci.start(sumo_cmd)
             obs, rew = env.reset() 
             eps_reward += rew
-            
+            eps_served_demand += rew
             while not done:
 
                 reb_action = self.select_action(env)
             
                 obs, rew, done, info = env.step(reb_action)
- 
+
                 eps_reward += rew
-                eps_served_demand += info["served_demand"]
+                eps_served_demand += info["profit"]
                 eps_rebalancing_cost += info["rebalancing_cost"]
-    
+        
             episode_reward.append(eps_reward)
             episode_served_demand.append(eps_served_demand)
             episode_rebalancing_cost.append(eps_rebalancing_cost)

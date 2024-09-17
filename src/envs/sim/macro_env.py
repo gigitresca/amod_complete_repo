@@ -186,7 +186,7 @@ class AMoD:
         self.info['served_demand'] = 0 # initialize served demand
         self.info["operating_cost"] = 0 # initialize operating cost
         self.info['revenue'] = 0
-        self.info['rebalancing_cost'] = 0
+        self.info['profit'] = 0
         if paxAction is None:  # default matching algorithm used if isMatching is True, matching method will need the information of self.acc[t+1], therefore this part cannot be put forward
             paxAction = self.matching(CPLEXPATH=CPLEXPATH, PATH=PATH, platform = platform)
         self.paxAction = paxAction
@@ -206,8 +206,10 @@ class AMoD:
             self.info['served_demand'] += self.servedDemand[i,j][t]            
             self.dacc[j][t+self.demandTime[i,j][t]] += self.paxFlow[i,j][t+self.demandTime[i,j][t]]
             self.reward += self.paxAction[k]*(self.price[i,j][t] - self.demandTime[i,j][t]*self.beta)  
-            test_rew += self.paxAction[k]*(self.price[i,j][t])     
+            test_rew += self.paxAction[k]*(self.price[i,j][t]) 
+
             self.info['revenue'] += self.paxAction[k]*(self.price[i,j][t])  
+            self.info['profit'] += self.paxAction[k]*(self.price[i,j][t] - self.demandTime[i,j][t]*self.beta) 
        # print('test_rew:', test_rew)
         self.obs = (self.acc, self.time, self.dacc, self.demand) # for acc, the time index would be t+1, but for demand, the time index would be t
         done = False # if passenger matching is executed first
@@ -215,6 +217,11 @@ class AMoD:
     
     # reb step
     def reb_step(self, rebAction):
+        self.info['served_demand'] = 0 # initialize served demand
+        self.info["operating_cost"] = 0 # initialize operating cost
+        self.info['revenue'] = 0
+        self.info['rebalancing_cost'] = 0#
+        self.info['profit'] = 0
         t = self.time
         self.reward = 0 # reward is calculated from before this to the next rebalancing, we may also have two rewards, one for pax matching and one for rebalancing
         self.rebAction = rebAction      
@@ -252,16 +259,20 @@ class AMoD:
         # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
         # Take action in environment
         rew = 0
-        obs, rebreward, done, info = self.reb_step(reb_action)
-
+        info = {}
+        info['rebalancing_cost'] = 0 
+        info['profit'] = 0
+        obs, rebreward, done, _ = self.reb_step(reb_action)
+        info['rebalancing_cost'] = -rebreward
         rew += rebreward 
 
         if done: 
             return obs, rew, done, info
 
-        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
-    
+        obs, paxreward, done, _ = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
+        info['profit'] = paxreward
         rew += paxreward
+       
         return obs, rew, done, info
 
     def reset(self):

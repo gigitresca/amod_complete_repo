@@ -116,19 +116,18 @@ def test(config):
     episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(cfg.model.test_episodes, env)
 
     print('Mean Episode Profit ($): ', np.mean(episode_reward))
-    print('Mean Episode Served Demand($): ', np.mean(episode_served_demand))
+    print('Mean Episode Served Demand- Proit($): ', np.mean(episode_served_demand))
     print('Mean Episode Rebalancing Cost($): ', np.mean(episode_rebalancing_cost))
 
-
     no_reb_reward = 27592.241758477943
-    no_reb_demand = 1599.6
+    #no_reb_demand = 1599.6
+    no_reb_demand = 27592.241758477943
     no_reb_cost = 0.0
     mean_reward = np.mean(episode_reward)
     mean_served_demand = np.mean(episode_served_demand)
     mean_rebalancing_cost = np.mean(episode_rebalancing_cost)
 
-
-    labels = ['Reward', 'Served Demand', 'Rebalancing Cost']
+    labels = ['Overall Profit', 'Served Demand Profit', 'Rebalancing Cost']
     rl_means = [mean_reward, mean_served_demand, mean_rebalancing_cost]
 
     no_control = [no_reb_reward, no_reb_demand, no_reb_cost]
