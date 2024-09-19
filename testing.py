@@ -109,7 +109,7 @@ def test(config):
     
     use_cuda = not cfg.model.no_cuda and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
-
+    
     model = setup_model(cfg, env, parser, device)
     
     print(f'Testing model {cfg.model.name} on {cfg.simulator.name} environment')
@@ -119,19 +119,23 @@ def test(config):
     print('Mean Episode Served Demand- Proit($): ', np.mean(episode_served_demand))
     print('Mean Episode Rebalancing Cost($): ', np.mean(episode_rebalancing_cost))
 
-    no_reb_reward = 27592.241758477943
+    no_reb_reward = 27593
     #no_reb_demand = 1599.6
-    no_reb_demand = 27592.241758477943
+    no_reb_demand = 27593
     no_reb_cost = 0.0
     mean_reward = np.mean(episode_reward)
     mean_served_demand = np.mean(episode_served_demand)
     mean_rebalancing_cost = np.mean(episode_rebalancing_cost)
 
+    #round 
+    mean_reward = round(mean_reward)
+    mean_served_demand = round(mean_served_demand)
+    mean_rebalancing_cost = round(mean_rebalancing_cost)
     labels = ['Overall Profit', 'Served Demand Profit', 'Rebalancing Cost']
     rl_means = [mean_reward, mean_served_demand, mean_rebalancing_cost]
 
     no_control = [no_reb_reward, no_reb_demand, no_reb_cost]
-
+    
     import matplotlib.pyplot as plt
     x = np.arange(len(labels))  # the label locations
     width = 0.25  # the width of the bars
@@ -152,7 +156,7 @@ def test(config):
     def add_value_labels(rects):
         for rect in rects:
             height = rect.get_height()
-            ax.annotate(f'{height:.2f}',
+            ax.annotate(f'{int(height)}',
                         xy=(rect.get_x() + rect.get_width() / 2, height),
                         xytext=(0, 3),  # 3 points vertical offset
                         textcoords="offset points",

@@ -402,6 +402,7 @@ class SAC(nn.Module):
         episode_served_demand = []
         episode_rebalancing_cost = []
         episode_rebalanced_vehicles = []
+        actions = []
         for i_episode in epochs:
             eps_reward = 0
             eps_served_demand = 0
