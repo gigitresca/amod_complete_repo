@@ -458,12 +458,10 @@ class SAC(nn.Module):
         torch.save(checkpoint, path)
 
     def load_checkpoint(self, path="ckpt.pth"):
-        checkpoint = torch.load(path, map_location=self.device)
-        model_dict = self.state_dict()
-     
-        self.load_state_dict(model_dict)
+        checkpoint = torch.load(path)
+        self.load_state_dict(checkpoint["model"])
         for key, value in self.optimizers.items():
             self.optimizers[key].load_state_dict(checkpoint[key])
-    
+
     def log(self, log_dict, path="log.pth"):
         torch.save(log_dict, path)
