@@ -459,7 +459,26 @@ class SAC(nn.Module):
 
     def load_checkpoint(self, path="ckpt.pth"):
         checkpoint = torch.load(path)
-        self.load_state_dict(checkpoint["model"])
+        try:
+            # Attempt to load the model state dict as is
+            self.load_state_dict(checkpoint["model"])
+            #print(checkpoint["model"].keys())
+        except RuntimeError as e:
+        
+            model_state_dict = checkpoint["model"]
+            new_state_dict = {}
+            # Remapping the keys
+            for key in model_state_dict.keys():
+                if "conv1.weight" in key:
+                    new_key = key.replace("conv1.weight", "conv1.lin.weight")
+                #elif "lin.bias" in key:
+                #    new_key = key.replace("lin.bias", "bias")
+                else:
+                    new_key = key
+                new_state_dict[new_key] = model_state_dict[key]
+
+            self.load_state_dict(new_state_dict)
+        
         for key, value in self.optimizers.items():
             self.optimizers[key].load_state_dict(checkpoint[key])
 
