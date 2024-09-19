@@ -272,7 +272,7 @@ class AMoD:
         obs, paxreward, done, _ = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
         info['profit'] = paxreward
         rew += paxreward
-       
+        
         return obs, rew, done, info
 
     def reset(self):

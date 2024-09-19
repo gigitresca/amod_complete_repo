@@ -8,7 +8,7 @@ def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
     
     cfg = cfg.simulator
-   
+    cfg.simulator.cplexpath = cfg.model.cplexpath
     demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
     aggregated_demand = not cfg.random_od
     scenario_path = 'src/envs/data/LuSTScenario/'
@@ -27,10 +27,12 @@ def setup_macro(cfg):
     from src.envs.sim.macro_env import Scenario, AMoD, GNNParser
     with open("src/envs/data/macro/calibrated_parameters.json", "r") as file:
         calibrated_params = json.load(file)
+    
+    cfg.simulator.cplexpath = cfg.model.cplexpath
 
     cfg = cfg.simulator
     city = cfg.city
-
+     
     scenario = Scenario(
     json_file=f"src/envs/data/macro/scenario_{city}.json",
     demand_ratio=calibrated_params[city]["demand_ratio"],
