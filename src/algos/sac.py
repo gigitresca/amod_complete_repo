@@ -402,7 +402,8 @@ class SAC(nn.Module):
         episode_served_demand = []
         episode_rebalancing_cost = []
         episode_rebalanced_vehicles = []
-        actions = []
+        episode_actions = []
+        episode_inflows = []
         for i_episode in epochs:
             eps_reward = 0
             eps_served_demand = 0
@@ -415,9 +416,12 @@ class SAC(nn.Module):
             obs = self.parser.parse_obs(obs)
             eps_reward += rew
             eps_served_demand += rew
+            actions = []
+            inflow = np.zeros(len(env.region))
             while not done:
                 
                 action_rl = self.select_action(obs, deterministic=True)
+                actions.append(action_rl)
                 desiredAcc = {env.region[i]: int(action_rl[i] * dictsum(env.acc, env.time + 1))
                     for i in range(len(self.env.region))
                 }
@@ -428,9 +432,15 @@ class SAC(nn.Module):
                     self.cplexpath,
                 )
                 new_obs, rew, done, info = env.step(reb_action)
+                #calculate inflow to each node in the graph
+               
+                for k in range(len(env.edges)):
+                    i,j = env.edges[k]
+                    inflow[j] += reb_action[k]
+
                 if not done:
                     obs = self.parser.parse_obs(new_obs)
-
+                
                 eps_reward += rew
                 eps_served_demand += info["profit"]
                 eps_rebalancing_cost += info["rebalancing_cost"]
@@ -441,6 +451,11 @@ class SAC(nn.Module):
             episode_reward.append(eps_reward)
             episode_served_demand.append(eps_served_demand)
             episode_rebalancing_cost.append(eps_rebalancing_cost)
+            episode_actions.append(np.mean(actions, axis=0))
+            episode_inflows.append(inflow)
+
+            print(episode_actions)
+            print(episode_inflows)
             #episode_rebalanced_vehicles.append(eps_rebalancing_veh)
 
 
