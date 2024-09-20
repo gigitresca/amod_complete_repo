@@ -206,6 +206,8 @@ def test(config):
     ax.set_ylabel('Factor')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
+
+    ax.set_title(f'Comparison of incoming Rebalancing Flows vs Profit')
     ax.legend()
 
     plt.tight_layout()  
