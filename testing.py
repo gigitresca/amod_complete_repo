@@ -113,40 +113,40 @@ def test(config):
     model = setup_model(cfg, env, parser, device)
     
     print(f'Testing model {cfg.model.name} on {cfg.simulator.name} environment')
-    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(cfg.model.test_episodes, env)
+    episode_reward, episode_served_demand, episode_rebalancing_cost, inflows = model.test(cfg.model.test_episodes, env)
 
     print('Mean Episode Profit ($): ', np.mean(episode_reward))
     print('Mean Episode Served Demand- Proit($): ', np.mean(episode_served_demand))
     print('Mean Episode Rebalancing Cost($): ', np.mean(episode_rebalancing_cost))
 
-    no_reb_reward = 27593
+    inflows = np.mean(inflows, axis=0)
+    no_reb_reward = 27.6
     #no_reb_demand = 1599.6
-    no_reb_demand = 27593
+    no_reb_demand = 27.6
     no_reb_cost = 0.0
     mean_reward = np.mean(episode_reward)
     mean_served_demand = np.mean(episode_served_demand)
     mean_rebalancing_cost = np.mean(episode_rebalancing_cost)
 
-    #round 
-    mean_reward = round(mean_reward)
-    mean_served_demand = round(mean_served_demand)
-    mean_rebalancing_cost = round(mean_rebalancing_cost)
+    mean_reward = round(mean_reward/1000,2)
+    mean_served_demand = round(mean_served_demand/1000,2)
+    mean_rebalancing_cost = round(mean_rebalancing_cost/1000,2)
     labels = ['Overall Profit', 'Served Demand Profit', 'Rebalancing Cost']
     rl_means = [mean_reward, mean_served_demand, mean_rebalancing_cost]
-
+    
     no_control = [no_reb_reward, no_reb_demand, no_reb_cost]
     
     import matplotlib.pyplot as plt
     x = np.arange(len(labels))  # the label locations
-    width = 0.25  # the width of the bars
+    width = 0.15  # the width of the bars
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    rects1 = ax.bar(x - width/2, rl_means, width, label=cfg.model.name, color='tab:blue', capsize=5)
-    rects2 = ax.bar(x + width/2, no_control, width, label='No Control', color='tab:orange')
+    rects1 = ax.bar(x - width/2, rl_means, width, label=cfg.model.name, color="#0072BD", capsize=5)
+    rects2 = ax.bar(x + width/2, no_control, width, label='No Control', color="#A2142F")
     
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_xlabel('Metrics')
-    ax.set_ylabel('$')
+    ax.set_ylabel('$, x10^3')
     ax.set_title(f'Comparison of {cfg.model.name} vs No Control')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
@@ -156,7 +156,7 @@ def test(config):
     def add_value_labels(rects):
         for rect in rects:
             height = rect.get_height()
-            ax.annotate(f'{int(height)}',
+            ax.annotate(f'{height:.1f}',
                         xy=(rect.get_x() + rect.get_width() / 2, height),
                         xytext=(0, 3),  # 3 points vertical offset
                         textcoords="offset points",
@@ -170,6 +170,46 @@ def test(config):
     plt.grid(True, axis='y', linestyle='--', alpha=0.7)
     plt.show()
     
+
+    open_reqest = {0: 0,
+        1: 414.0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 49756.49999999998,
+        6: 9948.600000000006,
+        7: 98.99999999999999,
+        8: 198.00000000000003,
+        9: 881.9999999999998,
+        10: 1232.9999999999993,
+        11: 6492.600000000001,
+        12: 23293.80000000004,
+        13: 170.99999999999997}
+    
+    open_reqest = {k: v / max(open_reqest.values()) for k,v in open_reqest.items()}
+
+    inflows = inflows / max(inflows)
+
+    labels = range(14)
+    x = np.arange(len(labels))  # the label locations
+    width = 0.25  # the width of the bars
+
+    r1 = np.arange(14)
+    r2 = [x + width for x in r1]
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    rects1 = ax.bar(r2, inflows, width, label='Rebalancing Flows', color="#0072BD")
+    rects2 = ax.bar(r1, open_reqest.values(), width, label='Profit', color="#A2142F")
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_xlabel('Regions')
+    ax.set_ylabel('Factor')
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.legend()
+
+    plt.tight_layout()  
+    plt.show()
 
 @hydra.main(version_base=None, config_path="src/config/", config_name="config")
 def main(cfg: DictConfig):

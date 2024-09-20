@@ -4,7 +4,7 @@ if 'SUMO_HOME' in os.environ:
     sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
 import traci
 from tqdm import trange
-
+import numpy as np
 class BaseAlgorithm:
     def __init__(self, **kwargs):
         """
@@ -49,12 +49,12 @@ class BaseAlgorithm:
         episode_reward = []
         episode_served_demand = []
         episode_rebalancing_cost = []
-
+        inflows = []
         for i_episode in epochs:
             eps_reward = 0
             eps_served_demand = 0
             eps_rebalancing_cost = 0
-            
+            inflow = np.zeros(env.nregion)
             done = False
             if sim =='sumo':
                 traci.start(sumo_cmd)
@@ -67,6 +67,10 @@ class BaseAlgorithm:
             
                 obs, rew, done, info = env.step(reb_action)
 
+                for k in range(len(env.edges)):
+                    i,j = env.edges[k]
+                    inflow[j] += reb_action[k]
+                
                 eps_reward += rew
                 eps_served_demand += info["profit"]
                 eps_rebalancing_cost += info["rebalancing_cost"]
@@ -74,7 +78,9 @@ class BaseAlgorithm:
             episode_reward.append(eps_reward)
             episode_served_demand.append(eps_served_demand)
             episode_rebalancing_cost.append(eps_rebalancing_cost)
+            inflows.append(inflow)
             epochs.set_description(
                 f"Test Episode {i_episode+1} | Reward: {eps_reward:.2f} | ServedDemand: {eps_served_demand:.2f} | Reb. Cost: {eps_rebalancing_cost:.2f}"
             )
-        return episode_reward, episode_served_demand, episode_rebalancing_cost
+        return episode_reward, episode_served_demand, episode_rebalancing_cost, inflows
+        
