@@ -134,6 +134,7 @@ model=sac
 ```
 ```
 sac model arguments:
+    agent_name          agent name for training or evaluation (default: today's date + '_sac_gnn')
     cplexpath           defines directory of the CPLEX installation
     max_episodes        number of episodes to train agent (default: 16k)
     no_cuda             disables CUDA training (default: true)
@@ -151,34 +152,15 @@ sac model arguments:
     test_episodes       number of episodes to test agent (default 10)
 ```
 
-## Examples
-
-To train an agent, `main.py` accepts the following arguments:
-```bash
-cplex arguments:
-    --cplexpath     defines directory of the CPLEX installation
-    
-model arguments:
-    --test          activates agent evaluation mode (default: False)
-    --max_episodes  number of episodes to train agent (default: 16k)
-    --max_steps     number of steps per episode (default: T=60)
-    --no-cuda       disables CUDA training (default: True, i.e. run on CPU)
-    --directory     defines directory where to log files (default: saved_files)
-    
-simulator arguments: (unless necessary, we recommend using the provided ones)
-    --seed          random seed (default: 10)
-    --demand_ratio  (default: 0.5)
-    --json_hr       (default: 7)
-    --json_tsetp    (default: 3)
-    --no-beta       (default: 0.5)
-```
-
 **Important**: Take care of specifying the correct path for your local CPLEX installation. Typical default paths based on different operating systems could be the following
 ```bash
 Windows: "C:/Program Files/ibm/ILOG/CPLEX_Studio128/opl/bin/x64_win64/"
 OSX: "/Applications/CPLEX_Studio128/opl/bin/x86-64_osx/"
 Linux: "/opt/ibm/ILOG/CPLEX_Studio128/opl/bin/x86-64_linux/"
 ```
+
+## Examples
+
 ### Training and simulating an agent
 
 1. To train an agent (with the default parameters) run the following:
