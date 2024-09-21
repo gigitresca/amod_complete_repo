@@ -51,6 +51,98 @@ pip install -r requirements.txt
 `├── test.ipynb`: test main file<br>
 `├── train.py`: Rl agents train main file <br>
 
+##  Configuration parameters
+To run a training or a testing, firstly the simulator and the model type must be selected with the config arguments
+```
+config arguments:
+    simulator           defines the simulator fidelity between 'macro' and 'sumo' (default: macro)
+    model               defines the selected model: choose between the models saved in src/algos/registry.py file (default: sac)
+```
+### Simulators parameters
+Use the following argument for macroscopic simulator:
+```
+simulator=macro
+```
+```
+macro simulator arguments
+    seed                random seed (default: 10)
+    demand_ratio        ratio of demand (default: 0.5)
+    json_hr             hour of the day for JSON configuratio (default: 7)
+    json_tstep          minutes per timestep (default: 3 min)
+    beta                cost of rebalancing (default: 0.5)
+    city                city: defines the city to train or test on (default: 'nyc_brooklyn')
+    max_steps           number of steps per episode (default: T=20)
+    time_horizon        steps in the future for demand and arriving vehicle forecast (default: 6 min)
+    directory           defines directory where to save files
+```
+Use the following argument for mesoscopic simulator:
+```
+simulator=sumo
+```
+```
+sumo simulator arguments
+    sumocfg_file        define the SUMO configuration file
+    net_file            define the city network file
+    seed                random seed (default: 10)
+    demand_ratio        demand ratio (default: 0.8)
+    time_start          simulation start time in hours (default: 7)
+    duration            episode duration in hours (default: 2 hr)
+    time_horizon        matching steps in the future for demand and arriving vehicle forecast (default: 10 min)
+    matching_tstep      minutes per timestep (default: 1 min)
+    reb_tstep           minutes per timestep (default: 3 min)
+    sumo_tstep          sumo time step (default: 1 s)
+    max_waiting_time    maximum passengers waiting time for a ride (default: 10 min)
+    beta                cost of rebalancing (default: 1)
+    num_regions         number of regions for spatial aggregation (default: 8)
+    random_od           demand aggregated in the centers of the regions (default: False)
+    acc_init            initial number of taxis per region (default: 90)
+    city                or test on (default: 'lux')
+    directory           defines directory where to save files
+```
+### Models parameters
+Use the following argument for a2c agent:
+```
+model=a2c
+```
+```
+a2c model arguments
+    agent_name          agent name for training or evaluation (default: today's date + '_a2c_gnn')
+    cplexpath           defines directory of the CPLEX installation
+    directory           defines directory where to save files
+    max_episodes        number of episodes to train agent (default: 16k)
+    max_steps           number of steps per episode (default: T=120)
+    no_cuda             disables CUDA training (default: true)
+    batch_size          defines batch size (default: 100)
+    p_lr                define policy learning rate (default: 1e-3)
+    q_lr                defines q-value learning rate (default: 1e-3)
+    hidden_size         defines hidden units in the MLP layers (default: 256)
+    clip                clip value for gradient clipping (default: 500)
+    checkpoint_path     path where to save model checkpoints (A2C)
+```
+
+Use the following argument for sac agent:
+```
+model=sac
+```
+```
+sac model arguments
+    cplexpath           defines directory of the CPLEX installation
+    max_episodes        number of episodes to train agent (default: 16k)
+    no_cuda             disables CUDA training (default: true)
+    batch_size          defines batch size (default: 100)
+    p_lr                define policy learning rate (default: 1e-3)
+    q_lr                defines q-value learning rate (default: 1e-3)
+    alpha               defines entropy coefficient (default: 0.3)
+    auto_entropy        use automatic entropy tuning (default: false)
+    hidden_size         defines hidden units in the MLP layers (default: 256)
+    clip                clip value for gradient clipping (default: 500)
+    checkpoint_path     path where to save model checkpoints (SAC)
+    rew_scale           defines reward scale (default: 0.01)
+    use_LSTM            use LSTM in the model (default: false)
+    input_size          number of node features (defalut: 13)
+    test_episodes       number of episodes to test agent (default 10)
+```
+
 ## Examples
 
 To train an agent, `main.py` accepts the following arguments:
