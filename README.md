@@ -59,12 +59,16 @@ config arguments:
     model               defines the selected model: choose between the models saved in src/algos/registry.py file (default: sac)
 ```
 ### Simulators parameters
+You need to pass the following argument to set a simulator parameter:
+```
+simulator.{arg}=value
+```
 Use the following argument for macroscopic simulator:
 ```
 simulator=macro
 ```
 ```
-macro simulator arguments
+macro simulator arguments:
     seed                random seed (default: 10)
     demand_ratio        ratio of demand (default: 0.5)
     json_hr             hour of the day for JSON configuratio (default: 7)
@@ -80,7 +84,7 @@ Use the following argument for mesoscopic simulator:
 simulator=sumo
 ```
 ```
-sumo simulator arguments
+sumo simulator arguments:
     sumocfg_file        define the SUMO configuration file
     net_file            define the city network file
     seed                random seed (default: 10)
@@ -100,12 +104,16 @@ sumo simulator arguments
     directory           defines directory where to save files
 ```
 ### Models parameters
+You need to pass the following argument to set a simulator parameter:
+```
+model.{arg}=value
+```
 Use the following argument for a2c agent:
 ```
 model=a2c
 ```
 ```
-a2c model arguments
+a2c model arguments:
     agent_name          agent name for training or evaluation (default: today's date + '_a2c_gnn')
     cplexpath           defines directory of the CPLEX installation
     directory           defines directory where to save files
@@ -125,7 +133,7 @@ Use the following argument for sac agent:
 model=sac
 ```
 ```
-sac model arguments
+sac model arguments:
     cplexpath           defines directory of the CPLEX installation
     max_episodes        number of episodes to train agent (default: 16k)
     no_cuda             disables CUDA training (default: true)
