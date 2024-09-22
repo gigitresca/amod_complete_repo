@@ -12,7 +12,7 @@ class RandomBaseline(BaseAlgorithm):
         super().__init__()
         self.cplexpath = kwargs.get('cplexpath')
         self.directory = kwargs.get('directory')
-
+    
     def select_action(self, env):
         """
         Implements the random baseline for rebalancing.

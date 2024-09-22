@@ -140,23 +140,25 @@ def test(config):
     x = np.arange(len(labels))  # the label locations
     width = 0.15  # the width of the bars
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    rects1 = ax.bar(x - width/2, rl_means, width, label=cfg.model.name, color="#0072BD", capsize=5)
-    rects2 = ax.bar(x + width/2, no_control, width, label='No Control', color="#A2142F")
+    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
+
+    #fig, ax = plt.subplots(figsize=(8, 5))
+    rects1 = ax1.bar(x - width/2, rl_means, width, label=cfg.model.name, color="#0072BD", capsize=5)
+    rects2 = ax1.bar(x + width/2, no_control, width, label='No Control', color="#A2142F")
     
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_xlabel('Metrics')
-    ax.set_ylabel('$, x10^3')
-    ax.set_title(f'Comparison of {cfg.model.name} vs No Control')
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-    ax.legend()
+    ax1.set_xlabel('Metrics')
+    ax1.set_ylabel('$, x10^3')
+    ax1.set_title(f'Comparison of {cfg.model.name} vs No Control')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(labels)
+    ax1.legend()
     
     # Function to add value labels on top of bars
     def add_value_labels(rects):
         for rect in rects:
             height = rect.get_height()
-            ax.annotate(f'{height:.1f}',
+            ax1.annotate(f'{height:.1f}',
                         xy=(rect.get_x() + rect.get_width() / 2, height),
                         xytext=(0, 3),  # 3 points vertical offset
                         textcoords="offset points",
@@ -166,9 +168,9 @@ def test(config):
     add_value_labels(rects1)
     add_value_labels(rects2)
 
-    plt.tight_layout()
+    #plt.tight_layout()
     plt.grid(True, axis='y', linestyle='--', alpha=0.7)
-    plt.show()
+    #plt.show()
     
 
     open_reqest = {0: 0,
@@ -186,9 +188,9 @@ def test(config):
         12: 23293.80000000004,
         13: 170.99999999999997}
     
-    open_reqest = {k: v / max(open_reqest.values()) for k,v in open_reqest.items()}
+    #open_reqest = {k: v / max(open_reqest.values()) for k,v in open_reqest.items()}
 
-    inflows = inflows / max(inflows)
+    #inflows = inflows / max(inflows)
 
     labels = range(14)
     x = np.arange(len(labels))  # the label locations
@@ -197,18 +199,22 @@ def test(config):
     r1 = np.arange(14)
     r2 = [x + width for x in r1]
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    rects1 = ax.bar(r2, inflows, width, label='Rebalancing Flows', color="#0072BD")
-    rects2 = ax.bar(r1, open_reqest.values(), width, label='Profit', color="#A2142F")
+    #fig, ax = plt.subplots(figsize=(8, 5))
+    ax2.bar(r2, inflows, width, label='Rebalancing Flows', color="#0072BD")
+    ax3 = ax2.twinx()  # Create a second y-axis
+    ax3.bar(r1, open_reqest.values(), width, label='Profit', color="#A2142F")
 
-    # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_xlabel('Regions')
-    ax.set_ylabel('Factor')
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-
-    ax.set_title(f'Comparison of incoming Rebalancing Flows vs Profit')
-    ax.legend()
+    # Add labels and title to the second plot
+    ax2.set_xlabel('Regions')
+    ax2.set_ylabel('Flows', color="#0072BD")
+    ax3.set_ylabel('Profit', color="#A2142F")
+    ax2.set_title('Comparison of Incoming Rebalancing Flows vs Profit')
+    ax2.set_xticks(r1)
+    ax2.set_xticklabels(labels)
+    ax2.tick_params(axis='y', labelcolor="#0072BD")
+    ax3.tick_params(axis='y', labelcolor="#A2142F")
+    #ax2.legend()
+    #ax3.legend()
 
     plt.tight_layout()  
     plt.show()
