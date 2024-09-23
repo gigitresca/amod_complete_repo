@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-09-23 14:56:19 by Eclipse SUMO sumo Version 1.20.0
+<!-- generated on 2024-09-23 15:59:06 by Eclipse SUMO sumo Version 1.20.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
@@ -8,6 +8,12 @@
         <route-files value="src/envs/data/lux/input/routes/local.rou.xml,src/envs/data/lux/input/routes/transit.rou.xml"/>
         <additional-files value="src/envs/data/lux/input/add/vtypes.add.xml,src/envs/data/lux/input/add/e1detectors.add.xml,src/envs/data/lux/input/add/tll.static.xml"/>
     </input>
+
+    <output>
+        <summary-output value="saved_files/sumo_output/lux/mpc_dua_meso.static.summary.xml"/>
+        <tripinfo-output value="saved_files/sumo_output/lux/mpc_dua_meso.static.tripinfo.xml"/>
+        <tripinfo-output.write-unfinished value="true"/>
+    </output>
 
     <time>
         <begin value="0"/>
@@ -42,7 +48,7 @@
     </taxi_device>
 
     <traci_server>
-        <remote-port value="61898"/>
+        <remote-port value="63501"/>
     </traci_server>
 
     <mesoscopic>
@@ -70,37 +76,37 @@
 
 <detector xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/det_e1meso_file.xsd">
     <interval begin="0.00" end="1800.00" id="2857_link" sampledSeconds="4.97" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.68" speedRelative="1.01" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="0.00" end="1800.00" id="2858_link" sampledSeconds="6.20" density="0.03" laneDensity="0.03" occupancy="0.02" waitingTime="0.00" timeLoss="0.00" speed="17.00" speedRelative="0.87" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="0.00" end="1800.00" id="2858_link" sampledSeconds="21.74" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.39" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
     <interval begin="0.00" end="1800.00" id="2859_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="2860_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="2861_link" sampledSeconds="33.71" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="0.00" end="1800.00" id="2860_link" sampledSeconds="10.24" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.97" speedRelative="1.08" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="0.00" end="1800.00" id="2861_link" sampledSeconds="26.97" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
     <interval begin="0.00" end="1800.00" id="2862_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="2863_link" sampledSeconds="16.65" density="0.09" laneDensity="0.09" occupancy="0.05" waitingTime="0.00" timeLoss="0.00" speed="18.21" speedRelative="0.94" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="0.00" end="1800.00" id="2863_link" sampledSeconds="14.78" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.52" speedRelative="1.06" departed="0" arrived="0" entered="3" left="3"/>
     <interval begin="0.00" end="1800.00" id="2868_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2869_link" sampledSeconds="231.76" density="1.29" laneDensity="1.29" occupancy="0.64" waitingTime="0.00" timeLoss="0.01" speed="18.97" speedRelative="0.98" departed="0" arrived="0" entered="44" left="44"/>
-    <interval begin="0.00" end="1800.00" id="2870_link" sampledSeconds="6.19" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="0.00" end="1800.00" id="2870_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2875_link" sampledSeconds="171.74" density="0.97" laneDensity="0.97" occupancy="0.48" waitingTime="0.00" timeLoss="0.01" speed="19.41" speedRelative="1.00" departed="0" arrived="0" entered="34" left="34"/>
-    <interval begin="0.00" end="1800.00" id="2884_link" sampledSeconds="5.52" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.17" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="0.00" end="1800.00" id="2884_link" sampledSeconds="36.51" density="0.20" laneDensity="0.20" occupancy="0.10" waitingTime="0.00" timeLoss="0.00" speed="19.25" speedRelative="0.99" departed="0" arrived="0" entered="7" left="7"/>
     <interval begin="0.00" end="1800.00" id="2885_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2886_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2899_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2928_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2929_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2930_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="2931_link" sampledSeconds="5.26" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="0.00" end="1800.00" id="2931_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2932_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2933_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="2934_link" sampledSeconds="48.58" density="0.26" laneDensity="0.26" occupancy="0.13" waitingTime="0.00" timeLoss="0.00" speed="19.38" speedRelative="1.00" departed="0" arrived="0" entered="9" left="9"/>
+    <interval begin="0.00" end="1800.00" id="2934_link" sampledSeconds="37.10" density="0.20" laneDensity="0.20" occupancy="0.10" waitingTime="0.00" timeLoss="0.00" speed="19.74" speedRelative="1.02" departed="0" arrived="0" entered="7" left="7"/>
     <interval begin="0.00" end="1800.00" id="2939_link" sampledSeconds="31.81" density="0.17" laneDensity="0.17" occupancy="0.08" waitingTime="0.00" timeLoss="0.00" speed="20.17" speedRelative="1.04" departed="0" arrived="0" entered="6" left="6"/>
     <interval begin="0.00" end="1800.00" id="2940_link" sampledSeconds="27.58" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="20.08" speedRelative="1.03" departed="0" arrived="0" entered="6" left="5"/>
-    <interval begin="0.00" end="1800.00" id="2945_link" sampledSeconds="5.06" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.29" speedRelative="0.99" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="0.00" end="1800.00" id="2945_link" sampledSeconds="20.11" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.40" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
     <interval begin="0.00" end="1800.00" id="2946_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2951_link" sampledSeconds="20.74" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="0.00" end="1800.00" id="2960_link" sampledSeconds="84.70" density="0.45" laneDensity="0.45" occupancy="0.22" waitingTime="0.00" timeLoss="0.59" speed="19.55" speedRelative="1.01" departed="0" arrived="0" entered="16" left="16"/>
-    <interval begin="0.00" end="1800.00" id="2961_link" sampledSeconds="4.75" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="0.00" end="1800.00" id="2962_link" sampledSeconds="7.90" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.15" speedRelative="1.04" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="0.00" end="1800.00" id="2967_link" sampledSeconds="5.17" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.67" speedRelative="1.01" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="0.00" end="1800.00" id="2968_link" sampledSeconds="9.79" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.79" speedRelative="1.02" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="0.00" end="1800.00" id="2960_link" sampledSeconds="100.72" density="0.54" laneDensity="0.54" occupancy="0.26" waitingTime="0.00" timeLoss="0.59" speed="19.52" speedRelative="1.00" departed="0" arrived="0" entered="19" left="19"/>
+    <interval begin="0.00" end="1800.00" id="2961_link" sampledSeconds="19.06" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.40" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="0.00" end="1800.00" id="2962_link" sampledSeconds="20.21" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.68" speedRelative="1.01" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="0.00" end="1800.00" id="2967_link" sampledSeconds="3.58" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.94" speedRelative="0.97" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="0.00" end="1800.00" id="2968_link" sampledSeconds="10.24" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.94" speedRelative="0.97" departed="0" arrived="0" entered="2" left="2"/>
     <interval begin="0.00" end="1800.00" id="2969_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2974_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="2975_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
@@ -113,365 +119,365 @@
     <interval begin="0.00" end="1800.00" id="3014_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="3015_link" sampledSeconds="205.64" density="1.17" laneDensity="1.17" occupancy="0.58" waitingTime="0.00" timeLoss="0.17" speed="19.49" speedRelative="1.00" departed="0" arrived="0" entered="41" left="41"/>
     <interval begin="0.00" end="1800.00" id="3020_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="3025_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="3026_link" sampledSeconds="24.11" density="0.17" laneDensity="0.17" occupancy="0.08" waitingTime="0.00" timeLoss="0.00" speed="20.17" speedRelative="1.04" departed="0" arrived="0" entered="6" left="6"/>
-    <interval begin="0.00" end="1800.00" id="3039_link" sampledSeconds="4.34" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.17" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="0.00" end="1800.00" id="3040_link" sampledSeconds="4.83" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.17" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="0.00" end="1800.00" id="3041_link" sampledSeconds="4.16" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.17" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="0.00" end="1800.00" id="3042_link" sampledSeconds="9.05" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="18.20" speedRelative="0.94" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="0.00" end="1800.00" id="3025_link" sampledSeconds="10.11" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.97" speedRelative="1.08" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="0.00" end="1800.00" id="3026_link" sampledSeconds="31.84" density="0.22" laneDensity="0.22" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="20.36" speedRelative="1.05" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="0.00" end="1800.00" id="3039_link" sampledSeconds="16.49" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.11" speedRelative="0.98" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="0.00" end="1800.00" id="3040_link" sampledSeconds="18.36" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.11" speedRelative="0.98" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="0.00" end="1800.00" id="3041_link" sampledSeconds="15.82" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.10" speedRelative="0.98" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="0.00" end="1800.00" id="3042_link" sampledSeconds="14.64" density="0.20" laneDensity="0.20" occupancy="0.10" waitingTime="0.00" timeLoss="0.00" speed="19.69" speedRelative="1.01" departed="0" arrived="0" entered="7" left="7"/>
     <interval begin="0.00" end="1800.00" id="3047_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="3052_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="3065_link" sampledSeconds="81.65" density="0.47" laneDensity="0.47" occupancy="0.24" waitingTime="0.00" timeLoss="0.09" speed="19.05" speedRelative="0.98" departed="0" arrived="0" entered="16" left="16"/>
     <interval begin="0.00" end="1800.00" id="3066_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="3071_link" sampledSeconds="6.78" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.17" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="0.00" end="1800.00" id="3071_link" sampledSeconds="25.78" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.10" speedRelative="0.98" departed="0" arrived="0" entered="4" left="4"/>
     <interval begin="0.00" end="1800.00" id="3080_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="3085_link" sampledSeconds="269.17" density="1.71" laneDensity="1.71" occupancy="0.84" waitingTime="0.00" timeLoss="0.01" speed="19.15" speedRelative="0.99" departed="0" arrived="0" entered="59" left="59"/>
     <interval begin="0.00" end="1800.00" id="3086_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="3095_link" sampledSeconds="174.26" density="0.98" laneDensity="0.98" occupancy="0.49" waitingTime="0.00" timeLoss="1.86" speed="19.28" speedRelative="0.99" departed="0" arrived="0" entered="34" left="34"/>
-    <interval begin="0.00" end="1800.00" id="3108_link" sampledSeconds="5.84" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.17" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="0.00" end="1800.00" id="3109_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="0.00" end="1800.00" id="3108_link" sampledSeconds="22.23" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.11" speedRelative="0.98" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="0.00" end="1800.00" id="3109_link" sampledSeconds="10.16" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.97" speedRelative="1.08" departed="0" arrived="0" entered="2" left="2"/>
     <interval begin="0.00" end="1800.00" id="3110_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="3111_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="0.00" end="1800.00" id="3112_link" sampledSeconds="9.84" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.52" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
     <interval begin="0.00" end="1800.00" id="3113_link" sampledSeconds="8.97" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.52" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="0.00" end="1800.00" id="3118_link" sampledSeconds="167.44" density="1.00" laneDensity="1.00" occupancy="0.50" waitingTime="0.00" timeLoss="1.13" speed="19.43" speedRelative="1.00" departed="0" arrived="0" entered="35" left="35"/>
-    <interval begin="0.00" end="1800.00" id="3119_link" sampledSeconds="23.13" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="18.20" speedRelative="0.94" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="0.00" end="1800.00" id="3120_link" sampledSeconds="11.18" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.17" speedRelative="0.93" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="0.00" end="1800.00" id="3125_link" sampledSeconds="88.05" density="0.46" laneDensity="0.46" occupancy="0.24" waitingTime="0.00" timeLoss="1.22" speed="19.37" speedRelative="1.00" departed="0" arrived="0" entered="17" left="16"/>
+    <interval begin="0.00" end="1800.00" id="3118_link" sampledSeconds="171.20" density="1.02" laneDensity="1.02" occupancy="0.51" waitingTime="0.00" timeLoss="1.13" speed="19.55" speedRelative="1.01" departed="0" arrived="0" entered="36" left="36"/>
+    <interval begin="0.00" end="1800.00" id="3119_link" sampledSeconds="27.38" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.22" speedRelative="0.99" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="0.00" end="1800.00" id="3120_link" sampledSeconds="10.28" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.76" speedRelative="1.02" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="0.00" end="1800.00" id="3125_link" sampledSeconds="98.14" density="0.51" laneDensity="0.51" occupancy="0.26" waitingTime="0.00" timeLoss="1.22" speed="19.53" speedRelative="1.00" departed="0" arrived="0" entered="19" left="18"/>
     <interval begin="0.00" end="1800.00" id="3126_link" sampledSeconds="282.28" density="1.51" laneDensity="1.51" occupancy="0.76" waitingTime="0.00" timeLoss="1.27" speed="19.50" speedRelative="1.00" departed="0" arrived="0" entered="53" left="53"/>
     <interval begin="0.00" end="1800.00" id="3127_link" sampledSeconds="99.97" density="0.50" laneDensity="0.50" occupancy="0.25" waitingTime="0.00" timeLoss="1.27" speed="19.34" speedRelative="1.00" departed="0" arrived="0" entered="18" left="17"/>
-    <interval begin="0.00" end="1800.00" id="3128_link" sampledSeconds="4.74" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.29" speedRelative="0.99" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="0.00" end="1800.00" id="3129_link" sampledSeconds="14.49" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.12" speedRelative="0.98" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="0.00" end="1800.00" id="3128_link" sampledSeconds="18.85" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.40" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="0.00" end="1800.00" id="3129_link" sampledSeconds="13.99" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.81" speedRelative="1.02" departed="0" arrived="0" entered="3" left="3"/>
     <interval begin="0.00" end="1800.00" id="3130_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="3131_link" sampledSeconds="15.53" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="18.88" speedRelative="0.97" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="0.00" end="1800.00" id="3131_link" sampledSeconds="10.14" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.27" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
     <interval begin="0.00" end="1800.00" id="3136_link" sampledSeconds="4.12" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="0.00" end="1800.00" id="3141_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="0.00" end="1800.00" id="3142_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="0.00" end="1800.00" id="3142_link" sampledSeconds="4.99" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="0.00" end="1800.00" id="3143_link" sampledSeconds="63.95" density="0.35" laneDensity="0.35" occupancy="0.18" waitingTime="0.00" timeLoss="0.00" speed="19.24" speedRelative="0.99" departed="0" arrived="0" entered="12" left="12"/>
     <interval begin="0.00" end="1800.00" id="3144_link" sampledSeconds="4.63" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="20.91" speedRelative="1.08" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="0.00" end="1800.00" id="3145_link" sampledSeconds="256.83" density="1.29" laneDensity="1.29" occupancy="0.64" waitingTime="0.00" timeLoss="1.19" speed="18.94" speedRelative="0.97" departed="0" arrived="0" entered="44" left="44"/>
-    <interval begin="1800.00" end="3600.00" id="2857_link" sampledSeconds="30.18" density="0.17" laneDensity="0.17" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="6" left="6"/>
+    <interval begin="1800.00" end="3600.00" id="2857_link" sampledSeconds="25.15" density="0.14" laneDensity="0.14" occupancy="0.08" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="5" left="5"/>
     <interval begin="1800.00" end="3600.00" id="2858_link" sampledSeconds="5.42" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="2859_link" sampledSeconds="9.99" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.67" speedRelative="1.06" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="1800.00" end="3600.00" id="2860_link" sampledSeconds="5.52" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="1800.00" end="3600.00" id="2861_link" sampledSeconds="26.97" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="1800.00" end="3600.00" id="2860_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="1800.00" end="3600.00" id="2861_link" sampledSeconds="6.74" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="2862_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="2863_link" sampledSeconds="15.63" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.40" speedRelative="1.00" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="1800.00" end="3600.00" id="2863_link" sampledSeconds="16.05" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="18.90" speedRelative="0.97" departed="0" arrived="0" entered="3" left="3"/>
     <interval begin="1800.00" end="3600.00" id="2868_link" sampledSeconds="4.95" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="20.18" speedRelative="1.04" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="1800.00" end="3600.00" id="2869_link" sampledSeconds="257.16" density="1.43" laneDensity="1.43" occupancy="0.73" waitingTime="0.00" timeLoss="1.47" speed="19.04" speedRelative="0.98" departed="0" arrived="0" entered="49" left="49"/>
+    <interval begin="1800.00" end="3600.00" id="2869_link" sampledSeconds="258.23" density="1.44" laneDensity="1.44" occupancy="0.73" waitingTime="0.00" timeLoss="2.53" speed="18.96" speedRelative="0.98" departed="0" arrived="0" entered="49" left="49"/>
     <interval begin="1800.00" end="3600.00" id="2870_link" sampledSeconds="6.19" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="2875_link" sampledSeconds="256.50" density="1.45" laneDensity="1.45" occupancy="0.74" waitingTime="0.00" timeLoss="3.20" speed="18.73" speedRelative="0.96" departed="0" arrived="0" entered="49" left="49"/>
-    <interval begin="1800.00" end="3600.00" id="2884_link" sampledSeconds="15.23" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.77" speedRelative="1.02" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="1800.00" end="3600.00" id="2885_link" sampledSeconds="5.36" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="1800.00" end="3600.00" id="2884_link" sampledSeconds="20.85" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.26" speedRelative="0.99" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="1800.00" end="3600.00" id="2885_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="2886_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="2899_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="2928_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="2929_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="2930_link" sampledSeconds="14.49" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.54" speedRelative="1.01" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="1800.00" end="3600.00" id="2930_link" sampledSeconds="9.63" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.59" speedRelative="1.01" departed="0" arrived="0" entered="2" left="2"/>
     <interval begin="1800.00" end="3600.00" id="2931_link" sampledSeconds="5.26" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="2932_link" sampledSeconds="5.68" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.69" speedRelative="1.01" departed="1" arrived="0" entered="0" left="1"/>
     <interval begin="1800.00" end="3600.00" id="2933_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="2934_link" sampledSeconds="70.83" density="0.38" laneDensity="0.38" occupancy="0.18" waitingTime="0.00" timeLoss="0.00" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="13" left="13"/>
-    <interval begin="1800.00" end="3600.00" id="2939_link" sampledSeconds="61.72" density="0.32" laneDensity="0.32" occupancy="0.16" waitingTime="0.00" timeLoss="0.00" speed="19.06" speedRelative="0.98" departed="0" arrived="0" entered="11" left="11"/>
-    <interval begin="1800.00" end="3600.00" id="2940_link" sampledSeconds="66.85" density="0.34" laneDensity="0.34" occupancy="0.17" waitingTime="0.00" timeLoss="0.00" speed="19.17" speedRelative="0.99" departed="0" arrived="0" entered="11" left="12"/>
-    <interval begin="1800.00" end="3600.00" id="2945_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="2946_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="2951_link" sampledSeconds="15.55" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="1800.00" end="3600.00" id="2934_link" sampledSeconds="64.79" density="0.34" laneDensity="0.34" occupancy="0.17" waitingTime="0.00" timeLoss="0.00" speed="19.38" speedRelative="1.00" departed="0" arrived="0" entered="12" left="12"/>
+    <interval begin="1800.00" end="3600.00" id="2939_link" sampledSeconds="72.06" density="0.37" laneDensity="0.37" occupancy="0.19" waitingTime="0.00" timeLoss="0.00" speed="19.29" speedRelative="0.99" departed="0" arrived="0" entered="13" left="13"/>
+    <interval begin="1800.00" end="3600.00" id="2940_link" sampledSeconds="82.91" density="0.43" laneDensity="0.43" occupancy="0.21" waitingTime="0.00" timeLoss="0.00" speed="19.36" speedRelative="1.00" departed="0" arrived="0" entered="14" left="15"/>
+    <interval begin="1800.00" end="3600.00" id="2945_link" sampledSeconds="4.64" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="21.01" speedRelative="1.08" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="1800.00" end="3600.00" id="2946_link" sampledSeconds="5.19" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="1800.00" end="3600.00" id="2951_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="2960_link" sampledSeconds="122.81" density="0.66" laneDensity="0.66" occupancy="0.34" waitingTime="0.00" timeLoss="0.00" speed="19.38" speedRelative="1.00" departed="0" arrived="0" entered="23" left="23"/>
     <interval begin="1800.00" end="3600.00" id="2961_link" sampledSeconds="28.10" density="0.17" laneDensity="0.17" occupancy="0.08" waitingTime="0.00" timeLoss="0.00" speed="19.73" speedRelative="1.01" departed="0" arrived="0" entered="6" left="6"/>
     <interval begin="1800.00" end="3600.00" id="2962_link" sampledSeconds="28.29" density="0.20" laneDensity="0.20" occupancy="0.10" waitingTime="0.00" timeLoss="0.00" speed="19.69" speedRelative="1.01" departed="0" arrived="0" entered="7" left="7"/>
-    <interval begin="1800.00" end="3600.00" id="2967_link" sampledSeconds="3.48" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="1800.00" end="3600.00" id="2968_link" sampledSeconds="4.99" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="1800.00" end="3600.00" id="2969_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="1800.00" end="3600.00" id="2967_link" sampledSeconds="5.23" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="1800.00" end="3600.00" id="2968_link" sampledSeconds="9.97" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="1800.00" end="3600.00" id="2969_link" sampledSeconds="7.94" density="0.04" laneDensity="0.04" occupancy="0.02" waitingTime="0.00" timeLoss="3.00" speed="13.07" speedRelative="0.67" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="2974_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="2975_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="2984_link" sampledSeconds="27.89" density="0.17" laneDensity="0.17" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="6" left="6"/>
+    <interval begin="1800.00" end="3600.00" id="2984_link" sampledSeconds="32.54" density="0.20" laneDensity="0.20" occupancy="0.10" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="7" left="7"/>
     <interval begin="1800.00" end="3600.00" id="2985_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="2990_link" sampledSeconds="39.57" density="0.23" laneDensity="0.23" occupancy="0.12" waitingTime="0.00" timeLoss="0.00" speed="19.05" speedRelative="0.98" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="1800.00" end="3600.00" id="2990_link" sampledSeconds="40.00" density="0.24" laneDensity="0.24" occupancy="0.12" waitingTime="0.00" timeLoss="0.00" speed="18.85" speedRelative="0.97" departed="0" arrived="0" entered="8" left="8"/>
     <interval begin="1800.00" end="3600.00" id="2995_link" sampledSeconds="5.38" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.72" speedRelative="0.96" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="3004_link" sampledSeconds="109.16" density="0.59" laneDensity="0.59" occupancy="0.30" waitingTime="0.00" timeLoss="0.00" speed="18.92" speedRelative="0.97" departed="0" arrived="0" entered="20" left="20"/>
     <interval begin="1800.00" end="3600.00" id="3013_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="3014_link" sampledSeconds="9.82" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="1800.00" end="3600.00" id="3014_link" sampledSeconds="14.73" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="3" left="3"/>
     <interval begin="1800.00" end="3600.00" id="3015_link" sampledSeconds="218.86" density="1.24" laneDensity="1.24" occupancy="0.60" waitingTime="0.00" timeLoss="0.01" speed="19.24" speedRelative="0.99" departed="0" arrived="0" entered="44" left="43"/>
     <interval begin="1800.00" end="3600.00" id="3020_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="3025_link" sampledSeconds="5.46" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="1800.00" end="3600.00" id="3026_link" sampledSeconds="55.18" density="0.38" laneDensity="0.38" occupancy="0.18" waitingTime="0.00" timeLoss="0.00" speed="19.10" speedRelative="0.98" departed="1" arrived="0" entered="12" left="13"/>
-    <interval begin="1800.00" end="3600.00" id="3039_link" sampledSeconds="16.34" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.29" speedRelative="0.99" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="1800.00" end="3600.00" id="3040_link" sampledSeconds="17.50" density="0.11" laneDensity="0.11" occupancy="0.05" waitingTime="0.00" timeLoss="0.00" speed="20.05" speedRelative="1.03" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="1800.00" end="3600.00" id="3041_link" sampledSeconds="18.91" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.97" speedRelative="1.03" departed="0" arrived="0" entered="5" left="5"/>
-    <interval begin="1800.00" end="3600.00" id="3042_link" sampledSeconds="16.67" density="0.22" laneDensity="0.22" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.76" speedRelative="1.02" departed="0" arrived="0" entered="8" left="8"/>
-    <interval begin="1800.00" end="3600.00" id="3047_link" sampledSeconds="5.18" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="1800.00" end="3600.00" id="3025_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="1800.00" end="3600.00" id="3026_link" sampledSeconds="58.85" density="0.40" laneDensity="0.40" occupancy="0.20" waitingTime="0.00" timeLoss="0.00" speed="19.28" speedRelative="0.99" departed="1" arrived="0" entered="13" left="14"/>
+    <interval begin="1800.00" end="3600.00" id="3039_link" sampledSeconds="20.75" density="0.15" laneDensity="0.15" occupancy="0.08" waitingTime="0.00" timeLoss="0.00" speed="18.99" speedRelative="0.98" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="1800.00" end="3600.00" id="3040_link" sampledSeconds="17.71" density="0.11" laneDensity="0.11" occupancy="0.05" waitingTime="0.00" timeLoss="0.00" speed="19.81" speedRelative="1.02" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="1800.00" end="3600.00" id="3041_link" sampledSeconds="19.09" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.79" speedRelative="1.02" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="1800.00" end="3600.00" id="3042_link" sampledSeconds="16.94" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="1800.00" end="3600.00" id="3047_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="3052_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="3065_link" sampledSeconds="108.25" density="0.62" laneDensity="0.62" occupancy="0.32" waitingTime="0.00" timeLoss="1.08" speed="18.86" speedRelative="0.97" departed="0" arrived="0" entered="21" left="21"/>
     <interval begin="1800.00" end="3600.00" id="3066_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="3071_link" sampledSeconds="24.56" density="0.11" laneDensity="0.11" occupancy="0.05" waitingTime="0.00" timeLoss="0.00" speed="20.05" speedRelative="1.03" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="1800.00" end="3600.00" id="3080_link" sampledSeconds="5.37" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="20.18" speedRelative="1.04" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="1800.00" end="3600.00" id="3071_link" sampledSeconds="24.86" density="0.11" laneDensity="0.11" occupancy="0.05" waitingTime="0.00" timeLoss="0.00" speed="19.81" speedRelative="1.02" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="1800.00" end="3600.00" id="3080_link" sampledSeconds="10.94" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.80" speedRelative="1.02" departed="0" arrived="0" entered="2" left="2"/>
     <interval begin="1800.00" end="3600.00" id="3085_link" sampledSeconds="318.00" density="2.02" laneDensity="2.02" occupancy="1.03" waitingTime="0.00" timeLoss="2.05" speed="18.96" speedRelative="0.98" departed="0" arrived="0" entered="69" left="69"/>
     <interval begin="1800.00" end="3600.00" id="3086_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="3095_link" sampledSeconds="240.83" density="1.35" laneDensity="1.35" occupancy="0.68" waitingTime="0.00" timeLoss="7.84" speed="18.47" speedRelative="0.95" departed="0" arrived="0" entered="45" left="45"/>
-    <interval begin="1800.00" end="3600.00" id="3108_link" sampledSeconds="22.01" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.29" speedRelative="0.99" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="1800.00" end="3600.00" id="3109_link" sampledSeconds="11.03" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.31" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="1800.00" end="3600.00" id="3110_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="1800.00" end="3600.00" id="3108_link" sampledSeconds="27.96" density="0.15" laneDensity="0.15" occupancy="0.08" waitingTime="0.00" timeLoss="0.00" speed="18.99" speedRelative="0.98" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="1800.00" end="3600.00" id="3109_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="1800.00" end="3600.00" id="3110_link" sampledSeconds="5.33" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="3111_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="3112_link" sampledSeconds="60.19" density="0.35" laneDensity="0.35" occupancy="0.17" waitingTime="0.00" timeLoss="0.00" speed="19.15" speedRelative="0.98" departed="0" arrived="0" entered="12" left="12"/>
-    <interval begin="1800.00" end="3600.00" id="3113_link" sampledSeconds="54.87" density="0.35" laneDensity="0.35" occupancy="0.17" waitingTime="0.00" timeLoss="0.00" speed="19.15" speedRelative="0.98" departed="0" arrived="0" entered="12" left="12"/>
-    <interval begin="1800.00" end="3600.00" id="3118_link" sampledSeconds="264.13" density="1.58" laneDensity="1.58" occupancy="0.80" waitingTime="0.00" timeLoss="7.91" speed="18.44" speedRelative="0.95" departed="0" arrived="0" entered="53" left="52"/>
-    <interval begin="1800.00" end="3600.00" id="3119_link" sampledSeconds="37.20" density="0.20" laneDensity="0.20" occupancy="0.10" waitingTime="0.00" timeLoss="0.00" speed="19.80" speedRelative="1.02" departed="0" arrived="0" entered="7" left="7"/>
-    <interval begin="1800.00" end="3600.00" id="3120_link" sampledSeconds="10.04" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.22" speedRelative="1.04" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="1800.00" end="3600.00" id="3125_link" sampledSeconds="130.78" density="0.69" laneDensity="0.69" occupancy="0.33" waitingTime="0.00" timeLoss="0.00" speed="19.35" speedRelative="1.00" departed="0" arrived="0" entered="23" left="24"/>
+    <interval begin="1800.00" end="3600.00" id="3112_link" sampledSeconds="75.01" density="0.43" laneDensity="0.43" occupancy="0.22" waitingTime="0.00" timeLoss="0.00" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="15" left="15"/>
+    <interval begin="1800.00" end="3600.00" id="3113_link" sampledSeconds="68.37" density="0.43" laneDensity="0.43" occupancy="0.22" waitingTime="0.00" timeLoss="0.00" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="15" left="15"/>
+    <interval begin="1800.00" end="3600.00" id="3118_link" sampledSeconds="272.44" density="1.63" laneDensity="1.63" occupancy="0.82" waitingTime="0.00" timeLoss="7.91" speed="18.43" speedRelative="0.95" departed="0" arrived="0" entered="54" left="54"/>
+    <interval begin="1800.00" end="3600.00" id="3119_link" sampledSeconds="43.30" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="1800.00" end="3600.00" id="3120_link" sampledSeconds="4.82" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="21.07" speedRelative="1.08" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="1800.00" end="3600.00" id="3125_link" sampledSeconds="125.27" density="0.66" laneDensity="0.66" occupancy="0.31" waitingTime="0.00" timeLoss="0.00" speed="19.35" speedRelative="1.00" departed="0" arrived="0" entered="22" left="23"/>
     <interval begin="1800.00" end="3600.00" id="3126_link" sampledSeconds="366.84" density="1.96" laneDensity="1.96" occupancy="0.98" waitingTime="0.00" timeLoss="4.36" speed="18.96" speedRelative="0.98" departed="0" arrived="0" entered="67" left="67"/>
     <interval begin="1800.00" end="3600.00" id="3127_link" sampledSeconds="134.22" density="0.67" laneDensity="0.67" occupancy="0.32" waitingTime="0.00" timeLoss="0.53" speed="19.47" speedRelative="1.00" departed="0" arrived="0" entered="23" left="24"/>
     <interval begin="1800.00" end="3600.00" id="3128_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="3129_link" sampledSeconds="4.81" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.19" speedRelative="0.99" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="1800.00" end="3600.00" id="3129_link" sampledSeconds="4.75" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="1800.00" end="3600.00" id="3130_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="3131_link" sampledSeconds="23.82" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="20.51" speedRelative="1.06" departed="0" arrived="0" entered="5" left="5"/>
-    <interval begin="1800.00" end="3600.00" id="3136_link" sampledSeconds="16.30" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.64" speedRelative="1.01" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="1800.00" end="3600.00" id="3131_link" sampledSeconds="29.69" density="0.17" laneDensity="0.17" occupancy="0.08" waitingTime="0.00" timeLoss="0.00" speed="19.75" speedRelative="1.02" departed="0" arrived="0" entered="6" left="6"/>
+    <interval begin="1800.00" end="3600.00" id="3136_link" sampledSeconds="16.47" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
     <interval begin="1800.00" end="3600.00" id="3141_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="1800.00" end="3600.00" id="3142_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="1800.00" end="3600.00" id="3143_link" sampledSeconds="102.80" density="0.56" laneDensity="0.56" occupancy="0.28" waitingTime="0.00" timeLoss="0.00" speed="18.95" speedRelative="0.97" departed="0" arrived="0" entered="19" left="19"/>
+    <interval begin="1800.00" end="3600.00" id="3143_link" sampledSeconds="108.08" density="0.59" laneDensity="0.59" occupancy="0.30" waitingTime="0.00" timeLoss="0.00" speed="18.98" speedRelative="0.98" departed="0" arrived="0" entered="20" left="20"/>
     <interval begin="1800.00" end="3600.00" id="3144_link" sampledSeconds="4.98" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="1800.00" end="3600.00" id="3145_link" sampledSeconds="291.29" density="1.46" laneDensity="1.46" occupancy="0.75" waitingTime="0.00" timeLoss="3.58" speed="18.98" speedRelative="0.98" departed="0" arrived="0" entered="50" left="50"/>
-    <interval begin="3600.00" end="5400.00" id="2857_link" sampledSeconds="77.07" density="0.44" laneDensity="0.44" occupancy="0.22" waitingTime="0.00" timeLoss="0.51" speed="19.03" speedRelative="0.98" departed="0" arrived="0" entered="15" left="15"/>
-    <interval begin="3600.00" end="5400.00" id="2858_link" sampledSeconds="5.84" density="0.03" laneDensity="0.03" occupancy="0.02" waitingTime="0.00" timeLoss="0.00" speed="18.05" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="3600.00" end="5400.00" id="2859_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="2860_link" sampledSeconds="11.16" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.24" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="2861_link" sampledSeconds="28.25" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="18.56" speedRelative="0.95" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="3600.00" end="5400.00" id="2862_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="2863_link" sampledSeconds="90.41" density="0.50" laneDensity="0.50" occupancy="0.25" waitingTime="0.00" timeLoss="0.01" speed="19.01" speedRelative="0.98" departed="0" arrived="0" entered="17" left="17"/>
-    <interval begin="3600.00" end="5400.00" id="2868_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="1800.00" end="3600.00" id="3145_link" sampledSeconds="292.46" density="1.47" laneDensity="1.47" occupancy="0.75" waitingTime="0.00" timeLoss="4.76" speed="18.90" speedRelative="0.97" departed="0" arrived="0" entered="50" left="50"/>
+    <interval begin="3600.00" end="5400.00" id="2857_link" sampledSeconds="41.45" density="0.24" laneDensity="0.24" occupancy="0.12" waitingTime="0.00" timeLoss="0.00" speed="18.88" speedRelative="0.97" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="3600.00" end="5400.00" id="2858_link" sampledSeconds="5.84" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="18.05" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="2859_link" sampledSeconds="10.48" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.71" speedRelative="1.01" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="2860_link" sampledSeconds="10.38" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.70" speedRelative="1.06" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="2861_link" sampledSeconds="41.73" density="0.18" laneDensity="0.18" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="18.85" speedRelative="0.97" departed="0" arrived="0" entered="6" left="6"/>
+    <interval begin="3600.00" end="5400.00" id="2862_link" sampledSeconds="4.95" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="2863_link" sampledSeconds="85.20" density="0.47" laneDensity="0.47" occupancy="0.23" waitingTime="0.00" timeLoss="0.00" speed="18.98" speedRelative="0.98" departed="0" arrived="0" entered="16" left="16"/>
+    <interval begin="3600.00" end="5400.00" id="2868_link" sampledSeconds="5.14" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="3600.00" end="5400.00" id="2869_link" sampledSeconds="387.03" density="2.15" laneDensity="2.15" occupancy="1.06" waitingTime="0.00" timeLoss="5.16" speed="19.10" speedRelative="0.98" departed="0" arrived="0" entered="74" left="74"/>
     <interval begin="3600.00" end="5400.00" id="2870_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="2875_link" sampledSeconds="399.24" density="2.26" laneDensity="2.26" occupancy="1.14" waitingTime="0.00" timeLoss="6.85" speed="18.91" speedRelative="0.97" departed="0" arrived="0" entered="77" left="77"/>
+    <interval begin="3600.00" end="5400.00" id="2875_link" sampledSeconds="398.19" density="2.26" laneDensity="2.26" occupancy="1.14" waitingTime="0.00" timeLoss="5.80" speed="18.96" speedRelative="0.98" departed="0" arrived="0" entered="77" left="77"/>
     <interval begin="3600.00" end="5400.00" id="2884_link" sampledSeconds="10.33" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="2885_link" sampledSeconds="5.36" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="2885_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="2886_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="2899_link" sampledSeconds="5.88" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.52" speedRelative="1.00" departed="0" arrived="1" entered="1" left="0"/>
     <interval begin="3600.00" end="5400.00" id="2928_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="2929_link" sampledSeconds="1.59" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.08" speedRelative="0.98" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="2929_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="2930_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="2931_link" sampledSeconds="5.24" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.52" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="3600.00" end="5400.00" id="2932_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="2933_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="2934_link" sampledSeconds="107.79" density="0.57" laneDensity="0.57" occupancy="0.29" waitingTime="0.00" timeLoss="0.00" speed="19.41" speedRelative="1.00" departed="0" arrived="0" entered="20" left="20"/>
-    <interval begin="3600.00" end="5400.00" id="2939_link" sampledSeconds="111.02" density="0.58" laneDensity="0.58" occupancy="0.29" waitingTime="0.00" timeLoss="0.00" speed="19.26" speedRelative="0.99" departed="0" arrived="0" entered="20" left="20"/>
-    <interval begin="3600.00" end="5400.00" id="2940_link" sampledSeconds="106.53" density="0.55" laneDensity="0.55" occupancy="0.28" waitingTime="0.00" timeLoss="0.01" speed="19.25" speedRelative="0.99" departed="0" arrived="0" entered="19" left="19"/>
-    <interval begin="3600.00" end="5400.00" id="2945_link" sampledSeconds="25.75" density="0.15" laneDensity="0.15" occupancy="0.07" waitingTime="0.00" timeLoss="0.27" speed="18.95" speedRelative="0.97" departed="0" arrived="0" entered="5" left="5"/>
-    <interval begin="3600.00" end="5400.00" id="2946_link" sampledSeconds="14.65" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.68" speedRelative="1.06" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="3600.00" end="5400.00" id="2951_link" sampledSeconds="21.72" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="18.56" speedRelative="0.95" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="3600.00" end="5400.00" id="2960_link" sampledSeconds="187.46" density="1.01" laneDensity="1.01" occupancy="0.50" waitingTime="0.00" timeLoss="2.12" speed="18.77" speedRelative="0.97" departed="0" arrived="0" entered="34" left="34"/>
-    <interval begin="3600.00" end="5400.00" id="2961_link" sampledSeconds="15.17" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="18.27" speedRelative="0.94" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="3600.00" end="5400.00" id="2962_link" sampledSeconds="17.60" density="0.12" laneDensity="0.12" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="18.09" speedRelative="0.93" departed="0" arrived="0" entered="4" left="4"/>
-    <interval begin="3600.00" end="5400.00" id="2967_link" sampledSeconds="4.99" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.35" speedRelative="1.05" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="3600.00" end="5400.00" id="2968_link" sampledSeconds="9.32" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.79" speedRelative="1.07" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="2969_link" sampledSeconds="27.90" density="0.15" laneDensity="0.15" occupancy="0.08" waitingTime="0.00" timeLoss="11.58" speed="11.16" speedRelative="0.57" departed="1" arrived="0" entered="2" left="3"/>
+    <interval begin="3600.00" end="5400.00" id="2934_link" sampledSeconds="119.31" density="0.63" laneDensity="0.63" occupancy="0.32" waitingTime="0.00" timeLoss="0.00" speed="19.29" speedRelative="0.99" departed="0" arrived="0" entered="22" left="22"/>
+    <interval begin="3600.00" end="5400.00" id="2939_link" sampledSeconds="128.00" density="0.67" laneDensity="0.67" occupancy="0.34" waitingTime="0.00" timeLoss="0.01" speed="19.21" speedRelative="0.99" departed="0" arrived="0" entered="23" left="23"/>
+    <interval begin="3600.00" end="5400.00" id="2940_link" sampledSeconds="129.24" density="0.67" laneDensity="0.67" occupancy="0.34" waitingTime="0.00" timeLoss="0.01" speed="19.21" speedRelative="0.99" departed="0" arrived="0" entered="23" left="23"/>
+    <interval begin="3600.00" end="5400.00" id="2945_link" sampledSeconds="30.50" density="0.17" laneDensity="0.17" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="6" left="6"/>
+    <interval begin="3600.00" end="5400.00" id="2946_link" sampledSeconds="9.45" density="0.05" laneDensity="0.05" occupancy="0.02" waitingTime="0.00" timeLoss="0.00" speed="21.35" speedRelative="1.10" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="2951_link" sampledSeconds="32.09" density="0.18" laneDensity="0.18" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="18.84" speedRelative="0.97" departed="0" arrived="0" entered="6" left="6"/>
+    <interval begin="3600.00" end="5400.00" id="2960_link" sampledSeconds="170.55" density="0.92" laneDensity="0.92" occupancy="0.45" waitingTime="0.00" timeLoss="2.12" speed="18.81" speedRelative="0.97" departed="0" arrived="0" entered="31" left="31"/>
+    <interval begin="3600.00" end="5400.00" id="2961_link" sampledSeconds="4.83" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.15" speedRelative="0.99" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="2962_link" sampledSeconds="8.69" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.32" speedRelative="0.94" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="2967_link" sampledSeconds="3.25" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.83" speedRelative="1.07" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="2968_link" sampledSeconds="4.34" density="0.02" laneDensity="0.02" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="22.33" speedRelative="1.15" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="2969_link" sampledSeconds="41.99" density="0.22" laneDensity="0.22" occupancy="0.11" waitingTime="0.00" timeLoss="15.00" speed="12.35" speedRelative="0.64" departed="1" arrived="0" entered="4" left="5"/>
     <interval begin="3600.00" end="5400.00" id="2974_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="2975_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="2984_link" sampledSeconds="23.07" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.58" speedRelative="1.01" departed="0" arrived="0" entered="5" left="5"/>
-    <interval begin="3600.00" end="5400.00" id="2985_link" sampledSeconds="5.31" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="3600.00" end="5400.00" id="2990_link" sampledSeconds="13.69" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.66" speedRelative="1.06" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="3600.00" end="5400.00" id="2984_link" sampledSeconds="23.00" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.64" speedRelative="1.01" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="3600.00" end="5400.00" id="2985_link" sampledSeconds="10.57" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.52" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="2990_link" sampledSeconds="14.06" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.11" speedRelative="1.03" departed="0" arrived="0" entered="3" left="3"/>
     <interval begin="3600.00" end="5400.00" id="2995_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="3004_link" sampledSeconds="157.03" density="0.84" laneDensity="0.84" occupancy="0.42" waitingTime="0.00" timeLoss="2.12" speed="19.07" speedRelative="0.98" departed="0" arrived="0" entered="29" left="29"/>
+    <interval begin="3600.00" end="5400.00" id="3004_link" sampledSeconds="151.72" density="0.82" laneDensity="0.82" occupancy="0.41" waitingTime="0.00" timeLoss="2.12" speed="19.06" speedRelative="0.98" departed="0" arrived="0" entered="28" left="28"/>
     <interval begin="3600.00" end="5400.00" id="3013_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="3014_link" sampledSeconds="4.91" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="3600.00" end="5400.00" id="3015_link" sampledSeconds="415.48" density="2.36" laneDensity="2.36" occupancy="1.18" waitingTime="0.00" timeLoss="17.34" speed="18.33" speedRelative="0.94" departed="0" arrived="0" entered="77" left="78"/>
+    <interval begin="3600.00" end="5400.00" id="3015_link" sampledSeconds="409.91" density="2.33" laneDensity="2.33" occupancy="1.17" waitingTime="0.00" timeLoss="17.34" speed="18.34" speedRelative="0.94" departed="0" arrived="0" entered="76" left="77"/>
     <interval begin="3600.00" end="5400.00" id="3020_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="3025_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="3026_link" sampledSeconds="92.14" density="0.63" laneDensity="0.63" occupancy="0.32" waitingTime="0.00" timeLoss="0.00" speed="19.26" speedRelative="0.99" departed="0" arrived="0" entered="22" left="21"/>
+    <interval begin="3600.00" end="5400.00" id="3025_link" sampledSeconds="4.79" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="22.14" speedRelative="1.14" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="3026_link" sampledSeconds="104.86" density="0.72" laneDensity="0.72" occupancy="0.36" waitingTime="0.00" timeLoss="0.00" speed="19.33" speedRelative="0.99" departed="0" arrived="0" entered="25" left="25"/>
     <interval begin="3600.00" end="5400.00" id="3039_link" sampledSeconds="12.49" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="18.93" speedRelative="0.97" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="3600.00" end="5400.00" id="3040_link" sampledSeconds="35.23" density="0.22" laneDensity="0.22" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.91" speedRelative="1.02" departed="0" arrived="0" entered="8" left="8"/>
-    <interval begin="3600.00" end="5400.00" id="3041_link" sampledSeconds="30.35" density="0.22" laneDensity="0.22" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.91" speedRelative="1.02" departed="0" arrived="0" entered="8" left="8"/>
-    <interval begin="3600.00" end="5400.00" id="3042_link" sampledSeconds="53.37" density="0.72" laneDensity="0.72" occupancy="0.36" waitingTime="0.00" timeLoss="0.00" speed="19.29" speedRelative="0.99" departed="0" arrived="0" entered="25" left="25"/>
-    <interval begin="3600.00" end="5400.00" id="3047_link" sampledSeconds="4.55" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="22.13" speedRelative="1.14" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="3040_link" sampledSeconds="35.65" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.68" speedRelative="1.01" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="3600.00" end="5400.00" id="3041_link" sampledSeconds="30.71" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.68" speedRelative="1.01" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="3600.00" end="5400.00" id="3042_link" sampledSeconds="51.44" density="0.69" laneDensity="0.69" occupancy="0.34" waitingTime="0.00" timeLoss="0.00" speed="19.21" speedRelative="0.99" departed="0" arrived="0" entered="24" left="24"/>
+    <interval begin="3600.00" end="5400.00" id="3047_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="3052_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="3065_link" sampledSeconds="217.56" density="1.24" laneDensity="1.24" occupancy="0.63" waitingTime="0.00" timeLoss="5.29" speed="18.77" speedRelative="0.97" departed="0" arrived="0" entered="42" left="42"/>
-    <interval begin="3600.00" end="5400.00" id="3066_link" sampledSeconds="10.28" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.67" speedRelative="1.01" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="3071_link" sampledSeconds="61.97" density="0.28" laneDensity="0.28" occupancy="0.14" waitingTime="0.00" timeLoss="0.00" speed="19.87" speedRelative="1.02" departed="0" arrived="0" entered="10" left="10"/>
-    <interval begin="3600.00" end="5400.00" id="3080_link" sampledSeconds="11.15" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="3085_link" sampledSeconds="483.80" density="3.08" laneDensity="3.08" occupancy="1.52" waitingTime="0.00" timeLoss="1.56" speed="19.25" speedRelative="0.99" departed="0" arrived="0" entered="107" left="106"/>
+    <interval begin="3600.00" end="5400.00" id="3066_link" sampledSeconds="4.98" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="20.29" speedRelative="1.04" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="3071_link" sampledSeconds="56.11" density="0.25" laneDensity="0.25" occupancy="0.12" waitingTime="0.00" timeLoss="0.00" speed="19.75" speedRelative="1.02" departed="0" arrived="0" entered="9" left="9"/>
+    <interval begin="3600.00" end="5400.00" id="3080_link" sampledSeconds="5.57" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="3085_link" sampledSeconds="479.31" density="3.05" laneDensity="3.05" occupancy="1.51" waitingTime="0.00" timeLoss="1.56" speed="19.24" speedRelative="0.99" departed="0" arrived="0" entered="106" left="105"/>
     <interval begin="3600.00" end="5400.00" id="3086_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="3095_link" sampledSeconds="418.02" density="2.35" laneDensity="2.35" occupancy="1.18" waitingTime="0.00" timeLoss="17.02" speed="18.22" speedRelative="0.94" departed="0" arrived="0" entered="78" left="77"/>
     <interval begin="3600.00" end="5400.00" id="3108_link" sampledSeconds="16.83" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="18.93" speedRelative="0.97" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="3600.00" end="5400.00" id="3109_link" sampledSeconds="11.07" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.24" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="3110_link" sampledSeconds="15.05" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.68" speedRelative="1.06" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="3600.00" end="5400.00" id="3109_link" sampledSeconds="10.29" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.70" speedRelative="1.06" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="3600.00" end="5400.00" id="3110_link" sampledSeconds="20.38" density="0.11" laneDensity="0.11" occupancy="0.05" waitingTime="0.00" timeLoss="0.00" speed="20.35" speedRelative="1.05" departed="0" arrived="0" entered="4" left="4"/>
     <interval begin="3600.00" end="5400.00" id="3111_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="3112_link" sampledSeconds="39.96" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.22" speedRelative="0.99" departed="0" arrived="0" entered="8" left="8"/>
-    <interval begin="3600.00" end="5400.00" id="3113_link" sampledSeconds="36.43" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.22" speedRelative="0.99" departed="0" arrived="0" entered="8" left="8"/>
-    <interval begin="3600.00" end="5400.00" id="3118_link" sampledSeconds="524.07" density="3.13" laneDensity="3.13" occupancy="1.57" waitingTime="0.00" timeLoss="23.83" speed="18.20" speedRelative="0.94" departed="0" arrived="0" entered="102" left="103"/>
-    <interval begin="3600.00" end="5400.00" id="3119_link" sampledSeconds="137.05" density="0.72" laneDensity="0.72" occupancy="0.36" waitingTime="0.00" timeLoss="0.65" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="25" left="25"/>
-    <interval begin="3600.00" end="5400.00" id="3120_link" sampledSeconds="10.55" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.24" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="3125_link" sampledSeconds="204.51" density="1.07" laneDensity="1.07" occupancy="0.52" waitingTime="0.00" timeLoss="2.26" speed="19.67" speedRelative="1.01" departed="0" arrived="0" entered="38" left="38"/>
+    <interval begin="3600.00" end="5400.00" id="3112_link" sampledSeconds="39.18" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.61" speedRelative="1.01" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="3600.00" end="5400.00" id="3113_link" sampledSeconds="35.72" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.61" speedRelative="1.01" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="3600.00" end="5400.00" id="3118_link" sampledSeconds="515.78" density="3.08" laneDensity="3.08" occupancy="1.55" waitingTime="0.00" timeLoss="27.00" speed="18.02" speedRelative="0.93" departed="0" arrived="0" entered="100" left="100"/>
+    <interval begin="3600.00" end="5400.00" id="3119_link" sampledSeconds="126.73" density="0.67" laneDensity="0.67" occupancy="0.33" waitingTime="0.00" timeLoss="0.01" speed="19.10" speedRelative="0.98" departed="0" arrived="0" entered="23" left="23"/>
+    <interval begin="3600.00" end="5400.00" id="3120_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="3600.00" end="5400.00" id="3125_link" sampledSeconds="198.40" density="1.04" laneDensity="1.04" occupancy="0.50" waitingTime="0.00" timeLoss="2.37" speed="19.75" speedRelative="1.02" departed="0" arrived="0" entered="37" left="37"/>
     <interval begin="3600.00" end="5400.00" id="3126_link" sampledSeconds="627.44" density="3.36" laneDensity="3.36" occupancy="1.66" waitingTime="0.00" timeLoss="12.56" speed="18.87" speedRelative="0.97" departed="0" arrived="0" entered="114" left="114"/>
     <interval begin="3600.00" end="5400.00" id="3127_link" sampledSeconds="186.18" density="0.93" laneDensity="0.93" occupancy="0.45" waitingTime="0.00" timeLoss="1.83" speed="19.66" speedRelative="1.01" departed="0" arrived="0" entered="33" left="33"/>
-    <interval begin="3600.00" end="5400.00" id="3128_link" sampledSeconds="9.50" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.26" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="3600.00" end="5400.00" id="3129_link" sampledSeconds="14.25" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.45" speedRelative="1.00" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="3600.00" end="5400.00" id="3128_link" sampledSeconds="4.79" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.08" speedRelative="0.98" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="3600.00" end="5400.00" id="3129_link" sampledSeconds="4.75" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="3600.00" end="5400.00" id="3130_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="3131_link" sampledSeconds="62.03" density="0.35" laneDensity="0.35" occupancy="0.17" waitingTime="0.00" timeLoss="0.00" speed="18.90" speedRelative="0.97" departed="0" arrived="0" entered="12" left="12"/>
-    <interval begin="3600.00" end="5400.00" id="3136_link" sampledSeconds="16.56" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.33" speedRelative="0.99" departed="0" arrived="0" entered="4" left="4"/>
+    <interval begin="3600.00" end="5400.00" id="3131_link" sampledSeconds="57.36" density="0.33" laneDensity="0.33" occupancy="0.16" waitingTime="0.00" timeLoss="0.00" speed="18.74" speedRelative="0.96" departed="0" arrived="0" entered="11" left="11"/>
+    <interval begin="3600.00" end="5400.00" id="3136_link" sampledSeconds="11.97" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.06" speedRelative="1.03" departed="0" arrived="0" entered="3" left="3"/>
     <interval begin="3600.00" end="5400.00" id="3141_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="3600.00" end="5400.00" id="3142_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="3600.00" end="5400.00" id="3143_link" sampledSeconds="159.70" density="0.87" laneDensity="0.87" occupancy="0.43" waitingTime="0.00" timeLoss="0.01" speed="19.26" speedRelative="0.99" departed="0" arrived="0" entered="30" left="30"/>
+    <interval begin="3600.00" end="5400.00" id="3143_link" sampledSeconds="154.43" density="0.84" laneDensity="0.84" occupancy="0.42" waitingTime="0.00" timeLoss="0.01" speed="19.26" speedRelative="0.99" departed="0" arrived="0" entered="29" left="29"/>
     <interval begin="3600.00" end="5400.00" id="3144_link" sampledSeconds="5.52" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="17.55" speedRelative="0.90" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="3600.00" end="5400.00" id="3145_link" sampledSeconds="440.38" density="2.21" laneDensity="2.21" occupancy="1.10" waitingTime="0.00" timeLoss="7.82" speed="18.93" speedRelative="0.97" departed="0" arrived="0" entered="76" left="75"/>
     <interval begin="5400.00" end="7200.00" id="2857_link" sampledSeconds="25.54" density="0.15" laneDensity="0.15" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.15" speedRelative="0.99" departed="0" arrived="0" entered="5" left="5"/>
     <interval begin="5400.00" end="7200.00" id="2858_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="2859_link" sampledSeconds="10.00" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.64" speedRelative="1.06" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="2860_link" sampledSeconds="11.55" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.60" speedRelative="0.96" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="2861_link" sampledSeconds="33.55" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.54" speedRelative="1.00" departed="0" arrived="0" entered="5" left="5"/>
+    <interval begin="5400.00" end="7200.00" id="2859_link" sampledSeconds="4.69" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="22.00" speedRelative="1.13" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2860_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="5400.00" end="7200.00" id="2861_link" sampledSeconds="6.58" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.93" speedRelative="1.02" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="5400.00" end="7200.00" id="2862_link" sampledSeconds="4.95" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="2863_link" sampledSeconds="53.09" density="0.29" laneDensity="0.29" occupancy="0.15" waitingTime="0.00" timeLoss="0.00" speed="19.04" speedRelative="0.98" departed="0" arrived="0" entered="10" left="10"/>
+    <interval begin="5400.00" end="7200.00" id="2863_link" sampledSeconds="42.22" density="0.23" laneDensity="0.23" occupancy="0.12" waitingTime="0.00" timeLoss="0.00" speed="19.15" speedRelative="0.99" departed="0" arrived="0" entered="8" left="8"/>
     <interval begin="5400.00" end="7200.00" id="2868_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="2869_link" sampledSeconds="457.28" density="2.54" laneDensity="2.54" occupancy="1.28" waitingTime="0.00" timeLoss="6.77" speed="18.83" speedRelative="0.97" departed="0" arrived="0" entered="87" left="86"/>
     <interval begin="5400.00" end="7200.00" id="2870_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="2875_link" sampledSeconds="442.36" density="2.51" laneDensity="2.51" occupancy="1.25" waitingTime="0.00" timeLoss="10.55" speed="18.62" speedRelative="0.96" departed="0" arrived="0" entered="84" left="84"/>
+    <interval begin="5400.00" end="7200.00" id="2875_link" sampledSeconds="440.99" density="2.50" laneDensity="2.50" occupancy="1.24" waitingTime="0.00" timeLoss="9.18" speed="18.68" speedRelative="0.96" departed="0" arrived="0" entered="84" left="84"/>
     <interval begin="5400.00" end="7200.00" id="2884_link" sampledSeconds="5.92" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="16.96" speedRelative="0.87" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="5400.00" end="7200.00" id="2885_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="2886_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="2899_link" sampledSeconds="9.04" density="0.04" laneDensity="0.04" occupancy="0.02" waitingTime="0.00" timeLoss="3.00" speed="12.70" speedRelative="0.65" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="5400.00" end="7200.00" id="2928_link" sampledSeconds="3.66" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="21.70" speedRelative="1.12" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="5400.00" end="7200.00" id="2929_link" sampledSeconds="2.89" density="0.05" laneDensity="0.05" occupancy="0.02" waitingTime="0.00" timeLoss="0.00" speed="21.05" speedRelative="1.08" departed="1" arrived="0" entered="1" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="2930_link" sampledSeconds="14.56" density="0.09" laneDensity="0.09" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="3" left="3"/>
-    <interval begin="5400.00" end="7200.00" id="2931_link" sampledSeconds="5.38" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.00" speedRelative="0.98" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="5400.00" end="7200.00" id="2932_link" sampledSeconds="11.63" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.22" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="2933_link" sampledSeconds="5.14" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="5400.00" end="7200.00" id="2934_link" sampledSeconds="108.07" density="0.57" laneDensity="0.57" occupancy="0.28" waitingTime="0.00" timeLoss="1.34" speed="19.36" speedRelative="1.00" departed="0" arrived="0" entered="20" left="20"/>
-    <interval begin="5400.00" end="7200.00" id="2939_link" sampledSeconds="96.00" density="0.50" laneDensity="0.50" occupancy="0.25" waitingTime="0.00" timeLoss="0.00" speed="20.05" speedRelative="1.03" departed="0" arrived="0" entered="18" left="18"/>
-    <interval begin="5400.00" end="7200.00" id="2940_link" sampledSeconds="108.69" density="0.56" laneDensity="0.56" occupancy="0.28" waitingTime="0.00" timeLoss="0.01" speed="19.87" speedRelative="1.02" departed="0" arrived="0" entered="20" left="20"/>
-    <interval begin="5400.00" end="7200.00" id="2945_link" sampledSeconds="5.02" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2930_link" sampledSeconds="4.85" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2931_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="5400.00" end="7200.00" id="2932_link" sampledSeconds="5.88" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.00" speedRelative="0.98" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2933_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="5400.00" end="7200.00" id="2934_link" sampledSeconds="96.07" density="0.51" laneDensity="0.51" occupancy="0.25" waitingTime="0.00" timeLoss="0.00" speed="19.60" speedRelative="1.01" departed="0" arrived="0" entered="18" left="18"/>
+    <interval begin="5400.00" end="7200.00" id="2939_link" sampledSeconds="63.04" density="0.33" laneDensity="0.33" occupancy="0.16" waitingTime="0.00" timeLoss="0.00" speed="20.35" speedRelative="1.05" departed="0" arrived="0" entered="12" left="12"/>
+    <interval begin="5400.00" end="7200.00" id="2940_link" sampledSeconds="70.55" density="0.36" laneDensity="0.36" occupancy="0.18" waitingTime="0.00" timeLoss="0.68" speed="19.89" speedRelative="1.02" departed="0" arrived="0" entered="13" left="13"/>
+    <interval begin="5400.00" end="7200.00" id="2945_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="2946_link" sampledSeconds="4.72" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="21.37" speedRelative="1.10" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="5400.00" end="7200.00" id="2951_link" sampledSeconds="25.79" density="0.14" laneDensity="0.14" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.54" speedRelative="1.00" departed="0" arrived="0" entered="5" left="5"/>
-    <interval begin="5400.00" end="7200.00" id="2960_link" sampledSeconds="210.25" density="1.13" laneDensity="1.13" occupancy="0.57" waitingTime="0.00" timeLoss="4.28" speed="18.70" speedRelative="0.96" departed="0" arrived="0" entered="38" left="38"/>
-    <interval begin="5400.00" end="7200.00" id="2961_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="2962_link" sampledSeconds="3.62" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="22.00" speedRelative="1.13" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="5400.00" end="7200.00" id="2967_link" sampledSeconds="3.38" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.05" speedRelative="1.03" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="2968_link" sampledSeconds="9.67" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.05" speedRelative="1.03" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="2969_link" sampledSeconds="8.34" density="0.04" laneDensity="0.04" occupancy="0.02" waitingTime="0.00" timeLoss="3.00" speed="12.44" speedRelative="0.64" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2951_link" sampledSeconds="5.06" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.92" speedRelative="1.02" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2960_link" sampledSeconds="215.61" density="1.16" laneDensity="1.16" occupancy="0.59" waitingTime="0.00" timeLoss="4.28" speed="18.72" speedRelative="0.96" departed="0" arrived="0" entered="39" left="39"/>
+    <interval begin="5400.00" end="7200.00" id="2961_link" sampledSeconds="4.78" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="19.32" speedRelative="0.99" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2962_link" sampledSeconds="7.74" density="0.05" laneDensity="0.05" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="20.57" speedRelative="1.06" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="5400.00" end="7200.00" id="2967_link" sampledSeconds="1.64" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="20.70" speedRelative="1.06" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2968_link" sampledSeconds="4.68" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="20.70" speedRelative="1.06" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="2969_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="2974_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="2975_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="2984_link" sampledSeconds="41.83" density="0.26" laneDensity="0.26" occupancy="0.13" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="9" left="9"/>
+    <interval begin="5400.00" end="7200.00" id="2984_link" sampledSeconds="37.18" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="8" left="8"/>
     <interval begin="5400.00" end="7200.00" id="2985_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="2990_link" sampledSeconds="40.21" density="0.24" laneDensity="0.24" occupancy="0.12" waitingTime="0.00" timeLoss="0.00" speed="18.75" speedRelative="0.96" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="5400.00" end="7200.00" id="2990_link" sampledSeconds="19.39" density="0.11" laneDensity="0.11" occupancy="0.06" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
     <interval begin="5400.00" end="7200.00" id="2995_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="3004_link" sampledSeconds="209.62" density="1.13" laneDensity="1.13" occupancy="0.57" waitingTime="0.00" timeLoss="4.11" speed="18.72" speedRelative="0.96" departed="0" arrived="0" entered="38" left="38"/>
     <interval begin="5400.00" end="7200.00" id="3013_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="3014_link" sampledSeconds="4.40" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="21.70" speedRelative="1.12" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="5400.00" end="7200.00" id="3015_link" sampledSeconds="470.23" density="2.67" laneDensity="2.67" occupancy="1.36" waitingTime="0.00" timeLoss="11.38" speed="18.71" speedRelative="0.96" departed="0" arrived="0" entered="90" left="90"/>
+    <interval begin="5400.00" end="7200.00" id="3014_link" sampledSeconds="9.77" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.54" speedRelative="1.01" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="5400.00" end="7200.00" id="3015_link" sampledSeconds="470.58" density="2.67" laneDensity="2.67" occupancy="1.36" waitingTime="0.00" timeLoss="11.72" speed="18.69" speedRelative="0.96" departed="0" arrived="0" entered="90" left="90"/>
     <interval begin="5400.00" end="7200.00" id="3020_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="3025_link" sampledSeconds="11.41" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.60" speedRelative="0.96" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="3026_link" sampledSeconds="86.59" density="0.59" laneDensity="0.59" occupancy="0.29" waitingTime="0.00" timeLoss="0.00" speed="19.76" speedRelative="1.02" departed="1" arrived="0" entered="20" left="22"/>
-    <interval begin="5400.00" end="7200.00" id="3039_link" sampledSeconds="8.98" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="17.54" speedRelative="0.90" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="3040_link" sampledSeconds="36.14" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.42" speedRelative="1.00" departed="0" arrived="0" entered="8" left="8"/>
-    <interval begin="5400.00" end="7200.00" id="3041_link" sampledSeconds="35.15" density="0.26" laneDensity="0.26" occupancy="0.13" waitingTime="0.00" timeLoss="0.00" speed="19.37" speedRelative="1.00" departed="0" arrived="0" entered="10" left="9"/>
-    <interval begin="5400.00" end="7200.00" id="3042_link" sampledSeconds="40.76" density="0.55" laneDensity="0.55" occupancy="0.27" waitingTime="0.00" timeLoss="0.00" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="19" left="19"/>
-    <interval begin="5400.00" end="7200.00" id="3047_link" sampledSeconds="5.54" density="0.03" laneDensity="0.03" occupancy="0.02" waitingTime="0.00" timeLoss="0.00" speed="18.16" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="3025_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="5400.00" end="7200.00" id="3026_link" sampledSeconds="53.68" density="0.37" laneDensity="0.37" occupancy="0.18" waitingTime="0.00" timeLoss="1.23" speed="19.63" speedRelative="1.01" departed="1" arrived="0" entered="12" left="13"/>
+    <interval begin="5400.00" end="7200.00" id="3039_link" sampledSeconds="4.64" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="16.96" speedRelative="0.87" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="3040_link" sampledSeconds="27.41" density="0.17" laneDensity="0.17" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="6" left="6"/>
+    <interval begin="5400.00" end="7200.00" id="3041_link" sampledSeconds="27.59" density="0.20" laneDensity="0.20" occupancy="0.10" waitingTime="0.00" timeLoss="0.00" speed="19.17" speedRelative="0.99" departed="0" arrived="0" entered="7" left="7"/>
+    <interval begin="5400.00" end="7200.00" id="3042_link" sampledSeconds="32.23" density="0.43" laneDensity="0.43" occupancy="0.22" waitingTime="0.00" timeLoss="0.00" speed="19.16" speedRelative="0.99" departed="0" arrived="0" entered="15" left="15"/>
+    <interval begin="5400.00" end="7200.00" id="3047_link" sampledSeconds="4.92" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="20.46" speedRelative="1.05" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="5400.00" end="7200.00" id="3052_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="3065_link" sampledSeconds="306.14" density="1.75" laneDensity="1.75" occupancy="0.89" waitingTime="0.00" timeLoss="2.22" speed="19.05" speedRelative="0.98" departed="0" arrived="0" entered="60" left="60"/>
     <interval begin="5400.00" end="7200.00" id="3066_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="3071_link" sampledSeconds="50.72" density="0.23" laneDensity="0.23" occupancy="0.11" waitingTime="0.00" timeLoss="0.00" speed="19.42" speedRelative="1.00" departed="0" arrived="0" entered="8" left="8"/>
+    <interval begin="5400.00" end="7200.00" id="3071_link" sampledSeconds="38.48" density="0.17" laneDensity="0.17" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="19.20" speedRelative="0.99" departed="0" arrived="0" entered="6" left="6"/>
     <interval begin="5400.00" end="7200.00" id="3080_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="3085_link" sampledSeconds="559.36" density="3.56" laneDensity="3.56" occupancy="1.80" waitingTime="0.00" timeLoss="3.91" speed="19.00" speedRelative="0.98" departed="0" arrived="0" entered="122" left="122"/>
     <interval begin="5400.00" end="7200.00" id="3086_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="3095_link" sampledSeconds="455.93" density="2.56" laneDensity="2.56" occupancy="1.27" waitingTime="0.00" timeLoss="15.15" speed="18.42" speedRelative="0.95" departed="0" arrived="0" entered="84" left="85"/>
-    <interval begin="5400.00" end="7200.00" id="3108_link" sampledSeconds="5.85" density="0.03" laneDensity="0.03" occupancy="0.02" waitingTime="0.00" timeLoss="0.00" speed="18.16" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
-    <interval begin="5400.00" end="7200.00" id="3109_link" sampledSeconds="11.46" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.60" speedRelative="0.96" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="5400.00" end="7200.00" id="3108_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="5400.00" end="7200.00" id="3109_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="3110_link" sampledSeconds="15.52" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="20.04" speedRelative="1.03" departed="0" arrived="0" entered="3" left="3"/>
     <interval begin="5400.00" end="7200.00" id="3111_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="3112_link" sampledSeconds="68.89" density="0.40" laneDensity="0.40" occupancy="0.20" waitingTime="0.00" timeLoss="0.00" speed="19.52" speedRelative="1.00" departed="0" arrived="0" entered="14" left="14"/>
-    <interval begin="5400.00" end="7200.00" id="3113_link" sampledSeconds="66.83" density="0.42" laneDensity="0.42" occupancy="0.21" waitingTime="0.00" timeLoss="0.00" speed="19.65" speedRelative="1.01" departed="0" arrived="0" entered="15" left="15"/>
-    <interval begin="5400.00" end="7200.00" id="3118_link" sampledSeconds="513.17" density="3.07" laneDensity="3.07" occupancy="1.52" waitingTime="0.00" timeLoss="17.18" speed="18.48" speedRelative="0.95" departed="0" arrived="0" entered="102" left="102"/>
-    <interval begin="5400.00" end="7200.00" id="3119_link" sampledSeconds="92.86" density="0.49" laneDensity="0.49" occupancy="0.25" waitingTime="0.00" timeLoss="0.01" speed="19.27" speedRelative="0.99" departed="0" arrived="0" entered="17" left="17"/>
-    <interval begin="5400.00" end="7200.00" id="3120_link" sampledSeconds="10.48" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="19.38" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
-    <interval begin="5400.00" end="7200.00" id="3125_link" sampledSeconds="229.11" density="1.20" laneDensity="1.20" occupancy="0.61" waitingTime="0.00" timeLoss="3.16" speed="18.49" speedRelative="0.95" departed="0" arrived="0" entered="40" left="40"/>
+    <interval begin="5400.00" end="7200.00" id="3112_link" sampledSeconds="59.56" density="0.34" laneDensity="0.34" occupancy="0.17" waitingTime="0.00" timeLoss="0.00" speed="19.35" speedRelative="1.00" departed="0" arrived="0" entered="12" left="12"/>
+    <interval begin="5400.00" end="7200.00" id="3113_link" sampledSeconds="58.33" density="0.37" laneDensity="0.37" occupancy="0.18" waitingTime="0.00" timeLoss="0.00" speed="19.51" speedRelative="1.00" departed="0" arrived="0" entered="13" left="13"/>
+    <interval begin="5400.00" end="7200.00" id="3118_link" sampledSeconds="503.69" density="3.01" laneDensity="3.01" occupancy="1.49" waitingTime="0.00" timeLoss="16.95" speed="18.46" speedRelative="0.95" departed="0" arrived="0" entered="100" left="100"/>
+    <interval begin="5400.00" end="7200.00" id="3119_link" sampledSeconds="82.39" density="0.43" laneDensity="0.43" occupancy="0.22" waitingTime="0.00" timeLoss="0.01" speed="19.16" speedRelative="0.99" departed="0" arrived="0" entered="15" left="15"/>
+    <interval begin="5400.00" end="7200.00" id="3120_link" sampledSeconds="15.44" density="0.08" laneDensity="0.08" occupancy="0.04" waitingTime="0.00" timeLoss="0.00" speed="19.73" speedRelative="1.01" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="5400.00" end="7200.00" id="3125_link" sampledSeconds="217.73" density="1.14" laneDensity="1.14" occupancy="0.58" waitingTime="0.00" timeLoss="3.16" speed="18.48" speedRelative="0.95" departed="0" arrived="0" entered="38" left="38"/>
     <interval begin="5400.00" end="7200.00" id="3126_link" sampledSeconds="687.31" density="3.68" laneDensity="3.68" occupancy="1.85" waitingTime="0.00" timeLoss="17.94" speed="18.43" speedRelative="0.95" departed="0" arrived="0" entered="122" left="122"/>
     <interval begin="5400.00" end="7200.00" id="3127_link" sampledSeconds="226.81" density="1.14" laneDensity="1.14" occupancy="0.58" waitingTime="0.00" timeLoss="2.08" speed="18.58" speedRelative="0.96" departed="0" arrived="0" entered="38" left="38"/>
     <interval begin="5400.00" end="7200.00" id="3128_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="3129_link" sampledSeconds="9.93" density="0.06" laneDensity="0.06" occupancy="0.03" waitingTime="0.00" timeLoss="0.00" speed="18.60" speedRelative="0.96" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="5400.00" end="7200.00" id="3129_link" sampledSeconds="5.19" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="17.79" speedRelative="0.92" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="5400.00" end="7200.00" id="3130_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="3131_link" sampledSeconds="70.65" density="0.40" laneDensity="0.40" occupancy="0.20" waitingTime="0.00" timeLoss="0.43" speed="19.36" speedRelative="1.00" departed="0" arrived="0" entered="14" left="14"/>
-    <interval begin="5400.00" end="7200.00" id="3136_link" sampledSeconds="20.96" density="0.15" laneDensity="0.15" occupancy="0.07" waitingTime="0.00" timeLoss="0.00" speed="19.09" speedRelative="0.98" departed="0" arrived="0" entered="5" left="5"/>
-    <interval begin="5400.00" end="7200.00" id="3141_link" sampledSeconds="6.02" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="16.96" speedRelative="0.87" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="5400.00" end="7200.00" id="3131_link" sampledSeconds="80.99" density="0.46" laneDensity="0.46" occupancy="0.23" waitingTime="0.00" timeLoss="0.00" speed="19.30" speedRelative="0.99" departed="0" arrived="0" entered="16" left="16"/>
+    <interval begin="5400.00" end="7200.00" id="3136_link" sampledSeconds="25.17" density="0.17" laneDensity="0.17" occupancy="0.09" waitingTime="0.00" timeLoss="0.00" speed="19.08" speedRelative="0.98" departed="1" arrived="0" entered="5" left="6"/>
+    <interval begin="5400.00" end="7200.00" id="3141_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
     <interval begin="5400.00" end="7200.00" id="3142_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="5400.00" end="7200.00" id="3143_link" sampledSeconds="194.87" density="1.06" laneDensity="1.06" occupancy="0.55" waitingTime="0.00" timeLoss="2.08" speed="18.94" speedRelative="0.97" departed="0" arrived="0" entered="36" left="36"/>
+    <interval begin="5400.00" end="7200.00" id="3143_link" sampledSeconds="193.97" density="1.05" laneDensity="1.05" occupancy="0.55" waitingTime="0.00" timeLoss="1.18" speed="19.03" speedRelative="0.98" departed="0" arrived="0" entered="36" left="36"/>
     <interval begin="5400.00" end="7200.00" id="3144_link" sampledSeconds="4.40" density="0.03" laneDensity="0.03" occupancy="0.01" waitingTime="0.00" timeLoss="0.00" speed="22.00" speedRelative="1.13" departed="0" arrived="0" entered="1" left="1"/>
     <interval begin="5400.00" end="7200.00" id="3145_link" sampledSeconds="516.72" density="2.60" laneDensity="2.60" occupancy="1.31" waitingTime="0.00" timeLoss="10.96" speed="18.75" speedRelative="0.96" departed="0" arrived="0" entered="87" left="88"/>
-    <interval begin="7200.00" end="7201.00" id="2857_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2858_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2859_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2860_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2861_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2862_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2863_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2868_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2869_link" sampledSeconds="2.00" density="20.02" laneDensity="20.02" occupancy="10.01" waitingTime="0.00" timeLoss="0.00" speed="18.69" speedRelative="0.96" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2870_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2875_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2884_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2885_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2886_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2899_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2928_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2929_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2930_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2931_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2932_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2933_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2934_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2939_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2940_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2945_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2946_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2951_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2960_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2961_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2962_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2967_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2968_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2969_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2974_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2975_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2984_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2985_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2990_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="2995_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3004_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3013_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3014_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3015_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3020_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3025_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3026_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3039_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3040_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3041_link" sampledSeconds="2.00" density="26.47" laneDensity="26.47" occupancy="13.24" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3042_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3047_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3052_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3065_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3066_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3071_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3080_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3085_link" sampledSeconds="2.00" density="22.89" laneDensity="22.89" occupancy="11.45" waitingTime="0.00" timeLoss="0.00" speed="18.23" speedRelative="0.94" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3086_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3095_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3108_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3109_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3110_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3111_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3112_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3113_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3118_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3119_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3120_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3125_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3126_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3127_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3128_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3129_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3130_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3131_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3136_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3141_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3142_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3143_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3144_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
-    <interval begin="7200.00" end="7201.00" id="3145_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2857_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2858_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2859_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2860_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2861_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2862_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2863_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2868_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2869_link" sampledSeconds="29.79" density="4.89" laneDensity="4.89" occupancy="2.41" waitingTime="0.00" timeLoss="0.00" speed="19.50" speedRelative="1.00" departed="0" arrived="0" entered="5" left="6"/>
+    <interval begin="7200.00" end="7261.00" id="2870_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2875_link" sampledSeconds="21.97" density="3.67" laneDensity="3.67" occupancy="1.81" waitingTime="0.00" timeLoss="0.05" speed="20.15" speedRelative="1.04" departed="0" arrived="0" entered="5" left="3"/>
+    <interval begin="7200.00" end="7261.00" id="2884_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2885_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2886_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2899_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2928_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2929_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2930_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2931_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2932_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2933_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2934_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2939_link" sampledSeconds="6.37" density="0.98" laneDensity="0.98" occupancy="0.44" waitingTime="0.00" timeLoss="0.00" speed="16.80" speedRelative="0.86" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="7200.00" end="7261.00" id="2940_link" sampledSeconds="6.43" density="0.98" laneDensity="0.98" occupancy="0.44" waitingTime="0.00" timeLoss="0.00" speed="16.79" speedRelative="0.86" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="7200.00" end="7261.00" id="2945_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2946_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2951_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2960_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2961_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2962_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2967_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2968_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2969_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2974_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2975_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2984_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2985_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="2990_link" sampledSeconds="9.70" density="1.69" laneDensity="1.69" occupancy="0.84" waitingTime="0.00" timeLoss="0.00" speed="19.44" speedRelative="1.00" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="7200.00" end="7261.00" id="2995_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3004_link" sampledSeconds="5.70" density="0.90" laneDensity="0.90" occupancy="0.41" waitingTime="0.00" timeLoss="0.00" speed="18.12" speedRelative="0.93" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="7200.00" end="7261.00" id="3013_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3014_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3015_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3020_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3025_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3026_link" sampledSeconds="4.83" density="0.98" laneDensity="0.98" occupancy="0.44" waitingTime="0.00" timeLoss="0.00" speed="16.79" speedRelative="0.86" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="7200.00" end="7261.00" id="3039_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3040_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3041_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3042_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3047_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3052_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3065_link" sampledSeconds="10.15" density="1.71" laneDensity="1.71" occupancy="0.95" waitingTime="0.00" timeLoss="0.00" speed="19.15" speedRelative="0.99" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="7200.00" end="7261.00" id="3066_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3071_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3080_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3085_link" sampledSeconds="30.43" density="5.71" laneDensity="5.71" occupancy="2.74" waitingTime="0.00" timeLoss="0.00" speed="19.47" speedRelative="1.00" departed="0" arrived="0" entered="6" left="7"/>
+    <interval begin="7200.00" end="7261.00" id="3086_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3095_link" sampledSeconds="17.23" density="2.86" laneDensity="2.86" occupancy="1.58" waitingTime="0.00" timeLoss="1.78" speed="17.21" speedRelative="0.89" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="7200.00" end="7261.00" id="3108_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3109_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3110_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3111_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3112_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3113_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3118_link" sampledSeconds="10.21" density="1.80" laneDensity="1.80" occupancy="0.86" waitingTime="0.00" timeLoss="0.00" speed="18.20" speedRelative="0.94" departed="0" arrived="0" entered="2" left="2"/>
+    <interval begin="7200.00" end="7261.00" id="3119_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3120_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3125_link" sampledSeconds="5.76" density="0.89" laneDensity="0.89" occupancy="0.45" waitingTime="0.00" timeLoss="0.00" speed="18.39" speedRelative="0.95" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="7200.00" end="7261.00" id="3126_link" sampledSeconds="29.53" density="4.66" laneDensity="4.66" occupancy="2.50" waitingTime="0.00" timeLoss="0.14" speed="19.65" speedRelative="1.01" departed="0" arrived="0" entered="6" left="4"/>
+    <interval begin="7200.00" end="7261.00" id="3127_link" sampledSeconds="6.03" density="0.89" laneDensity="0.89" occupancy="0.45" waitingTime="0.00" timeLoss="0.00" speed="18.39" speedRelative="0.95" departed="0" arrived="0" entered="1" left="1"/>
+    <interval begin="7200.00" end="7261.00" id="3128_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3129_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3130_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3131_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3136_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3141_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3142_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3143_link" sampledSeconds="16.54" density="2.64" laneDensity="2.64" occupancy="1.23" waitingTime="0.00" timeLoss="0.00" speed="18.60" speedRelative="0.96" departed="0" arrived="0" entered="3" left="3"/>
+    <interval begin="7200.00" end="7261.00" id="3144_link" sampledSeconds="0.00" departed="0" arrived="0" entered="0" left="0"/>
+    <interval begin="7200.00" end="7261.00" id="3145_link" sampledSeconds="22.77" density="3.38" laneDensity="3.38" occupancy="1.65" waitingTime="0.00" timeLoss="0.55" speed="19.42" speedRelative="1.00" departed="0" arrived="0" entered="4" left="4"/>
 </detector>

@@ -10,6 +10,7 @@ class PlusOneBaseline(BaseAlgorithm):
         super().__init__()
         self.cplexpath = kwargs.get('cplexpath')
         self.directory = kwargs.get('directory')
+        self.policy_name = kwargs.get('policy_name')
 
     def select_action(self, env):
         """

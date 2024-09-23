@@ -18,6 +18,7 @@ class MPC:
         """
         self.cplexpath = kwargs.get('cplexpath')
         self.directory = kwargs.get('directory')
+        self.policy_name = kwargs.get('policy_name')
         self.T = kwargs.get('T')
         self.platform = None
 
@@ -150,6 +151,9 @@ class MPC:
                 "sumo", "--no-internal-links", "-c", env.cfg.sumocfg_file,
                 "--step-length", str(env.cfg.sumo_tstep),
                 "--device.taxi.dispatch-algorithm", "traci",
+                "--summary-output", "saved_files/sumo_output/" + env.cfg.city + "/" + self.policy_name + "_dua_meso.static.summary.xml",
+                "--tripinfo-output", "saved_files/sumo_output/" + env.cfg.city + "/" + self.policy_name + "_dua_meso.static.tripinfo.xml",
+                "--tripinfo-output.write-unfinished", "true",
                 "-b", str(env.cfg.time_start * 60 * 60), "--seed", "10",
                 "-W", 'true', "-v", 'false',
             ]

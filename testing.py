@@ -71,6 +71,7 @@ def setup_model(cfg, env, parser, device):
             "cplexpath": cfg.simulator.cplexpath,
             "directory": cfg.simulator.directory,
             "T": cfg.simulator.time_horizon,
+            "policy_name": cfg.model.agent_name
         }
         
         return model_class(**model_kwargs)
