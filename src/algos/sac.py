@@ -351,7 +351,7 @@ class SAC(nn.Module):
                     desiredAcc,
                     self.cplexpath,
                 )
-                new_obs, rew, done, info = self.env.step(reb_action)
+                new_obs, rew, done, info = self.env.step(reb_action=reb_action)
                 
                 episode_reward += rew
                 episode_served_demand += info["profit"]
@@ -431,7 +431,7 @@ class SAC(nn.Module):
                     desiredAcc,
                     self.cplexpath,
                 )
-                new_obs, rew, done, info = env.step(reb_action)
+                new_obs, rew, done, info = env.step(reb_action=reb_action)
                 #calculate inflow to each node in the graph
                
                 for k in range(len(env.edges)):

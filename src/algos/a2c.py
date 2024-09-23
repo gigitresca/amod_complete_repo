@@ -147,10 +147,10 @@ class A2C(nn.Module):
                     desired_acc,
                     self.cplexpath,
                 )
-                new_obs, rew, done, info = self.env.step(reb_action)
+                new_obs, rew, done, info = self.env.step(reb_action=reb_action)
                 #reb_action = self.solveRebFlow(self.env, f'sac/scenario_lux/{self.cfg.agent_name}', desired_acc, self.cfg.cplexpath)
 
-                #obs, rew, done, info = self.env.step(reb_action)
+                #obs, rew, done, info = self.env.step(reb_action=reb_action)
                 self.rewards.append(rew)
                 # track performance over episode
                 episode_reward += rew

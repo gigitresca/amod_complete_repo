@@ -44,7 +44,7 @@ class AMoD:
         self.reservations = list()
         self.reservations_assigned = list()
         self.demand_time = self.scenario.demand_time
-        self.reb_time = self.scenario.reb_time
+        self.rebTime = self.scenario.rebTime
         self.time = 0  # current time
         self.tstep = self.scenario.tstep
         self.duration = scenario.duration  # final time
@@ -72,7 +72,7 @@ class AMoD:
         self.edges = list(set(self.edges))
         self.nedge = [len(self.G.out_edges(n)) + 1 for n in self.region]  # number of edges leaving each region
         for i, j in self.G.edges:
-            self.G.edges[i, j]['time'] = self.reb_time[i, j][self.time]
+            self.G.edges[i, j]['time'] = self.rebTime[i, j][self.time]
             self.rebFlow[i, j] = defaultdict(float)
         for i, j in self.demand:
             self.paxFlow[i, j] = defaultdict(float)
@@ -272,13 +272,13 @@ class AMoD:
             # SUMO travels assignment
             taxis_reb = 0
             while taxis_reb < self.rebAction[k]:
-                taxi, arrival_time, reb_time = self.reb_taxi(reb_assign, taxis_reb, o=i, d=j)
+                taxi, arrival_time, rebTime = self.reb_taxi(reb_assign, taxis_reb, o=i, d=j)
                 self.regions_sumo[i]['taxis'].remove(taxi)
                 self.rebFlow[i, j][arrival_time] += 1
                 self.dacc[i][arrival_time] += 1
-                self.info['rebalancing_cost'] += reb_time * self.beta
-                self.info["operating_cost"] += reb_time * self.beta
-                self.reward -= reb_time * self.beta
+                self.info['rebalancing_cost'] += rebTime * self.beta
+                self.info["operating_cost"] += rebTime * self.beta
+                self.reward -= rebTime * self.beta
                 taxis_reb += 1
 
         if self.scenario.is_meso:
@@ -294,7 +294,7 @@ class AMoD:
         # Travel time update from sumo
         self.update_routes(time=t+tstep)
         for i, j in self.G.edges:
-            self.G.edges[i, j]['time'] = self.reb_time[i, j][self.time]
+            self.G.edges[i, j]['time'] = self.rebTime[i, j][self.time]
 
         done = (self.duration == t + tstep)  # if the episode is completed
         return self.obs, self.reward, done, self.info
@@ -337,8 +337,8 @@ class AMoD:
         edge_d_length = traci.lane.getLength(edge_d + '_0')
         edge_o = traci.vehicle.getRoadID(taxi_id)
         route = traci.simulation.findRoute(edge_o, edge_d, vType='taxi', routingMode=1)
-        reb_time = int(math.ceil(route.travelTime / (traci.vehicle.getSpeedFactor(taxi_id) * 60)))
-        arrival_time = t + reb_time  # Use the speed factor to have a more accurate forecast of the travel time
+        rebTime = int(math.ceil(route.travelTime / (traci.vehicle.getSpeedFactor(taxi_id) * 60)))
+        arrival_time = t + rebTime  # Use the speed factor to have a more accurate forecast of the travel time
         if arrival_time % tstep != 0:
             arrival_time = (arrival_time // tstep + 1) * tstep
         if self.scenario.is_meso:
@@ -352,7 +352,7 @@ class AMoD:
             traci.vehicle.setRoute(taxi_id, route.edges)
             traci.vehicle.setStop(taxi_id, edge_d, pos=edge_d_length, flags=1)  # Set the stop in the new location
             traci.vehicle.setStopParameter(taxi_id, 0, 'actType', 'rebalancing')  # Set the taxi condition to rebalancing
-        return taxi, arrival_time, reb_time
+        return taxi, arrival_time, rebTime
 
     def reset(self):
         """
@@ -397,10 +397,10 @@ class AMoD:
             if (i, j) in self.taxi_routes:
                 self.demand_time[i, j][0] = self.taxi_routes[(i, j)][2] / 60
                 self.demand_time[i, j][0] = max(int(math.ceil(self.demand_time[i, j][0])), 1)
-                self.reb_time[i, j][0] = self.demand_time[i, j][0]
+                self.rebTime[i, j][0] = self.demand_time[i, j][0]
             else:
                 self.demand_time[i, j][0] = 0
-                self.reb_time[i, j][0] = 0
+                self.rebTime[i, j][0] = 0
 
         for n in self.G:
             self.acc[n][0] = self.G.nodes[n]['accInit']
@@ -464,10 +464,10 @@ class AMoD:
             if (i, j) in self.taxi_routes:
                 self.demand_time[i, j][0] = self.taxi_routes[(i, j)][2] / 60
                 self.demand_time[i, j][0] = max(int(math.ceil(self.demand_time[i, j][0])), 1)
-                self.reb_time[i, j][0] = self.demand_time[i, j][0]
+                self.rebTime[i, j][0] = self.demand_time[i, j][0]
             else:
                 self.demand_time[i, j][0] = 0
-                self.reb_time[i, j][0] = 0
+                self.rebTime[i, j][0] = 0
 
         for n in self.G:
             self.acc[n][0] = self.G.nodes[n]['accInit']
@@ -554,10 +554,10 @@ class AMoD:
                 new_routes[(o, d)] = ((edge_o, edge_d), route.edges, route.travelTime)
                 self.demand_time[o, d][time] = new_routes[(o, d)][2] / 60
                 self.demand_time[o, d][time] = max(int(math.ceil(self.demand_time[o, d][time])), 1)
-                self.reb_time[o, d][time] = self.demand_time[o, d][time]
+                self.rebTime[o, d][time] = self.demand_time[o, d][time]
             else:
                 self.demand_time[o, d][time] = 0
-                self.reb_time[o, d][time] = 0
+                self.rebTime[o, d][time] = 0
         self.taxi_routes = new_routes
 
     def set_taxi_to_region(self, taxi_ids):
@@ -653,14 +653,14 @@ class Scenario:
         self.price = defaultdict(dict)
         self.alpha = 0
         self.demand_time = defaultdict(dict)
-        self.reb_time = defaultdict(dict)
+        self.rebTime = defaultdict(dict)
         self.time_start = time_start * 60
         self.duration = duration * 60
 
         # Time demand between nodes initialization
         for i, j in self.edges:
             self.demand_time[i, j] = defaultdict(int)
-            self.reb_time[i, j] = defaultdict(int)
+            self.rebTime[i, j] = defaultdict(int)
             self.price[i, j] = defaultdict(int)
             self.demand_input[i, j] = defaultdict(int)
 
@@ -693,10 +693,10 @@ class Scenario:
                 if (o, d) in self.taxi_routes:
                     self.demand_time[o, d][t] = self.taxi_routes[(o, d)][2] / 60
                     self.demand_time[o, d][t] = max(int(math.ceil(self.demand_time[o, d][t])), 1)
-                    self.reb_time[o, d][t] = self.demand_time[o, d][t]
+                    self.rebTime[o, d][t] = self.demand_time[o, d][t]
                 else:
                     self.demand_time[o, d][t] = 0
-                    self.reb_time[o, d][t] = 0
+                    self.rebTime[o, d][t] = 0
                 if t in self.demand_input[o, d]:
                     self.price[o, d][t] /= self.demand_input[o, d][t]
                 else:
@@ -901,7 +901,7 @@ class Scenario:
                     self.region_demand = region_rand * np.array(self.demand_input)
                 for i in self.G.nodes:
                     J = [j for _, j in self.G.out_edges(i)]
-                    prob = np.array([np.math.exp(-self.reb_time[i, j][0] * self.trip_length_preference) for j in J])
+                    prob = np.array([np.math.exp(-self.rebTime[i, j][0] * self.trip_length_preference) for j in J])
                     prob = prob / sum(prob)
                     for idx in range(len(J)):
                         self.static_demand[i, J[idx]] = self.region_demand[i] * prob[idx]

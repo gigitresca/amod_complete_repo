@@ -58,14 +58,14 @@ class BaseAlgorithm:
             done = False
             if sim =='sumo':
                 traci.start(sumo_cmd)
-            obs, rew = env.reset() 
+            obs, rew = env.reset()
             eps_reward += rew
             eps_served_demand += rew
             while not done:
 
                 reb_action = self.select_action(env)
             
-                obs, rew, done, info = env.step(reb_action)
+                obs, rew, done, info = env.step(reb_action=reb_action)
 
                 for k in range(len(env.edges)):
                     i,j = env.edges[k]

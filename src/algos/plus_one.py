@@ -17,8 +17,8 @@ class PlusOneBaseline(BaseAlgorithm):
         """
   
         time = len(env.obs[0][3])-1
-        action = [0] * env.nregions
-        acc = [env.acc[region][time] for region in range(env.nregions)]
+        action = [0] * env.nregion
+        acc = [env.acc[region][time] for region in range(env.nregion)]
         for k in range(len(env.edges)):
             o, d = env.edges[k]
             pax_action = env.paxAction[k]
@@ -26,17 +26,17 @@ class PlusOneBaseline(BaseAlgorithm):
                 continue
             action[o] += 1
 
-        for region_o in range(env.nregions):
+        for region_o in range(env.nregion):
             dacc = action[region_o]
             if dacc == 0:
                 continue
-            reb_time = dict()
-            for region_d in range(env.nregions):
+            rebTime = dict()
+            for region_d in range(env.nregion):
                 if region_d == region_o:
                     continue
-                reb_time[(region_o, region_d)] = env.reb_time[(region_o, region_d)][time - 1]
-            reb_time = dict(sorted(reb_time.items(), key=lambda item: item[1]))
-            flow = iter(reb_time)
+                rebTime[(region_o, region_d)] = env.rebTime[(region_o, region_d)][time - 1]
+            rebTime = dict(sorted(rebTime.items(), key=lambda item: item[1]))
+            flow = iter(rebTime)
             region_d = next(flow)[1]
             reb_taxi = 0
             while reb_taxi < dacc:
