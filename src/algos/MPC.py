@@ -52,7 +52,7 @@ class MPC:
             demandAttr.extend([(i,j,tt,env.demand[i,j][tt], env.demand_time[i,j][tt], env.price[i,j][tt]) for i,j in env.demand for tt in range(t+tstep, min(t+self.T, env.duration), tstep) if env.demand[i,j][tt]>1e-3])
             accTuple = [(n,env.acc[n][t+tstep]) for n in env.acc]
             daccTuple = [(n,tt,env.dacc[n][tt]) for n in env.acc for tt in range(t,min(t+self.T, env.duration))]
-            edgeAttr = [(i,j,env.reb_time[i,j][t]) for i,j in env.edges]
+            edgeAttr = [(i,j,env.rebTime[i,j][t]) for i,j in env.edges]
             modPath = os.getcwd().replace('\\', '/') + '/src/cplex_mod/'
             MPCPath = os.getcwd().replace('\\', '/') + '/saved_files/cplex_logs/' + self.directory + '/'
         else: 
