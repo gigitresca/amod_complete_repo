@@ -41,6 +41,7 @@ class AMoD:
         self.paxFlow = defaultdict(dict) # number of vehicles with passengers, key: (i,j) - (origin, destination), t - time
         self.edges = [] # set of rebalancing edges
         self.nregion = len(scenario.G) # number of regions
+        self.tstep = scenario.tstep # time step
         for i in self.G:
             self.edges.append((i,i))
             for e in self.G.out_edges(i):
@@ -316,6 +317,45 @@ class AMoD:
 
         self.reward = 0
         return obs, paxreward
+   
+    def reset_old(self):
+        # reset the episode
+        self.acc = defaultdict(dict)
+        self.dacc = defaultdict(dict)
+        self.rebFlow = defaultdict(dict)
+        self.paxFlow = defaultdict(dict)
+        self.edges = []
+        for i in self.G:
+            self.edges.append((i,i))
+            for e in self.G.out_edges(i):
+                self.edges.append(e)
+        self.edges = list(set(self.edges))
+        self.demand = defaultdict(dict) # demand
+        self.price = defaultdict(dict) # price
+        tripAttr = self.scenario.get_random_demand(reset=True)
+        self.regionDemand= defaultdict(dict)
+        for i,j,t,d,p in tripAttr: # trip attribute (origin, destination, time of request, demand, price)
+            self.demand[i,j][t] = d
+            self.price[i,j][t] = p
+            if t not in self.regionDemand[i]:
+                self.regionDemand[i][t] = 0
+            else:
+                self.regionDemand[i][t] +=d
+            
+        self.time = 0
+        for i,j in self.G.edges:
+            self.rebFlow[i,j] = defaultdict(float)
+            self.paxFlow[i,j] = defaultdict(float)            
+        for n in self.G:
+            self.acc[n][0] = self.G.nodes[n]['accInit']
+            self.dacc[n] = defaultdict(float) 
+        t = self.time
+        for i,j in self.demand:
+            self.servedDemand[i,j] = defaultdict(float)
+         # TODO: define states here
+        self.obs = (self.acc, self.time, self.dacc, self.demand)
+
+        return self.obs
    
     
     

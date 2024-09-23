@@ -5,6 +5,7 @@ from src.algos.ed import EqualDistribution
 from src.algos.plus_one import PlusOneBaseline
 from src.algos.no_reb import NoRebalanceBaseline
 from src.algos.random import RandomBaseline
+from src.algos.MPC import MPC
 
 MODEL_REGISTRY = {
     "sac": SAC,
@@ -12,7 +13,8 @@ MODEL_REGISTRY = {
     "equal_distribution": EqualDistribution,
     "plus_one": PlusOneBaseline,
     "no_rebalancing": NoRebalanceBaseline,
-    "random": RandomBaseline
+    "random": RandomBaseline,
+    "mpc": MPC
 }
 
 def get_model(model_name):

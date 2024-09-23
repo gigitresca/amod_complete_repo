@@ -42,14 +42,12 @@ def setup_macro(cfg):
         demand_ratio=calibrated_params[city]["demand_ratio"],
         json_hr=calibrated_params[city]["json_hr"],
         sd=cfg.seed,
-        #json_tstep=cfg.json_tsetp,
-        json_tstep=4,
+        json_tstep=calibrated_params[city]["test_tstep"],
         tf=cfg.max_steps,
     )
     env = AMoD(scenario, cfg = cfg, beta = calibrated_params[city]["beta"])
     parser = GNNParser(env, T=cfg.time_horizon, json_file=f"src/envs/data/macro/scenario_{city}.json")
     return env, parser
-
 
 def setup_model(cfg, env, parser, device):
     model_name = cfg.model.name
@@ -72,8 +70,9 @@ def setup_model(cfg, env, parser, device):
         model_kwargs = {
             "cplexpath": cfg.simulator.cplexpath,
             "directory": cfg.simulator.directory,
+            "T": cfg.simulator.time_horizon,
         }
-
+        
         return model_class(**model_kwargs)
 
 def setup_net(cfg):
@@ -236,9 +235,9 @@ def main(cfg: DictConfig):
     device = torch.device("cuda" if use_cuda else "cpu")
 
     model = setup_model(cfg, env, parser, device)
-
+    
     print('Testing...')
-    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(cfg.model.max_episodes, env)
+    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(cfg.model.test_episodes, env)
 
     print('Mean Episode Profit ($): ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
     print('Mean Episode Served Demand($): ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
