@@ -27,48 +27,46 @@ class A2C(nn.Module):
     """
     Advantage Actor Critic algorithm for the AMoD control problem. 
     """
-    def __init__(self, env, input_size, parser, eps=np.finfo(np.float32).eps.item(), device=torch.device("cpu")):
+    def __init__(self, env, input_size, cfg,parser, eps=np.finfo(np.float32).eps.item(), device=torch.device("cpu")):
         super(A2C, self).__init__()
         self.env = env
         self.eps = eps
         self.input_size = input_size
         self.hidden_size = input_size
         self.device = device
+        self.act_dim = env.nregion
         
-        self.actor = GNNActor(self.input_size, self.hidden_size)
+        self.actor = self.actor = GNNActor(self.input_size, self.hidden_size, act_dim=self.act_dim)
         self.critic = GNNValue(self.input_size, self.hidden_size)
         self.parser = parser
-        
+        self.cplexpath = cfg.cplexpath
+        self.directory = cfg.directory
         self.optimizers = self.configure_optimizers()
         
         # action & reward buffer
         self.saved_actions = []
         self.rewards = []
         self.to(self.device)
-        
+    
     def forward(self, obs, jitter=1e-20):
         """
         forward of both actor and critic
         """
         # parse raw environment data in model format
-        x = self.parse_obs(obs).to(self.device)
+        x = self.parser.parse_obs(obs).to(self.device)
         
         # actor: computes concentration parameters of a Dirichlet distribution
-        action, log_prob = self.actor(x)
+        action, log_prob = self.actor(x.x, x.edge_index)
 
         # critic: estimates V(s_t)
         value = self.critic(x)
         return action, log_prob, value
     
-    def parse_obs(self, obs):
-        state = self.obs_parser.parse_obs(obs)
-        return state
-    
     def select_action(self, obs):
         action, log_prob, value = self.forward(obs)
         
         self.saved_actions.append(SavedAction(log_prob, value))
-        return list(action.cpu().numpy())
+        return action.detach().cpu().numpy().squeeze()
 
     def training_step(self):
         R = 0
@@ -120,8 +118,8 @@ class A2C(nn.Module):
            'train_policy_losses': [],
            'train_value_losses': []}
 
-        train_episodes = cfg.max_episodes #set max number of training episodes
-        T = cfg.max_steps #set episode length
+        train_episodes = cfg.model.max_episodes #set max number of training episodes
+        T = cfg.model.max_steps #set episode length
         epochs = trange(train_episodes)     # epoch iterator
         best_reward = -np.inf   # set best reward
         self.train()   # set model in train mode
@@ -134,42 +132,48 @@ class A2C(nn.Module):
             episode_rebalancing_cost = 0
             episode_rebalanced_vehicles = 0
             # Reset the environment
-            obs = self.env.reset()  # initialize environment
+            obs, rew = self.env.reset()  # initialize environment
+           
+            self.rewards.append(rew)
             for step in range(T):
                 # take matching step (Step 1 in paper)
                 action_rl = self.select_action(obs)
                 desired_acc = {self.env.region[i]: int(action_rl[i] * dictsum(self.env.acc, self.env.time+self.env.tstep))for i in range(len(self.env.region))}
                 # solve minimum rebalancing distance problem (Step 3 in paper)
-                reb_action = self.solveRebFlow(self.env, f'sac/scenario_lux/{self.cfg.agent_name}', desired_acc, self.cfg.cplexpath)
 
-                obs, rew, done, info = self.env.step(reb_action)
+                reb_action = solveRebFlow(
+                    self.env,
+                    self.env.cfg.directory,
+                    desired_acc,
+                    self.cplexpath,
+                )
+                new_obs, rew, done, info = self.env.step(reb_action)
+                #reb_action = self.solveRebFlow(self.env, f'sac/scenario_lux/{self.cfg.agent_name}', desired_acc, self.cfg.cplexpath)
 
+                #obs, rew, done, info = self.env.step(reb_action)
                 self.rewards.append(rew)
                 # track performance over episode
-                episode_served_demand += info['served_demand']
-                episode_rebalancing_cost += info['rebalancing_cost']
-                episode_rebalanced_vehicles += info['rebalanced_vehicles']
+                episode_reward += rew
+                episode_served_demand += info["profit"]
+                episode_rebalancing_cost += info["rebalancing_cost"]
                 # stop episode if terminating conditions are met
                 if done:
                     break
             
             # perform on-policy backprop
             p_loss, v_loss = self.training_step()
-            log['train_policy_losses'].extend(p_loss)
-            log['train_value_losses'].extend(v_loss)
 
             # Send current statistics to screen
-            epochs.set_description(f"Episode {i_episode+1} | Reward: {episode_reward:.2f} | ServedDemand: {episode_served_demand:.2f} | Reb. Cost: {episode_rebalancing_cost:.2f}  | Reb. Veh: {episode_rebalanced_vehicles:.2f}")
-            # Checkpoint best performing model
-            if episode_reward >= best_reward:
-                self.save_checkpoint(path=f"./{args.directory}/ckpt/scenario_lux/{args.agent_name}.pth")
+            epochs.set_description(f"Episode {i_episode+1} | Reward: {episode_reward:.2f} | ServedDemand: {episode_served_demand:.2f} | Reb. Cost: {episode_rebalancing_cost:.2f}")
+            
+            self.save_checkpoint(
+                path=f"ckpt/{cfg.model.checkpoint_path}.pth"
+            )
+            if episode_reward > best_reward: 
                 best_reward = episode_reward
-            # Log KPIs
-            log['train_reward'].append(episode_reward)
-            log['train_served_demand'].append(episode_served_demand)
-            log['train_reb_cost'].append(episode_rebalancing_cost)
-            log['train_reb_vehicles'].append(episode_rebalanced_vehicles)
-            self.log(log, path=f"./{args.directory}/rl_logs/scenario_lux/{args.agent_name}.pth")
+                self.save_checkpoint(
+                    path=f"ckpt/{cfg.model.checkpoint_path}_best.pth"
+                )
     
     def test_agent(self, test_episodes, env, cplexpath, matching_steps, agent_name):
         epochs = range(test_episodes)  # epoch iterator

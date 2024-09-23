@@ -53,7 +53,7 @@ def setup_model(cfg, env, parser, device):
         return SAC(env=env, input_size=cfg.input_size, cfg=cfg, parser=parser).to(device)
     elif model_name == "a2c":
         from src.algos.a2c import A2C
-        return A2C(env=env, input_size=cfg.input_size, parser=parser).to(device)
+        return A2C(env=env, input_size=cfg.input_size,cfg=cfg, parser=parser).to(device)
     else:
         raise ValueError(f"Unknown model or baseline: {model_name}")
 

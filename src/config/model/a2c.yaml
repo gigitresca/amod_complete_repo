@@ -2,7 +2,7 @@ name: a2c
 
 agent_name: ${now:%Y%m%d}_sac_gnn  # Agent name for training or evaluation (default: today's date + '_sac_gnn')
 
-cplexpath: "/opt/ibm/ILOG/CPLEX_Studio2211/opl/bin/x86-64_linux/"  # Defines directory of the CPLEX installation
+cplexpath: "/home/csasc/opt/opl/bin/x86-64_linux/"  # Defines directory of the CPLEX installation
 
 directory: "saved_files"  # Defines directory where to save files
 
@@ -23,3 +23,5 @@ hidden_size: 256  # Defines hidden units in the MLP layers
 clip: 500  # Clip value for gradient clipping (default: 500)
 
 checkpoint_path: "A2C"  # Path where to save model checkpoints
+
+input_size: 13 # Number of node features

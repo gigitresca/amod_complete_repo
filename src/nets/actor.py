@@ -41,7 +41,7 @@ class GNNActorLSTM(nn.Module):
     Actor \pi(a_t | s_t) parametrizing the concentration parameters of a Dirichlet Policy.
     """
 
-    def __init__(self, in_channels, hidden_size=32, act_dim=6):
+    def __init__(self, in_channels, hidden_size=32, act_dim=13):
         super().__init__()
         self.in_channels = in_channels
         self.act_dim = act_dim
