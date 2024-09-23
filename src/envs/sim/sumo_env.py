@@ -146,6 +146,7 @@ class AMoD:
         self.info['served_demand'] = 0  # initialize served demand
         self.info["operating_cost"] = 0  # initialize operating cost
         self.info['revenue'] = 0
+        self.info['profit'] = 0
         self.info['rebalancing_cost'] = 0
         # Matching step
         demandAttr = self.get_demand_attr()
@@ -188,6 +189,7 @@ class AMoD:
                     self.info["operating_cost"] += demand_time * self.beta
                     self.reward += (self.price[i, j][t] - demand_time * self.beta)
                 taxi_match += 1
+        self.info['profit'] += (self.info['revenue']-self.info["operating_cost"])
 
         self.obs = (self.acc, self.time, self.dacc, self.demand)  # for acc, the time index would be t+1, but for demand, the time index would be t
         done = False  # if passenger matching is executed first
@@ -297,7 +299,7 @@ class AMoD:
         done = (self.duration == t + tstep)  # if the episode is completed
         return self.obs, self.reward, done, self.info
 
-    def step(self, reb_action):
+    def step(self, pax_action=None, reb_action=None):
         # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
         # Take action in environment
         rew = 0
@@ -310,7 +312,7 @@ class AMoD:
             return obs, rew, done, info
         # Matching step
         self.sumo_steps()
-        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
+        obs, paxreward, done, info = self.pax_step(paxAction=pax_action, CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
         rew += paxreward
         return obs, rew, done, info
 

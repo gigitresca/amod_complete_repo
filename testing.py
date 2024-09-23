@@ -65,7 +65,12 @@ def setup_model(cfg, env, parser, device):
         model= A2C(env=env, input_size=cfg.model.input_size, parser=parser).to(device)
         model.load_checkpoint(path=f"ckpt/{cfg.model.checkpoint_path}_best.pth")
         return model
-    
+
+    elif model_name == "mpc":
+        from src.algos.MPC import MPC
+        model = MPC(env=env, cplexpath=cfg.simulator.cplexpath, T=cfg.simulator.time_horizon)
+        return model
+
     else:
         model_class = get_model(model_name)
         
