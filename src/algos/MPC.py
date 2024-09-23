@@ -1,11 +1,15 @@
 from collections import defaultdict
 import subprocess
 import os
+import sys
+if 'SUMO_HOME' in os.environ:
+    sys.path.append(os.path.join(os.environ['SUMO_HOME'], 'tools'))
 import traci
-from src.misc.utils import mat2str
 import re
 from tqdm import trange
+from src.misc.utils import mat2str
 import numpy as np
+
 
 class MPC:
     def __init__(self, **kwargs):
@@ -24,7 +28,8 @@ class MPC:
         flows = list()
         demandAttr = list()
         
-        if sumo: 
+        if sumo:
+            # Demand generation
             reservations = traci.person.getTaxiReservations(3)
             for trip in reservations:
                 persons = trip.persons[0]
@@ -45,13 +50,11 @@ class MPC:
                     demandAttr.append((o, d, t, 1, env.demand_time[o, d][t], env.price[o, d][t]))
             # Future demand
             demandAttr.extend([(i,j,tt,env.demand[i,j][tt], env.demand_time[i,j][tt], env.price[i,j][tt]) for i,j in env.demand for tt in range(t+tstep, min(t+self.T, env.duration), tstep) if env.demand[i,j][tt]>1e-3])
-            ############################
-
             accTuple = [(n,env.acc[n][t+tstep]) for n in env.acc]
             daccTuple = [(n,tt,env.dacc[n][tt]) for n in env.acc for tt in range(t,min(t+self.T, env.duration))]
             edgeAttr = [(i,j,env.reb_time[i,j][t]) for i,j in env.edges]
             modPath = os.getcwd().replace('\\', '/') + '/src/cplex_mod/'
-            MPCPath = os.getcwd().replace('\\', '/') + '/saved_files/cplex_logs/MPC/scenario_lux/exact/'
+            MPCPath = os.getcwd().replace('\\', '/') + '/saved_files/cplex_logs/' + self.directory + '/'
         else: 
 
             t = env.time
@@ -76,7 +79,7 @@ class MPC:
             ]
             edgeAttr = [(i, j, env.rebTime[i, j][t]) for i, j in env.edges]
             modPath = os.getcwd().replace("\\", "/") + "/src/cplex_mod/"
-            MPCPath = os.getcwd().replace("\\", "/") + "/saved_files/MPC/exact/"
+            MPCPath = os.getcwd().replace("\\", "/") + "/saved_files/cplex_logs/" + self.directory + "/"
         if not os.path.exists(MPCPath):
             os.makedirs(MPCPath)
         datafile = MPCPath + "data_{}.dat".format(t)
@@ -130,6 +133,11 @@ class MPC:
         return paxAction, rebAction
 
     def test(self, num_episodes, env):
+        """
+        for testing MPC
+        - num_episodes: An integer representing the number of episodes to run the test.
+        - env: The AMoD environment object that contains various attributes and methods.
+        """
         sim = env.cfg.name
         if sim == "sumo":
             # traci.close(wait=False)
@@ -159,16 +167,37 @@ class MPC:
             done = False
             if sim =='sumo':
                 traci.start(sumo_cmd)
-            _ = env.reset_old() 
+            _ = env.reset_old()
             
             while not done:
                 
-                pax_action, reb_action = self.MPC_exact(env)
-                _, paxreward, done, info = env.pax_step(paxAction=pax_action, CPLEXPATH=self.cplexpath)
+                if sim == 'sumo':
+                    # Taxis information
+                    env.time = int(((traci.simulation.getTime() - env.scenario.time_start * 60) // 60) - env.tstep)
+                    taxi_ids = traci.vehicle.getTaxiFleet(0)
+                    env.set_taxi_to_region(taxi_ids)
+                    # Info initialization
+                    for i in env.region:
+                        num_taxis = len(env.regions_sumo[i]['taxis'])
+                        env.acc[i][env.time + env.tstep] = num_taxis
+                    # MPC optimization step
+                    pax_action, reb_action = self.MPC_exact(env, True)
+                    # Environment step
+                    _, paxreward, done, info = env.pax_step(paxAction=pax_action, CPLEXPATH=self.cplexpath)
+                    _, rebreward, done, info = env.reb_step(reb_action)
+                    env.sumo_steps()
+                    rew = paxreward + rebreward
+                    if done:
+                        traci.simulationStep()
+                        traci.close()
+                else:
+                    pax_action, reb_action = self.MPC_exact(env)
 
-                _, rebreward, done, info = env.reb_step(reb_action)
-                
-                rew = paxreward + rebreward
+                    _, paxreward, done, info = env.pax_step(paxAction=pax_action, CPLEXPATH=self.cplexpath)
+
+                    _, rebreward, done, info = env.reb_step(reb_action)
+
+                    rew = paxreward + rebreward
 
                 for k in range(len(env.edges)):
                     i,j = env.edges[k]
@@ -182,8 +211,6 @@ class MPC:
             episode_served_demand.append(eps_served_demand)
             episode_rebalancing_cost.append(eps_rebalancing_cost)
             inflows.append(inflow)
-            epochs.set_description(
-                f"Test Episode {i_episode+1} | Reward: {eps_reward:.2f} | ServedDemand: {eps_served_demand:.2f} | Reb. Cost: {eps_rebalancing_cost:.2f}"
-            )
+            epochs.set_description(f"Test Episode {i_episode+1} | Reward: {eps_reward:.2f} | ServedDemand: {eps_served_demand:.2f} | Reb. Cost: {eps_rebalancing_cost:.2f}")
         return episode_reward, episode_served_demand, episode_rebalancing_cost, inflows
         

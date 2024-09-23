@@ -146,6 +146,7 @@ class AMoD:
         self.info['served_demand'] = 0  # initialize served demand
         self.info["operating_cost"] = 0  # initialize operating cost
         self.info['revenue'] = 0
+        self.info['profit'] = 0
         self.info['rebalancing_cost'] = 0
         # Matching step
         demandAttr = self.get_demand_attr()
@@ -188,6 +189,7 @@ class AMoD:
                     self.info["operating_cost"] += demand_time * self.beta
                     self.reward += (self.price[i, j][t] - demand_time * self.beta)
                 taxi_match += 1
+        self.info['profit'] += (self.info['revenue']-self.info["operating_cost"])
 
         self.obs = (self.acc, self.time, self.dacc, self.demand)  # for acc, the time index would be t+1, but for demand, the time index would be t
         done = False  # if passenger matching is executed first
@@ -297,7 +299,7 @@ class AMoD:
         done = (self.duration == t + tstep)  # if the episode is completed
         return self.obs, self.reward, done, self.info
 
-    def step(self, reb_action):
+    def step(self, pax_action=None, reb_action=None):
         # transform sample from Dirichlet into actual vehicle counts (i.e. (x1*x2*..*xn)*num_vehicles)
         # Take action in environment
         rew = 0
@@ -310,7 +312,7 @@ class AMoD:
             return obs, rew, done, info
         # Matching step
         self.sumo_steps()
-        obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
+        obs, paxreward, done, info = self.pax_step(paxAction=pax_action, CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
         rew += paxreward
         return obs, rew, done, info
 
@@ -353,6 +355,9 @@ class AMoD:
         return taxi, arrival_time, reb_time
 
     def reset(self):
+        """
+        Method to reset the environment with matching in before first env step
+        """
         # reset the episode
         self.acc = defaultdict(dict)
         self.dacc = defaultdict(dict)
@@ -415,6 +420,72 @@ class AMoD:
         self.sumo_steps()
         obs, paxreward, done, info = self.pax_step(CPLEXPATH=self.cfg.cplexpath, PATH=self.cfg.directory)
         return obs, paxreward
+
+    def reset_old(self):
+        """
+        Method to reset the environment without matching (used for MPC)
+        """
+        # reset the episode
+        self.acc = defaultdict(dict)
+        self.dacc = defaultdict(dict)
+        self.rebFlow = defaultdict(dict)
+        self.paxFlow = defaultdict(dict)
+        self.edges = []
+        for i in self.G:
+            self.edges.append((i, i))
+            for e in self.G.out_edges(i):
+                self.edges.append(e)
+
+        self.edges = list(set(self.edges))
+        self.demand = defaultdict(dict)  # demand
+        self.price = defaultdict(dict)  # price
+        self.demand_res = defaultdict(dict)  # demand with reservations from sumo
+        self.reservations_assigned = list()  # reservation assigned during the episode
+        trip_attr = self.scenario.get_random_demand()
+        self.regionDemand = defaultdict(dict)
+        for i, j, t, d, p in trip_attr:  # trip attribute (origin, destination, time of request, demand, price)
+            self.demand[i, j][t] = d
+            self.price[i, j][t] = p
+            if t not in self.regionDemand[i]:
+                self.regionDemand[i][t] = 0
+            else:
+                self.regionDemand[i][t] += d
+
+        for n in self.region:
+            self.demand[n, n] = {t: 0 for t in range(self.duration + self.scenario.thorizon)}
+            self.price[n, n] = {t: self.scenario.price[n, n][t] for t in range(self.duration + self.scenario.thorizon)}
+
+        self.time = 0
+        for i, j in self.G.edges:
+            self.rebFlow[i, j] = defaultdict(float)
+            self.paxFlow[i, j] = defaultdict(float)
+            self.demand_res[i, j] = defaultdict(dict)
+            self.servedDemand[i, j] = defaultdict(float)
+            if (i, j) in self.taxi_routes:
+                self.demand_time[i, j][0] = self.taxi_routes[(i, j)][2] / 60
+                self.demand_time[i, j][0] = max(int(math.ceil(self.demand_time[i, j][0])), 1)
+                self.reb_time[i, j][0] = self.demand_time[i, j][0]
+            else:
+                self.demand_time[i, j][0] = 0
+                self.reb_time[i, j][0] = 0
+
+        for n in self.G:
+            self.acc[n][0] = self.G.nodes[n]['accInit']
+            self.dacc[n] = defaultdict(float)
+            self.regions_sumo[n]['taxis'] = list()
+
+        # Initialize taxis in the network
+        self.scenario.set_taxi_lines()
+        self.scenario.set_taxi_distribution()
+
+        # TODO: define states here
+        self.obs = (self.acc, self.time, self.dacc, self.demand)
+        self.reward = 0
+        # 1st pax step
+        if self.scenario.is_meso:
+            traci.simulationStep()
+        self.sumo_steps()
+        return self.obs
 
     def get_demand_attr(self):
         """

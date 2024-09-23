@@ -237,7 +237,7 @@ def main(cfg: DictConfig):
     model = setup_model(cfg, env, parser, device)
     
     print('Testing...')
-    episode_reward, episode_served_demand, episode_rebalancing_cost = model.test(cfg.model.test_episodes, env)
+    episode_reward, episode_served_demand, episode_rebalancing_cost, episode_inflows = model.test(cfg.model.test_episodes, env)
 
     print('Mean Episode Profit ($): ', np.mean(episode_reward), 'Std Episode Reward: ', np.std(episode_reward))
     print('Mean Episode Served Demand($): ', np.mean(episode_served_demand), 'Std Episode Served Demand: ', np.std(episode_served_demand))
