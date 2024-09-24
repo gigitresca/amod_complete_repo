@@ -17,28 +17,28 @@ pip install -r requirements.txt
 ```
 ## Contents
 `amod_complete_repo`  
-`├── figures/`: directory for saving the output figures<br>
-`├── saved_files/`: directory for saving results, logging, etc<br>
+`├── testing.py`: test main file<br>
+`├── train.py`: RL agents train main file <br>
 `├── src/`  
 `│   ├── algos/`  
 `│   │   ├── sac.py`: Pytorch implementation of SAC<br>
 `│   │   ├── a2c.py`: PyTorch implementation of A2C<br>
-`│   │   ├── base.py`: Base class for baseline algorithms<br>
+`│   │   ├── base.py`: Base class for controller<br>
+`│   │   ├── ed.py`: Equal distribution controller<br>
 `│   │   ├── `...<br>
 `│   │   └── registry.py`: models registration function<br>
-`│   ├── config/`: default parameters for the simulator and the models<br>
-`│   ├── cplex_mod/`: CPLEX formulation of Rebalancing, Matching and MPC problems<br>
+`│   ├── nets/`  
+`│   │   ├── actor.py`: Pytorch implementation of a GNN-based actor<br>
+`│   │   ├── critic.py`: Pytorch implementation of a GNN-based critic<br>
 `│   ├── envs/`  
 `│   │   ├── data/`: data for the macroscopic and mesoscopic scenarios<br>
 `│   │   └── sim/`  
 `│   │   │    ├── macro_env.py`: implementation of a macroscopic simulator for AMoD systems system<br>
 `│   │   │    └── sumo_env.py`: implementation of a SUMO-based mesoscopic simulator for AMoD systems<br>
 `│   ├── misc/`: helper functions<br>
-`│   ├── nets/`  
-`│   │   ├── actor.py`: Pytorch implementation of a GNN-based actor<br>
-`│   │   ├── critic.py`: Pytorch implementation of a GNN-based critic<br>
-`├── testing.py`: test main file<br>
-`├── train.py`: Rl agents train main file <br>
+`│   ├── config/`: default parameters for the simulator and the models<br>
+`│   ├── cplex_mod/`: CPLEX formulation of Rebalancing, Matching and MPC problems<br>
+`├── saved_files/`: directory for saving results, logging, etc<br>
 
 ##  Configuration parameters
 To run a training or a testing, firstly the simulator and the model type must be selected with the config arguments
