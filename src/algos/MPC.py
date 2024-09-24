@@ -21,7 +21,7 @@ class MPC:
         self.policy_name = kwargs.get('policy_name')
         self.T = kwargs.get('T')
         self.platform = None
-
+    
     def MPC_exact(self, env, sumo=False):
         tstep = env.tstep
         t = env.time

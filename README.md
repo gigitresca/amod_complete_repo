@@ -1,7 +1,18 @@
 # Data-driven Methods for Network-level Coordination of Autonomous Mobility-on-Demand Systems Across Scales
 Official implementation of the [Data-driven Methods for Network-level Coordination of Autonomous Mobility-on-Demand Systems Across Scales](https://rl4amod-itsc24.github.io/) tutorial, presented at 27th IEEE International Conference on Intelligent Transportation Systems 2024
 
-<img src="figures/gnn-for-amod.png" width="700"/></td> <br/>
+# Coming Soon!
+<img align="center" src="src/figure.png" width="1500"/></td> <br/>
+
+Join us in moving the first steps toward the creation of publicly available benchmarks, datasets, and simulators for network-level coordination of MoD systems.
+
+We aim to provide:
+- Openly accessible simulation platforms across different fidelity levels (macroscopic, mesoscopic, microscopic)
+- Calibrated scenarios
+- Implementation of fleet coordination algorithms
+- A common validation process that allows for direct comparison between different approaches (i.e., leaderboard-based)
+- Standardized pipeline for contributed algorithms, scenarios, tools, etc.
+
 
 ## Prerequisites
 
@@ -169,4 +180,4 @@ python testing.py  simulator.name=macro model.name=equal_distribution simulator.
 ```
 
 ----------
-In case of any questions, bugs, suggestions or improvements, please feel free to contact us at csasc@dtu.dk or <ltresca@stanford.edu>.
+In case of any questions, bugs, suggestions or improvements, please feel free to contact us at <gammelli@stanford.edu>, csasc@dtu.dk or <ltresca@stanford.edu>.
