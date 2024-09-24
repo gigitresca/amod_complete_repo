@@ -55,6 +55,7 @@ def setup_model(cfg, env, parser, device):
     if model_name == "sac":
         from src.algos.sac import SAC
         model= SAC(env=env, input_size=cfg.model.input_size, cfg=cfg.model, parser=parser).to(device)
+        # model.load_checkpoint(path=f"ckpt/{cfg.model.agent_name}.pth")
         model.load_checkpoint(path=f"ckpt/{cfg.model.checkpoint_path}_best.pth")
         return model
     

@@ -119,6 +119,7 @@ class SAC(nn.Module):
 
         self.cplexpath = cfg.cplexpath
         self.directory = cfg.directory
+        self.agent_name = cfg.agent_name
         self.step = 0
         self.nodes = env.nregion
 
@@ -393,6 +394,9 @@ class SAC(nn.Module):
                 "sumo", "--no-internal-links", "-c", env.cfg.sumocfg_file,
                 "--step-length", str(env.cfg.sumo_tstep),
                 "--device.taxi.dispatch-algorithm", "traci",
+                "--summary-output", "saved_files/sumo_output/" + env.cfg.city + "/" + self.agent_name + "_dua_meso.static.summary.xml",
+                "--tripinfo-output", "saved_files/sumo_output/" + env.cfg.city + "/" + self.agent_name + "_dua_meso.static.tripinfo.xml",
+                "--tripinfo-output.write-unfinished", "true",
                 "-b", str(env.cfg.time_start * 60 * 60), "--seed", "10",
                 "-W", 'true', "-v", 'false',
             ]
