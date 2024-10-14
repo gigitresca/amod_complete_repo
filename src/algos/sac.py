@@ -298,22 +298,19 @@ class SAC(nn.Module):
         sim = cfg.simulator.name
         if sim == "sumo": 
             #traci.close(wait=False)
-            scenario_path = '/home/csasc/amod_complete_repo/src/envs/data/LuSTScenario/'
-            sumocfg_file = 'dua_meso.static.sumocfg'
-            net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
             os.makedirs('saved_files/sumo_output/scenario_lux/', exist_ok=True)
             matching_steps = int(cfg.simulator.matching_tstep * 60 / cfg.simulator.sumo_tstep)  # sumo steps between each matching
-            if 'meso' in net_file:
+            if 'meso' in cfg.simulator.net_file:
                 matching_steps -= 1 
                 
             sumo_cmd = [
-            "sumo", "--no-internal-links", "-c", os.path.join(scenario_path, sumocfg_file),
+            "sumo", "--no-internal-links", "-c", cfg.simulator.sumocfg_file,
             "--step-length", str(cfg.simulator.sumo_tstep),
             "--device.taxi.dispatch-algorithm", "traci",
             "-b", str(cfg.simulator.time_start * 60 * 60), "--seed", "10",
             "-W", 'true', "-v", 'false',
             ]
-            assert os.path.exists(os.path.join(scenario_path, sumocfg_file)), "SUMO configuration file not found!"
+            assert os.path.exists(cfg.simulator.sumocfg_file), "SUMO configuration file not found!"
         
         train_episodes = cfg.model.max_episodes  # set max number of training episodes
         epochs = trange(train_episodes)  # epoch iterator
@@ -332,15 +329,8 @@ class SAC(nn.Module):
             episode_rebalancing_cost = 0
             episode_served_demand += rew
             done = False
-            if sim =='sumo' and 'meso' in net_file:
-                traci.simulationStep()
+
             while not done:
-                if sim =='sumo':
-                    sumo_step = 0
-                    while sumo_step < matching_steps:
-                        traci.simulationStep()
-                        sumo_step += 1
-                
                 action_rl = self.select_action(obs)
                 desiredAcc = {self.env.region[i]: int(action_rl[i] * dictsum(self.env.acc, self.env.time + 1))
                     for i in range(len(self.env.region))
