@@ -6,22 +6,26 @@ import json
 from hydra import initialize, compose
 def setup_sumo(cfg):
     from src.envs.sim.sumo_env import Scenario, AMoD, GNNParser
-    
-    cfg = cfg.simulator
     cfg.simulator.cplexpath = cfg.model.cplexpath
+    if not cfg.simulator.directory:
+        cfg.simulator.directory = f"{cfg.model.name}/{cfg.simulator.city}"
+    cfg = cfg.simulator
+    scenario_path = 'src/envs/data'
+    cfg.sumocfg_file = f'{scenario_path}/{cfg.city}/{cfg.sumocfg_file}'
+    cfg.net_file = f'{scenario_path}/{cfg.city}/{cfg.net_file}'
     demand_file = f'src/envs/data/scenario_lux{cfg.num_regions}.json'
     aggregated_demand = not cfg.random_od
-    scenario_path = 'src/envs/data/LuSTScenario/'
-    net_file = os.path.join(scenario_path, 'input/lust_meso.net.xml')
 
-    scenario = Scenario(num_cluster=cfg.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,
-                sumo_net_file=net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
-                time_start=cfg.time_start, time_horizon=cfg.time_horizon, duration=cfg.duration,
-                tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time)
-    env = AMoD(scenario, beta=cfg.beta)
+    scenario = Scenario(
+        num_cluster=cfg.num_regions, json_file=demand_file, aggregated_demand=aggregated_demand,
+        sumo_net_file=cfg.net_file, acc_init=cfg.acc_init, sd=cfg.seed, demand_ratio=cfg.demand_ratio,
+        time_start=cfg.time_start, time_horizon=cfg.time_horizon, duration=cfg.duration,
+        tstep=cfg.matching_tstep, max_waiting_time=cfg.max_waiting_time
+    )
+    env = AMoD(scenario, cfg=cfg, beta=cfg.beta)
     parser = GNNParser(env, T=cfg.time_horizon, json_file=demand_file)
-
     return env, parser
+
 
 def setup_macro(cfg):
     from src.envs.sim.macro_env import Scenario, AMoD, GNNParser
@@ -29,21 +33,23 @@ def setup_macro(cfg):
         calibrated_params = json.load(file)
     
     cfg.simulator.cplexpath = cfg.model.cplexpath
-
+    if not cfg.simulator.directory:
+        cfg.simulator.directory = f"{cfg.model.name}/{cfg.simulator.city}"
     cfg = cfg.simulator
     city = cfg.city
      
     scenario = Scenario(
-    json_file=f"src/envs/data/macro/scenario_{city}.json",
-    demand_ratio=calibrated_params[city]["demand_ratio"],
-    json_hr=calibrated_params[city]["json_hr"],
-    sd=cfg.seed,
-    json_tstep=cfg.json_tsetp,
-    tf=cfg.max_steps,
+        json_file=f"src/envs/data/macro/scenario_{city}.json",
+        demand_ratio=calibrated_params[city]["demand_ratio"],
+        json_hr=calibrated_params[city]["json_hr"],
+        sd=cfg.seed,
+        json_tstep=cfg.json_tsetp,
+        tf=cfg.max_steps,
     )
     env = AMoD(scenario, cfg = cfg, beta = calibrated_params[city]["beta"])
     parser = GNNParser(env, T=cfg.time_horizon, json_file=f"src/envs/data/macro/scenario_{city}.json")
     return env, parser
+
 
 def setup_model(cfg, env, parser, device):
     model_name = cfg.model.name
